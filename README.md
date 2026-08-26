@@ -9,14 +9,26 @@ e base de conhecimento anonimizada.
 | Caminho | O que é |
 | --- | --- |
 | `docs/proposta.html` | Proposta de software — problema, módulos, LGPD, regulatório, arquitetura, roadmap, riscos e decisões abertas |
+| `docs/apresentacao.html` | Apresentação em 22 slides da mesma proposta, em linguagem simples, para apresentar ao médico |
 | `prototipo/index.html` | Protótipo navegável de 9 telas, arquivo único, sem dependências além do Google Fonts |
 
-Ambos são HTML autocontidos: basta abrir no navegador.
+Todos são HTML autocontidos: basta abrir no navegador.
 
 ## Publicados
 
 - Proposta — <https://claude.ai/code/artifact/e4c0ba7f-7134-445e-84a7-ddb296f2f386>
+- Apresentação — <https://claude.ai/code/artifact/ef1191c4-9ffa-4d93-b56e-d3940ecb94bd>
 - Protótipo — <https://claude.ai/code/artifact/ff86657a-da29-4bd1-9e90-6e0635ecfe36>
+
+## Apresentação — atalhos
+
+`←` `→` navega · `S` abre o sumário · `F` tela cheia · `Home` / `End` vão ao começo e ao fim.
+No celular, arrastar para o lado troca de slide. O endereço guarda o número do slide
+(`…#12`), então dá para mandar um link direto para um ponto específico.
+
+A regra de vocabulário da apresentação: **termo clínico fica preciso** (facectomia, PIO,
+escavação, adesão), **termo de tecnologia vira português comum** — o médico é o especialista
+de um lado e leigo do outro.
 
 ## Protótipo — telas
 
