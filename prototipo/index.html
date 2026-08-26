@@ -1,0 +1,1934 @@
+<title>RetinAI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* ═══════════════ TOKENS ═══════════════ */
+:root{
+  --bg:#EEF1F7; --surface:#FFFFFF; --surface-2:#F6F8FC; --surface-3:#E7ECF6;
+  --line:#D7DEEC; --line-soft:#E8EDF6;
+  --ink:#101827; --ink-2:#3B475C; --muted:#6B7789;
+  --brand:#2F5BD8; --brand-fg:#FFFFFF; --brand-soft:#E5EBFB; --brand-line:#BCCBF4;
+  --crit:#C33449; --crit-soft:#FBE6EA; --crit-line:#F0C0C9;
+  --warn:#9C6206; --warn-soft:#FAEFD9; --warn-line:#EDD3A2;
+  --ok:#07775F;   --ok-soft:#DDF2EC;   --ok-line:#AEDCD0;
+  --ai:#6141C2;   --ai-soft:#EBE6FB;   --ai-line:#CDBFF3;
+  --sh-1:0 1px 2px rgba(16,24,39,.05);
+  --sh-2:0 1px 2px rgba(16,24,39,.06), 0 10px 26px -14px rgba(16,24,39,.28);
+  --sh-3:0 24px 60px -22px rgba(16,24,39,.42);
+  --rail:248px; --top:60px; --r:12px;
+  --f-ui:"IBM Plex Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070C18; --surface:#0F1729; --surface-2:#141E36; --surface-3:#1B2743;
+    --line:#26324F; --line-soft:#1B2540;
+    --ink:#E7ECF7; --ink-2:#B6C1D7; --muted:#8391AC;
+    --brand:#7C9CFF; --brand-fg:#081026; --brand-soft:#182448; --brand-line:#2B3C6E;
+    --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+    --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+    --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+    --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+    --sh-1:0 1px 2px rgba(0,0,0,.4);
+    --sh-2:0 1px 2px rgba(0,0,0,.4), 0 12px 30px -16px rgba(0,0,0,.8);
+    --sh-3:0 28px 70px -24px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070C18; --surface:#0F1729; --surface-2:#141E36; --surface-3:#1B2743;
+  --line:#26324F; --line-soft:#1B2540;
+  --ink:#E7ECF7; --ink-2:#B6C1D7; --muted:#8391AC;
+  --brand:#7C9CFF; --brand-fg:#081026; --brand-soft:#182448; --brand-line:#2B3C6E;
+  --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+  --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+  --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+  --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+  --sh-1:0 1px 2px rgba(0,0,0,.4);
+  --sh-2:0 1px 2px rgba(0,0,0,.4), 0 12px 30px -16px rgba(0,0,0,.8);
+  --sh-3:0 28px 70px -24px rgba(0,0,0,.85);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--f-ui); background:var(--bg); color:var(--ink);
+  font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  height:100vh; overflow:hidden;
+}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ═══════════════ SHELL ═══════════════ */
+.app{display:grid;grid-template-columns:var(--rail) 1fr;height:100vh}
+.app.collapsed{--rail:64px}
+
+.rail{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.brand{display:flex;align-items:center;gap:10px;height:var(--top);padding:0 16px;border-bottom:1px solid var(--line);flex-shrink:0}
+.mark{width:30px;height:30px;border-radius:9px;background:var(--brand);display:grid;place-items:center;flex-shrink:0}
+.mark svg{width:19px;height:19px;display:block;color:var(--brand-fg)}
+.brand-t{font-weight:700;font-size:16px;letter-spacing:-.03em;white-space:nowrap}
+.brand-t span{color:var(--brand)}
+.app.collapsed .brand-t,.app.collapsed .nav-lbl,.app.collapsed .nav-txt,.app.collapsed .who-txt,.app.collapsed .ghost-mini span{display:none}
+.app.collapsed .brand{padding:0 17px}
+.app.collapsed .nav-i{justify-content:center;padding:9px 0}
+.app.collapsed .ghost-mini{justify-content:center}
+
+.nav{flex:1;overflow-y:auto;padding:12px 10px;scrollbar-width:thin}
+.nav::-webkit-scrollbar{width:6px}
+.nav::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+.nav-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-lbl.first{padding-top:2px}
+.nav-i{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:9px;background:none;border:0;cursor:pointer;color:var(--ink-2);font-size:13.5px;font-weight:500;text-align:left;transition:background .15s,color .15s;position:relative}
+.nav-i:hover{background:var(--surface-3);color:var(--ink)}
+.nav-i[aria-current="page"]{background:var(--brand-soft);color:var(--brand);font-weight:600}
+.nav-i[aria-current="page"]::before{content:"";position:absolute;left:-10px;top:50%;transform:translateY(-50%);width:3px;height:18px;border-radius:0 3px 3px 0;background:var(--brand)}
+.nav-i svg{width:17px;height:17px;flex-shrink:0;stroke-width:1.7}
+.nav-txt{flex:1;white-space:nowrap;overflow:hidden}
+.pip{font-family:var(--f-mono);font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:20px;background:var(--crit-soft);color:var(--crit);border:1px solid var(--crit-line)}
+.pip.w{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+.pip.a{background:var(--ai-soft);color:var(--ai);border-color:var(--ai-line)}
+.app.collapsed .pip{position:absolute;top:2px;right:5px;font-size:9px;padding:0 4px}
+
+.rail-foot{border-top:1px solid var(--line);padding:10px;display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.who{display:flex;align-items:center;gap:10px;padding:4px 6px}
+.who-av{width:30px;height:30px;border-radius:50%;background:var(--brand);color:var(--brand-fg);display:grid;place-items:center;font-size:11.5px;font-weight:700;flex-shrink:0}
+.who-n{font-size:12.5px;font-weight:600;white-space:nowrap}
+.who-r{font-size:11px;color:var(--muted);white-space:nowrap}
+.ghost-mini{display:flex;align-items:center;gap:9px;width:100%;padding:7px 8px;border-radius:8px;border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;text-align:left}
+.ghost-mini:hover{background:var(--surface-3);color:var(--ink)}
+.ghost-mini svg{width:16px;height:16px;stroke-width:1.7;flex-shrink:0}
+
+.main{display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.top{height:var(--top);flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 20px}
+.top-h{min-width:0;flex:1}
+.top-h h1{font-size:16px;font-weight:700;letter-spacing:-.025em;line-height:1.25}
+.top-h p{font-size:12px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-r{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.iconbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:var(--ink-2);position:relative;transition:background .15s,border-color .15s;flex-shrink:0}
+.iconbtn:hover{background:var(--surface-3);border-color:var(--brand-line)}
+.iconbtn svg{width:17px;height:17px;stroke-width:1.7}
+.iconbtn .dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--crit);border:2px solid var(--surface)}
+.kbd-btn{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px 0 11px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);color:var(--muted);font-size:12.5px;cursor:pointer;transition:border-color .15s}
+.kbd-btn:hover{border-color:var(--brand-line);color:var(--ink-2)}
+.kbd-btn svg{width:15px;height:15px;stroke-width:1.8}
+kbd{font-family:var(--f-mono);font-size:10px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 5px;background:var(--surface);color:var(--muted)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:34px;padding:0 14px;border-radius:9px;border:1px solid transparent;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:filter .15s,background .15s,border-color .15s}
+.btn svg{width:15px;height:15px;stroke-width:2;flex-shrink:0}
+.btn-p{background:var(--brand);color:var(--brand-fg)}
+.btn-p:hover{filter:brightness(1.1)}
+.btn-g{background:var(--surface);border-color:var(--line);color:var(--ink-2)}
+.btn-g:hover{background:var(--surface-3);border-color:var(--brand-line);color:var(--ink)}
+.btn-c{background:var(--crit-soft);border-color:var(--crit-line);color:var(--crit)}
+.btn-c:hover{filter:brightness(1.06)}
+.btn-a{background:var(--ai-soft);border-color:var(--ai-line);color:var(--ai)}
+.btn-a:hover{filter:brightness(1.06)}
+.btn-sm{height:28px;padding:0 10px;font-size:12px;border-radius:7px}
+.btn-sm svg{width:13px;height:13px}
+.btn-block{width:100%}
+
+.view{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+.view::-webkit-scrollbar{width:10px}
+.view::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;border:3px solid var(--bg)}
+.page{display:none;padding:18px 20px 34px;flex-direction:column;gap:14px;max-width:1620px}
+.page.on{display:flex;animation:rise .28s cubic-bezier(.2,.7,.3,1)}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-1);overflow:hidden;min-width:0}
+.card-h{display:flex;align-items:center;gap:10px;padding:11px 15px;border-bottom:1px solid var(--line-soft);min-height:44px}
+.card-h h2{font-size:13px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:7px;flex:1;min-width:0}
+.card-h h2 svg{width:15px;height:15px;stroke-width:1.8;color:var(--muted);flex-shrink:0}
+.card-b{padding:15px}
+.card-b.tight{padding:0}
+.link{background:none;border:0;color:var(--brand);font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:3px;padding:2px 0;white-space:nowrap}
+.link:hover{text-decoration:underline}
+.hint{font-size:11.5px;color:var(--muted)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.gmain{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:14px;align-items:start}
+
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2.5px 8px;border-radius:20px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.chip svg{width:11px;height:11px;stroke-width:2.2}
+.chip.c{background:var(--crit-soft);color:var(--crit);border-color:var(--crit-line)}
+.chip.w{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+.chip.o{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-line)}
+.chip.b{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
+.chip.a{background:var(--ai-soft);color:var(--ai);border-color:var(--ai-line)}
+.sev{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+.sev i{width:8px;height:8px;display:block;flex-shrink:0}
+.sev.c{color:var(--crit)} .sev.c i{background:var(--crit);transform:rotate(45deg)}
+.sev.w{color:var(--warn)} .sev.w i{background:var(--warn);border-radius:50%}
+.sev.o{color:var(--ok)}   .sev.o i{background:var(--ok);border-radius:2px}
+
+.ai-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ai);background:var(--ai-soft);border:1px solid var(--ai-line);padding:2px 7px;border-radius:6px;white-space:nowrap}
+.ai-tag svg{width:11px;height:11px;stroke-width:2.2}
+.conf{font-family:var(--f-mono);font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.conf-bar{width:44px;height:4px;border-radius:3px;background:var(--surface-3);overflow:hidden;display:block;flex-shrink:0}
+.conf-bar i{display:block;height:100%;border-radius:3px}
+.guard{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border-radius:9px;background:var(--ai-soft);border:1px solid var(--ai-line);font-size:11.5px;line-height:1.45;color:var(--ink-2)}
+.guard svg{width:14px;height:14px;stroke-width:2;color:var(--ai);flex-shrink:0;margin-top:1px}
+.note{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.45;border:1px solid}
+.note svg{width:14px;height:14px;stroke-width:2;flex-shrink:0;margin-top:1.5px}
+.note.c{background:var(--crit-soft);border-color:var(--crit-line);color:var(--crit)}
+.note.w{background:var(--warn-soft);border-color:var(--warn-line);color:var(--warn)}
+.note.o{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok)}
+.note.b{background:var(--brand-soft);border-color:var(--brand-line);color:var(--brand)}
+.note b{font-weight:700}
+
+.met{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;box-shadow:var(--sh-1);display:flex;flex-direction:column;gap:7px;min-width:0}
+.met-l{font-size:11.5px;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:6px}
+.met-l svg{width:13px;height:13px;stroke-width:1.9;flex-shrink:0}
+.met-v{font-family:var(--f-mono);font-size:26px;font-weight:600;letter-spacing:-.045em;line-height:1}
+.met-s{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.met-s svg{width:12px;height:12px;stroke-width:2.2;flex-shrink:0}
+
+.ladder{display:flex;gap:2px;height:8px;border-radius:5px;overflow:hidden;background:var(--surface-3)}
+.ladder i{display:block;height:100%}
+.ladder-k{display:flex;flex-wrap:wrap;gap:18px;margin-top:11px}
+.ladder-k button{display:flex;align-items:baseline;gap:7px;background:none;border:0;cursor:pointer;padding:0;text-align:left}
+.ladder-k .n{font-family:var(--f-mono);font-size:19px;font-weight:600;letter-spacing:-.04em}
+.ladder-k .t{font-size:11.5px;color:var(--muted)}
+.ladder-k button:hover .t{color:var(--ink)}
+
+.rows{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:12px;padding:11px 15px;border-bottom:1px solid var(--line-soft);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left;transition:background .13s;position:relative;color:inherit}
+.row:last-child{border-bottom:0}
+.row:hover{background:var(--surface-2)}
+.row.crit{border-left:3px solid var(--crit);padding-left:12px}
+.row.warn{border-left:3px solid var(--warn);padding-left:12px}
+.av{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:11.5px;font-weight:700;flex-shrink:0;font-family:var(--f-mono);letter-spacing:-.03em}
+.av.c{background:var(--crit-soft);color:var(--crit)}
+.av.w{background:var(--warn-soft);color:var(--warn)}
+.av.o{background:var(--ok-soft);color:var(--ok)}
+.av.b{background:var(--brand-soft);color:var(--brand)}
+.av.a{background:var(--ai-soft);color:var(--ai)}
+.row-m{flex:1;min-width:0}
+.row-n{font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.row-d{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.row-d b{color:var(--ink-2);font-weight:600}
+.row-e{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.score{text-align:right;flex-shrink:0}
+.score-v{display:block;font-family:var(--f-mono);font-size:15px;font-weight:600;letter-spacing:-.04em;line-height:1}
+.score-l{display:block;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.srcs{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--muted);font-weight:500}
+.srcs svg{width:11px;height:11px;stroke-width:2;flex-shrink:0}
+
+/* ── JANELA CRÍTICA PÓS-OP ── */
+.window{display:flex;flex-direction:column;gap:9px}
+.win-scale{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;font-family:var(--f-mono);font-size:9.5px;color:var(--muted);text-align:center}
+.win-track{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;height:26px}
+.win-cell{border-radius:5px;background:var(--surface-3);position:relative}
+.win-cell.risk{background:var(--crit-soft);border:1px solid var(--crit-line)}
+.win-cell.mid{background:var(--warn-soft);border:1px solid var(--warn-line)}
+.win-pt{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--f-mono);font-size:11px;font-weight:600}
+.win-pt.c{color:var(--crit)} .win-pt.w{color:var(--warn)} .win-pt.o{color:var(--ok)}
+
+/* ── BARRAS ── */
+.bars{display:flex;align-items:flex-end;gap:7px;height:84px}
+.bar-g{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bar{width:100%;border-radius:4px 4px 2px 2px;min-height:3px;transition:opacity .15s}
+.bar:hover{opacity:.75}
+.bar-l{font-family:var(--f-mono);font-size:9.5px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:11px}
+.legend span{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.legend i{width:9px;height:9px;border-radius:2px;display:block}
+.prog{height:5px;border-radius:3px;background:var(--surface-3);overflow:hidden}
+.prog i{display:block;height:100%;border-radius:3px}
+.prog-row{display:flex;flex-direction:column;gap:5px}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px}
+.prog-top b{font-family:var(--f-mono);font-weight:600;letter-spacing:-.02em}
+
+/* ── WORKSPACE 3 COLUNAS ── */
+.ws{display:grid;grid-template-columns:266px minmax(0,1fr) 400px;gap:14px;align-items:start}
+.ws-col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.ws-sticky{position:sticky;top:0}
+
+/* ── EDITOR DE NOTAS ── */
+.pad{display:flex;flex-direction:column;min-height:0}
+.pad-tools{display:flex;flex-wrap:wrap;gap:6px;padding:10px 15px;border-bottom:1px solid var(--line-soft);background:var(--surface-2)}
+.tok{font-family:var(--f-mono);font-size:11px;font-weight:500;padding:3px 8px;border-radius:6px;border:1px dashed var(--line);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s}
+.tok:hover{border-style:solid;border-color:var(--brand-line);color:var(--brand);background:var(--brand-soft)}
+.pad-ta{width:100%;min-height:290px;border:0;background:none;resize:vertical;padding:15px;font-family:var(--f-mono);font-size:12.5px;line-height:1.75;outline:none;color:var(--ink)}
+.pad-ta::placeholder{color:var(--muted)}
+.pad-foot{display:flex;align-items:center;gap:10px;padding:10px 15px;border-top:1px solid var(--line-soft);background:var(--surface-2);flex-wrap:wrap}
+.rec{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted)}
+.rec i{width:8px;height:8px;border-radius:50%;background:var(--crit);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ── PRONTUÁRIO GERADO ── */
+.chart-out{display:flex;flex-direction:column}
+.co-sec{border-bottom:1px solid var(--line-soft);padding:12px 15px}
+.co-sec:last-child{border-bottom:0}
+.co-h{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.co-h h3{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex:1}
+.co-h .acts{display:flex;gap:4px;opacity:0;transition:opacity .15s}
+.co-sec:hover .acts,.co-sec:focus-within .acts{opacity:1}
+.mini{width:24px;height:24px;border-radius:6px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:var(--muted)}
+.mini:hover{border-color:var(--brand-line);color:var(--brand);background:var(--brand-soft)}
+.mini svg{width:13px;height:13px;stroke-width:2}
+.co-body{font-size:12.5px;line-height:1.6;color:var(--ink-2)}
+.co-body strong{color:var(--ink);font-weight:600}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12.5px;align-items:baseline}
+.kv dt{color:var(--muted);font-size:11.5px}
+.kv dd{font-family:var(--f-mono);font-weight:500;letter-spacing:-.01em}
+.hyp{display:flex;flex-direction:column;gap:8px}
+.hyp-i{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:var(--surface-2)}
+.hyp-t{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:5px}
+.hyp-n{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px;min-width:0}
+.cid{font-family:var(--f-mono);font-size:10px;font-weight:600;padding:1px 5px;border-radius:4px;background:var(--surface-3);color:var(--muted);flex-shrink:0}
+.hyp-w{font-size:11.5px;color:var(--muted);line-height:1.5}
+.hyp-w em{font-style:normal;color:var(--ink-2);font-weight:500}
+.sign{display:flex;align-items:center;gap:10px;padding:12px 15px;border-top:1px solid var(--line);background:var(--surface-2);flex-wrap:wrap}
+
+/* ── LINHA DO TEMPO ── */
+.tl{display:flex;flex-direction:column;padding:4px 0}
+.tl-i{display:grid;grid-template-columns:70px 26px 1fr;gap:0;padding:0}
+.tl-when{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);text-align:right;padding:13px 10px 0 15px;white-space:nowrap}
+.tl-mid{position:relative;display:flex;justify-content:center}
+.tl-mid::before{content:"";position:absolute;top:0;bottom:0;width:1.5px;background:var(--line)}
+.tl-i:first-child .tl-mid::before{top:15px}
+.tl-i:last-child .tl-mid::before{bottom:calc(100% - 15px)}
+.tl-dot{width:11px;height:11px;border-radius:50%;background:var(--surface);border:2.5px solid var(--muted);margin-top:14px;z-index:1;flex-shrink:0}
+.tl-dot.c{border-color:var(--crit);background:var(--crit)}
+.tl-dot.b{border-color:var(--brand);background:var(--brand)}
+.tl-dot.o{border-color:var(--ok);background:var(--ok)}
+.tl-dot.a{border-color:var(--ai);background:var(--ai)}
+.tl-dot.w{border-color:var(--warn);background:var(--warn)}
+.tl-body{padding:10px 15px 10px 12px;min-width:0}
+.tl-t{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tl-d{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+
+/* ── ABAS ── */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);padding:0 15px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 12px;border:0;background:none;font-size:12.5px;font-weight:500;color:var(--muted);cursor:pointer;position:relative;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--brand);font-weight:600}
+.tab[aria-selected="true"]::after{content:"";position:absolute;left:6px;right:6px;bottom:-1px;height:2px;background:var(--brand);border-radius:2px 2px 0 0}
+
+/* ── HERO PACIENTE ── */
+.hero{display:flex;gap:16px;align-items:flex-start;padding:16px;flex-wrap:wrap}
+.hero-av{width:56px;height:56px;border-radius:14px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-family:var(--f-mono);font-size:17px;font-weight:700;flex-shrink:0}
+.hero-m{flex:1;min-width:210px}
+.hero-n{font-size:19px;font-weight:700;letter-spacing:-.03em}
+.hero-sub{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:5px;font-size:12px;color:var(--muted)}
+.hero-sub span{display:inline-flex;align-items:center;gap:5px}
+.hero-sub svg{width:13px;height:13px;stroke-width:1.8}
+.hero-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.hero-k{display:grid;grid-template-columns:repeat(4,minmax(74px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;flex-shrink:0}
+.hero-k div{background:var(--surface);padding:9px 12px;text-align:center}
+.hero-k .v{font-family:var(--f-mono);font-size:16px;font-weight:600;letter-spacing:-.04em}
+.hero-k .l{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* ── CONVERSA ── */
+.thread{display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--surface-2);min-height:400px;max-height:calc(100vh - 260px);overflow-y:auto;scrollbar-width:thin}
+.thread::-webkit-scrollbar{width:8px}
+.thread::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+.day{text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;position:relative;margin:4px 0}
+.day span{background:var(--surface-2);padding:0 10px;position:relative;z-index:1}
+.day::before{content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:var(--line)}
+.msg{max-width:78%;display:flex;flex-direction:column;gap:4px}
+.msg.out{align-self:flex-end;align-items:flex-end}
+.msg.in{align-self:flex-start}
+.bub{padding:9px 12px;border-radius:14px;font-size:12.5px;line-height:1.55;border:1px solid var(--line);background:var(--surface)}
+.msg.out .bub{background:var(--brand-soft);border-color:var(--brand-line);border-bottom-right-radius:4px}
+.msg.in .bub{border-bottom-left-radius:4px}
+.msg-meta{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:6px;padding:0 3px}
+.msg-meta svg{width:11px;height:11px;stroke-width:2}
+.vid{display:flex;align-items:center;gap:11px;margin-top:8px;padding:8px;border-radius:10px;background:var(--surface);border:1px solid var(--line);cursor:pointer}
+.vid:hover{border-color:var(--brand-line)}
+.vid-th{width:56px;height:40px;border-radius:7px;background:radial-gradient(circle at 50% 45%,#C9622E,#7A2A0C 55%,#2C0C03);display:grid;place-items:center;flex-shrink:0;color:#fff}
+.vid-th svg{width:17px;height:17px;stroke-width:2.5;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+.vid-t{font-size:12px;font-weight:600;line-height:1.35}
+.vid-s{font-size:10.5px;color:var(--muted);margin-top:2px;font-family:var(--f-mono)}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.quick button{font-size:11.5px;font-weight:500;padding:5px 11px;border-radius:20px;border:1px solid var(--brand-line);background:var(--surface);color:var(--brand);cursor:pointer}
+.quick button:hover{background:var(--brand-soft)}
+.escal{align-self:center;max-width:92%;width:100%}
+.compose{display:flex;align-items:center;gap:9px;padding:11px 15px;border-top:1px solid var(--line);background:var(--surface)}
+.compose input{flex:1;height:34px;border:1px solid var(--line);border-radius:9px;padding:0 12px;background:var(--surface-2);font-size:12.5px;outline:none;min-width:0}
+.compose input:focus{border-color:var(--brand);background:var(--surface)}
+
+/* ── VISUALIZADOR DE FUNDO ── */
+.viewer{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:#0A0D14;display:flex;flex-direction:column}
+.v-top{display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03);flex-wrap:wrap}
+.v-t{font-size:12px;font-weight:600;color:#E7ECF7;flex:1;min-width:0;display:flex;align-items:center;gap:8px}
+.v-tools{display:flex;gap:4px}
+.v-btn{height:26px;min-width:30px;padding:0 8px;border-radius:6px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.05);color:#B6C1D7;font-size:11px;font-weight:600;cursor:pointer;display:grid;place-items:center}
+.v-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+.v-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.v-btn svg{width:13px;height:13px;stroke-width:2}
+.fundus{position:relative;aspect-ratio:4/3;background:#05070C;overflow:hidden}
+.fundus-img{position:absolute;inset:0;margin:auto;width:86%;aspect-ratio:1;border-radius:50%;
+  background:
+    radial-gradient(circle at 68% 44%, rgba(255,246,214,.92) 0 2.6%, rgba(255,226,150,.55) 3.4%, transparent 7%),
+    radial-gradient(circle at 38% 55%, rgba(90,22,6,.85) 0 7%, transparent 13%),
+    radial-gradient(ellipse at 50% 50%, #C4682F 0%, #A24916 42%, #6E2708 74%, #3A1004 100%);
+  box-shadow:inset 0 0 70px rgba(0,0,0,.75)}
+.vessel{position:absolute;inset:0;width:100%;height:100%}
+.det{position:absolute;border:1.5px solid;border-radius:8px;pointer-events:none}
+.det-l{position:absolute;top:-9px;left:-1px;font-family:var(--f-mono);font-size:9.5px;font-weight:600;padding:1px 6px;border-radius:4px;white-space:nowrap;color:#fff}
+.det.c{border-color:#FF6E85;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 16px rgba(255,110,133,.3)}
+.det.c .det-l{background:#D4304C}
+.det.w{border-color:#F2B65F;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+.det.w .det-l{background:#A66B0C}
+.det.o{border-color:#4CD5B0;border-style:dashed;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+.det.o .det-l{background:#0B6E58}
+.v-bot{display:flex;align-items:center;gap:10px;padding:8px 13px;border-top:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03);font-family:var(--f-mono);font-size:10.5px;color:#8391AC;flex-wrap:wrap}
+.serie{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.serie-i{width:60px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);padding:5px;cursor:pointer;text-align:center}
+.serie-i:hover{border-color:var(--brand-line)}
+.serie-i.on{border-color:var(--crit);background:var(--crit-soft)}
+.serie-th{width:100%;aspect-ratio:1;border-radius:5px;background:radial-gradient(circle at 62% 45%,#E8C98A 0 8%,#A24916 40%,#3A1004 100%)}
+.serie-l{font-family:var(--f-mono);font-size:9.5px;color:var(--muted);margin-top:4px}
+.serie-i.on .serie-l{color:var(--crit);font-weight:600}
+
+/* ── ACHADOS ── */
+.find{display:flex;gap:11px;padding:11px 15px;border-bottom:1px solid var(--line-soft)}
+.find:last-child{border-bottom:0}
+.find-i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;flex-shrink:0}
+.find-i svg{width:15px;height:15px;stroke-width:2}
+.find-m{flex:1;min-width:0}
+.find-n{font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.find-d{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.why{margin-top:6px}
+.why summary{font-size:11px;color:var(--brand);cursor:pointer;font-weight:600;list-style:none;display:inline-flex;align-items:center;gap:4px}
+.why summary::-webkit-details-marker{display:none}
+.why summary::before{content:"▸";font-size:9px;transition:transform .15s;display:inline-block}
+.why[open] summary::before{transform:rotate(90deg)}
+.why p{font-size:11px;color:var(--muted);line-height:1.55;margin-top:6px;padding-left:11px;border-left:2px solid var(--line)}
+.gauge{display:flex;align-items:center;gap:14px}
+.gauge svg{flex-shrink:0}
+
+/* ── BASE DE CONHECIMENTO ── */
+.pipe{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.pipe-s{flex:1;min-width:150px;padding:13px 15px;position:relative;display:flex;flex-direction:column;gap:5px}
+.pipe-s:not(:last-child)::after{content:"";position:absolute;right:-1px;top:14px;bottom:14px;width:1px;background:var(--line)}
+.pipe-n{font-family:var(--f-mono);font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.08em}
+.pipe-t{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px}
+.pipe-t svg{width:14px;height:14px;stroke-width:2;flex-shrink:0}
+.pipe-d{font-size:11px;color:var(--muted);line-height:1.45}
+.pipe-c{font-family:var(--f-mono);font-size:11px;font-weight:600;margin-top:2px}
+.redact{background:var(--ink);color:var(--ink);border-radius:3px;padding:0 3px;user-select:none;font-family:var(--f-mono);letter-spacing:.02em}
+.caseid{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--ai);letter-spacing:-.01em}
+.kb-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface-2);cursor:pointer;transition:border-color .15s,transform .15s}
+.kb-card:hover{border-color:var(--ai-line);transform:translateY(-2px)}
+.kb-th{aspect-ratio:16/10;background:radial-gradient(circle at 60% 45%,#E8C98A 0 6%,#A24916 40%,#330E04 100%);position:relative}
+.kb-th.oct{background:linear-gradient(180deg,#0B1220 0 38%,#2B6FA8 42%,#7CC4E8 47%,#F2C14E 53%,#B4472B 58%,#160A08 66%,#080C16 100%)}
+.kb-th.cv{background:var(--surface-3);background-image:repeating-linear-gradient(0deg,transparent 0 9px,rgba(0,0,0,.14) 9px 10px),repeating-linear-gradient(90deg,transparent 0 9px,rgba(0,0,0,.14) 9px 10px);position:relative}
+.kb-th.cv::after{content:"";position:absolute;left:22%;top:26%;width:34%;height:30%;background:rgba(0,0,0,.62);border-radius:44% 20% 30% 50%}
+.kb-b{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.kb-t{font-size:12px;font-weight:600;line-height:1.35}
+.kb-m{display:flex;flex-wrap:wrap;gap:5px}
+.rag{border:1px solid var(--ai-line);background:var(--ai-soft);border-radius:10px;padding:13px 15px;display:flex;flex-direction:column;gap:10px}
+.rag-q{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;font-weight:600;line-height:1.5}
+.rag-q svg{width:15px;height:15px;stroke-width:2;color:var(--ai);flex-shrink:0;margin-top:2px}
+.rag-a{font-size:12.5px;line-height:1.65;color:var(--ink-2)}
+.cite{font-family:var(--f-mono);font-size:10px;font-weight:600;color:var(--ai);background:var(--surface);border:1px solid var(--ai-line);padding:0 5px;border-radius:4px;cursor:pointer;vertical-align:1px}
+.cite:hover{background:var(--ai-soft)}
+
+/* ── TABELA ── */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{text-align:left;font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:9px 15px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:10px 15px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--surface-2)}
+.tbl-wrap{overflow-x:auto}
+.sw{width:38px;height:21px;border-radius:12px;background:var(--surface-3);border:1px solid var(--line);position:relative;cursor:pointer;flex-shrink:0;transition:background .18s,border-color .18s;padding:0}
+.sw::after{content:"";position:absolute;left:2px;top:1.5px;width:16px;height:16px;border-radius:50%;background:var(--surface);box-shadow:var(--sh-1);transition:transform .18s}
+.sw[aria-checked="true"]{background:var(--ok);border-color:var(--ok)}
+.sw[aria-checked="true"]::after{transform:translateX(17px)}
+.sw.off-c[aria-checked="false"]{background:var(--crit-soft);border-color:var(--crit-line)}
+
+/* ── VAULT ── */
+.vault{border:1px solid var(--line);border-radius:11px;padding:14px;display:flex;flex-direction:column;gap:9px;background:var(--surface-2);height:100%}
+.vault.a{border-color:var(--crit-line);background:var(--crit-soft)}
+.vault.b{border-color:var(--ai-line);background:var(--ai-soft)}
+.vault-t{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:8px}
+.vault-t svg{width:15px;height:15px;stroke-width:2;flex-shrink:0}
+.vault ul{list-style:none;display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--ink-2);line-height:1.45}
+.vault li{display:flex;gap:7px;align-items:flex-start}
+.vault li::before{content:"";width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0;margin-top:7px;opacity:.5}
+.bridge{display:grid;place-items:center;padding:0 4px}
+.bridge-b{border:1px dashed var(--line);border-radius:9px;padding:9px 11px;text-align:center;font-size:11px;color:var(--muted);line-height:1.45;background:var(--surface)}
+.bridge-b svg{width:17px;height:17px;stroke-width:1.8;color:var(--warn);margin-bottom:5px}
+
+/* ── PALETA DE COMANDOS ── */
+.scrim{position:fixed;inset:0;background:rgba(6,10,20,.55);backdrop-filter:blur(3px);z-index:60;display:none;align-items:flex-start;justify-content:center;padding-top:11vh}
+.scrim.on{display:flex;animation:fade .16s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.pal{width:min(560px,92vw);background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-3);overflow:hidden;animation:pop .2s cubic-bezier(.2,.8,.3,1)}
+@keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+.pal-in{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid var(--line)}
+.pal-in svg{width:17px;height:17px;stroke-width:1.9;color:var(--muted);flex-shrink:0}
+.pal-in input{flex:1;border:0;background:none;outline:none;font-size:14.5px;min-width:0}
+.pal-list{max-height:340px;overflow-y:auto;padding:6px}
+.pal-i{display:flex;align-items:center;gap:11px;width:100%;padding:9px 11px;border-radius:9px;border:0;background:none;cursor:pointer;text-align:left;font-size:13px;color:var(--ink-2)}
+.pal-i:hover,.pal-i.sel{background:var(--brand-soft);color:var(--brand)}
+.pal-i svg{width:16px;height:16px;stroke-width:1.8;flex-shrink:0}
+.pal-i .k{margin-left:auto;font-size:10.5px;color:var(--muted);font-family:var(--f-mono)}
+.pal-empty{padding:22px 15px;text-align:center;font-size:12.5px;color:var(--muted)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--ink);color:var(--bg);padding:11px 17px;border-radius:10px;font-size:12.5px;font-weight:500;box-shadow:var(--sh-3);z-index:80;transition:transform .28s cubic-bezier(.2,.8,.3,1);max-width:min(440px,90vw);display:flex;align-items:center;gap:9px}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.toast svg{width:15px;height:15px;stroke-width:2.2;flex-shrink:0}
+
+/* ── DEMO BADGE ── */
+.demo{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:center;padding:6px 4px 2px;line-height:1.5}
+.app.collapsed .demo{display:none}
+@media (max-width:1100px){.demo{display:none}}
+
+/* ── RESPONSIVO ── */
+@media (max-width:1500px){.ws{grid-template-columns:242px minmax(0,1fr) 366px}}
+@media (max-width:1300px){
+  .ws{grid-template-columns:minmax(0,1fr) 366px}
+  .ws-ctx{grid-column:1/-1;order:-1}
+  .ws-ctx .card{display:grid;grid-template-columns:repeat(2,1fr);gap:0}
+  .gmain{grid-template-columns:1fr}
+  .g4{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:1100px){
+  .app{grid-template-columns:64px 1fr}
+  .app .brand-t,.app .nav-lbl,.app .nav-txt,.app .who-txt,.app .ghost-mini span{display:none}
+  .app .nav-i{justify-content:center;padding:9px 0}
+  .app .ghost-mini{justify-content:center}
+  .app .pip{position:absolute;top:2px;right:5px;font-size:9px;padding:0 4px}
+  .ws{grid-template-columns:1fr}
+  .g3,.g2{grid-template-columns:1fr}
+  .ws-ctx .card{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .g4{grid-template-columns:1fr}
+  .page{padding:14px 13px 30px}
+  .top{padding:0 13px;gap:9px}
+  .top-h h1{font-size:15px}
+  .top-h p{display:none}
+  .hero-k{grid-template-columns:repeat(2,1fr)}
+  .msg{max-width:90%}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<g id="i-eye" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></g>
+<g id="i-grid" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></g>
+<g id="i-users" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3.2"/><path d="M22 20v-2a4 4 0 0 0-3-3.87M16.5 4.2a3.2 3.2 0 0 1 0 5.6"/></g>
+<g id="i-note" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3H9a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v0a2 2 0 0 0-2-2Z"/><path d="M17 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/><path d="M8 12h8M8 16h5"/></g>
+<g id="i-alert" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.9 18a2 2 0 0 0 1.7 3h16.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></g>
+<g id="i-chat" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.9-.9L3 21l1.9-5a8.4 8.4 0 0 1-.9-3.9 8.4 8.4 0 0 1 8.4-9h.6a8.4 8.4 0 0 1 8 8v.4Z"/></g>
+<g id="i-scan" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.4"/></g>
+<g id="i-book" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 0 4 21.5v-2Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M9 7h7"/></g>
+<g id="i-shield" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5.5l-8-3-8 3V12c0 6 8 10 8 10Z"/><path d="M9.2 12.2 11.3 14.3l3.8-3.8"/></g>
+<g id="i-search" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></g>
+<g id="i-bell" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></g>
+<g id="i-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g>
+<g id="i-moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></g>
+<g id="i-panel" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M9.5 3v18"/></g>
+<g id="i-chev" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></g>
+<g id="i-back" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></g>
+<g id="i-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></g>
+<g id="i-x" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></g>
+<g id="i-pen" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></g>
+<g id="i-plus" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g>
+<g id="i-video" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m23 7-7 5 7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2.5"/></g>
+<g id="i-play" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4.5v15l13-7.5-13-7.5Z"/></g>
+<g id="i-phone" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.8 2Z"/></g>
+<g id="i-cal" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M16 2.5v5M8 2.5v5M3 10.5h18"/></g>
+<g id="i-clock" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 2"/></g>
+<g id="i-pulse" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 8-6-16-3 8H2"/></g>
+<g id="i-drop" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7 6.7 8a7.5 7.5 0 1 0 10.6 0L12 2.7Z"/></g>
+<g id="i-spark" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6 14 9l6.4 2-6.4 2-2 6.4-2-6.4L3.6 11 10 9l2-6.4Z"/><path d="M19 3.2 19.7 5l1.8.7-1.8.7L19 8.3l-.7-1.9L16.5 5.7l1.8-.7L19 3.2Z"/></g>
+<g id="i-lock" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="11" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></g>
+<g id="i-file" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2.5H7a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5l-5-5Z"/><path d="M14 2.5v5h5M9 13h6M9 17h4"/></g>
+<g id="i-filter" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z"/></g>
+<g id="i-out" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></g>
+<g id="i-layers" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.6 9.5 5-9.5 5-9.5-5 9.5-5Z"/><path d="m2.5 16.5 9.5 5 9.5-5M2.5 12l9.5 5 9.5-5"/></g>
+<g id="i-db" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8.5" ry="3.2"/><path d="M3.5 5.5v13c0 1.8 3.8 3.2 8.5 3.2s8.5-1.4 8.5-3.2v-13M3.5 12c0 1.8 3.8 3.2 8.5 3.2s8.5-1.4 8.5-3.2"/></g>
+<g id="i-userx" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="3.3"/><path d="m17 8 4 4M21 8l-4 4"/></g>
+<g id="i-hist" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4M3 4.5V10h5.5"/><path d="M12 7.5V12l3 2"/></g>
+<g id="i-zoom" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9M11 8.5v5M8.5 11h5"/></g>
+<g id="i-cmp" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M9 6h6a3 3 0 0 1 3 3v6M15 18H9a3 3 0 0 1-3-3V9"/></g>
+<g id="i-send" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2.5 11 13M21.5 2.5l-6.7 19-3.8-8.5L2.5 9.2l19-6.7Z"/></g>
+<g id="i-gear" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1.5a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 3.2 7.5a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1A1.6 1.6 0 0 0 8.6 1.6V1.5a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></g>
+<g id="i-info" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4.5M12 8h.01"/></g>
+<g id="i-tri-up" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></g>
+<g id="i-tri-dn" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M18.5 12.5 12 19l-6.5-6.5"/></g>
+</defs></svg>
+
+<div class="app" id="app">
+
+<aside class="rail">
+  <div class="brand">
+    <div class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-eye"/></svg></div>
+    <div class="brand-t">Retin<span>AI</span></div>
+  </div>
+  <nav class="nav" aria-label="Navegação principal">
+    <div class="nav-lbl first">Principal</div>
+    <button class="nav-i" data-go="painel" aria-current="page"><svg viewBox="0 0 24 24"><use href="#i-grid"/></svg><span class="nav-txt">Painel</span></button>
+    <button class="nav-i" data-go="pacientes"><svg viewBox="0 0 24 24"><use href="#i-users"/></svg><span class="nav-txt">Pacientes</span></button>
+    <button class="nav-i" data-go="atendimento"><svg viewBox="0 0 24 24"><use href="#i-note"/></svg><span class="nav-txt">Atendimento</span></button>
+    <div class="nav-lbl">Monitoramento</div>
+    <button class="nav-i" data-go="risco"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><span class="nav-txt">Central de risco</span><span class="pip">3</span></button>
+    <button class="nav-i" data-go="conversas"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg><span class="nav-txt">Conversas</span><span class="pip w">7</span></button>
+    <div class="nav-lbl">Inteligência</div>
+    <button class="nav-i" data-go="exames"><svg viewBox="0 0 24 24"><use href="#i-scan"/></svg><span class="nav-txt">Exames e imagem</span><span class="pip a">8</span></button>
+    <button class="nav-i" data-go="base"><svg viewBox="0 0 24 24"><use href="#i-book"/></svg><span class="nav-txt">Base de conhecimento</span></button>
+    <div class="nav-lbl">Governança</div>
+    <button class="nav-i" data-go="privacidade"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg><span class="nav-txt">Privacidade e LGPD</span></button>
+  </nav>
+  <div class="rail-foot">
+    <div class="demo">Protótipo navegável<br>dados fictícios</div>
+    <button class="ghost-mini" id="collapse"><svg viewBox="0 0 24 24"><use href="#i-panel"/></svg><span>Recolher menu</span></button>
+    <div class="who">
+      <div class="who-av">RM</div>
+      <div class="who-txt">
+        <div class="who-n">Dr. Rafael Mendes</div>
+        <div class="who-r">Oftalmologia · R3</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="top">
+    <button class="iconbtn" id="back" style="display:none" title="Voltar"><svg viewBox="0 0 24 24"><use href="#i-back"/></svg></button>
+    <div class="top-h">
+      <h1 id="ttl">Painel</h1>
+      <p id="sub">Quarta-feira, 26 de agosto · 14 atendimentos hoje · 3 pacientes em janela crítica</p>
+    </div>
+    <div class="top-r">
+      <button class="kbd-btn" id="openpal"><svg viewBox="0 0 24 24"><use href="#i-search"/></svg><span>Buscar</span><kbd>Ctrl K</kbd></button>
+      <button class="iconbtn" id="theme" title="Alternar tema"><svg viewBox="0 0 24 24" id="theme-ico"><use href="#i-moon"/></svg></button>
+      <button class="iconbtn" data-toast="3 alertas críticos e 7 conversas aguardam resposta." title="Notificações"><svg viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="dot"></span></button>
+      <button class="btn btn-p" data-go="atendimento"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>Novo atendimento</button>
+    </div>
+  </header>
+
+  <div class="view" id="view">
+
+<!-- ═════════ PAINEL ═════════ -->
+<section class="page on" id="p-painel">
+
+  <div class="g4">
+    <div class="met">
+      <div class="met-l"><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg>Em janela crítica pós-op</div>
+      <div class="met-v" style="color:var(--crit)">3</div>
+      <div class="met-s"><span class="chip c">D+1 a D+7</span> maior incidência</div>
+    </div>
+    <div class="met">
+      <div class="met-l"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>Sinais de alarme relatados</div>
+      <div class="met-v" style="color:var(--crit)">2</div>
+      <div class="met-s">últimas 24 h · via WhatsApp</div>
+    </div>
+    <div class="met">
+      <div class="met-l"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>Check-ins sem resposta</div>
+      <div class="met-v" style="color:var(--warn)">7</div>
+      <div class="met-s"><svg viewBox="0 0 24 24" style="color:var(--warn)"><use href="#i-tri-up"/></svg>3 há mais de 48 h</div>
+    </div>
+    <div class="met">
+      <div class="met-l"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>Aguardando sua validação</div>
+      <div class="met-v" style="color:var(--ai)">11</div>
+      <div class="met-s">8 laudos · 3 prontuários</div>
+    </div>
+  </div>
+
+  <div class="gmain">
+    <div class="card">
+      <div class="card-h">
+        <h2><svg viewBox="0 0 24 24"><use href="#i-pulse"/></svg>Quem precisa de você agora</h2>
+        <button class="link" data-go="risco">Central de risco<svg viewBox="0 0 24 24" width="12" height="12" style="stroke-width:2.4"><use href="#i-chev"/></svg></button>
+      </div>
+      <div class="card-b" style="padding-bottom:13px">
+        <div class="ladder">
+          <i style="width:4%;background:var(--crit)"></i>
+          <i style="width:11%;background:var(--warn)"></i>
+          <i style="width:85%;background:var(--ok)"></i>
+        </div>
+        <div class="ladder-k">
+          <button data-toast="Filtrando por risco crítico."><span class="n" style="color:var(--crit)">3</span><span class="t">críticos</span></button>
+          <button data-toast="Filtrando por risco de atenção."><span class="n" style="color:var(--warn)">8</span><span class="t">atenção</span></button>
+          <button data-toast="Filtrando por pacientes estáveis."><span class="n" style="color:var(--ok)">131</span><span class="t">estáveis</span></button>
+          <button data-toast="Mostrando pacientes sem contato nas últimas 72 h."><span class="n" style="color:var(--muted)">9</span><span class="t">sem contato há 72 h</span></button>
+        </div>
+      </div>
+      <div class="rows" style="border-top:1px solid var(--line-soft)">
+
+        <button class="row crit" data-go="conversas">
+          <span class="av c">MS</span>
+          <span class="row-m">
+            <span class="row-n">Maria A. Santos<span class="chip c"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>Sinal de alarme</span></span>
+            <span class="row-d">Facectomia OD · <b>D+3</b> — relatou dor 8/10, halos coloridos e hiperemia progressiva</span>
+          </span>
+          <span class="row-e">
+            <span class="srcs"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>há 22 min</span>
+            <span class="score"><span class="score-v" style="color:var(--crit)">9.1</span><span class="score-l">risco</span></span>
+          </span>
+        </button>
+
+        <button class="row crit" data-go="conversas">
+          <span class="av c">RL</span>
+          <span class="row-m">
+            <span class="row-n">Roberto Lima<span class="chip c"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>Sinal de alarme</span></span>
+            <span class="row-d">Vitrectomia OS · <b>D+6</b> — moscas volantes novas e fotopsias há 1 dia</span>
+          </span>
+          <span class="row-e">
+            <span class="srcs"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>há 1 h</span>
+            <span class="score"><span class="score-v" style="color:var(--crit)">8.8</span><span class="score-l">risco</span></span>
+          </span>
+        </button>
+
+        <button class="row crit" data-go="paciente">
+          <span class="av c">JF</span>
+          <span class="row-m">
+            <span class="row-n">José Carlos Ferreira<span class="chip w">Adesão 45%</span></span>
+            <span class="row-d">Glaucoma bilateral · sem registro de colírio há <b>4 dias</b> · última PIO 28 / 26 mmHg</span>
+          </span>
+          <span class="row-e">
+            <span class="srcs"><svg viewBox="0 0 24 24"><use href="#i-drop"/></svg>adesão</span>
+            <span class="score"><span class="score-v" style="color:var(--crit)">8.4</span><span class="score-l">risco</span></span>
+          </span>
+        </button>
+
+        <button class="row warn" data-go="paciente">
+          <span class="av w">AR</span>
+          <span class="row-m">
+            <span class="row-n">Ana Paula Ribeiro<span class="chip w">3 check-ins sem resposta</span></span>
+            <span class="row-d">Retinopatia diabética proliferativa · HbA1c 9,4% · retorno atrasado em 3 semanas</span>
+          </span>
+          <span class="row-e">
+            <span class="srcs"><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg>72 h</span>
+            <span class="score"><span class="score-v" style="color:var(--warn)">7.2</span><span class="score-l">risco</span></span>
+          </span>
+        </button>
+
+        <button class="row warn" data-go="exames">
+          <span class="av w">CS</span>
+          <span class="row-m">
+            <span class="row-n">Célia Souza<span class="chip a"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>Laudo aguardando validação</span></span>
+            <span class="row-d">Retinografia OS · pré-análise sugere <b>drusas moles em polo posterior</b></span>
+          </span>
+          <span class="row-e">
+            <span class="srcs"><svg viewBox="0 0 24 24"><use href="#i-scan"/></svg>há 2 h</span>
+            <span class="score"><span class="score-v" style="color:var(--warn)">5.6</span><span class="score-l">risco</span></span>
+          </span>
+        </button>
+
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg>Janela crítica pós-operatória</h2></div>
+        <div class="card-b">
+          <div class="window">
+            <div class="win-track">
+              <div class="win-cell"></div>
+              <div class="win-cell risk"><span class="win-pt c">1</span></div>
+              <div class="win-cell risk"></div>
+              <div class="win-cell risk"><span class="win-pt c">1</span></div>
+              <div class="win-cell risk"></div>
+              <div class="win-cell risk"></div>
+              <div class="win-cell mid"><span class="win-pt c">1</span></div>
+              <div class="win-cell mid"><span class="win-pt w">2</span></div>
+            </div>
+            <div class="win-scale"><span>D0</span><span>D1</span><span>D2</span><span>D3</span><span>D4</span><span>D5</span><span>D6</span><span>D7</span></div>
+          </div>
+          <p class="hint" style="margin-top:11px;line-height:1.55">Faixa vermelha marca o intervalo de maior incidência de endoftalmite aguda pós-facectomia. Pacientes nesse intervalo recebem check-in diário automático e escalonam com um único sinal de alarme.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">
+          <h2><svg viewBox="0 0 24 24"><use href="#i-drop"/></svg>Adesão ao tratamento</h2>
+          <span class="chip o">média 78%</span>
+        </div>
+        <div class="card-b">
+          <div class="bars">
+            <div class="bar-g"><div class="bar" style="height:58%;background:var(--ok)"></div><span class="bar-l">S1</span></div>
+            <div class="bar-g"><div class="bar" style="height:71%;background:var(--ok)"></div><span class="bar-l">S2</span></div>
+            <div class="bar-g"><div class="bar" style="height:66%;background:var(--ok)"></div><span class="bar-l">S3</span></div>
+            <div class="bar-g"><div class="bar" style="height:80%;background:var(--ok)"></div><span class="bar-l">S4</span></div>
+            <div class="bar-g"><div class="bar" style="height:74%;background:var(--ok)"></div><span class="bar-l">S5</span></div>
+            <div class="bar-g"><div class="bar" style="height:52%;background:var(--warn)"></div><span class="bar-l">S6</span></div>
+            <div class="bar-g"><div class="bar" style="height:88%;background:var(--ok)"></div><span class="bar-l">S7</span></div>
+            <div class="bar-g"><div class="bar" style="height:83%;background:var(--ok)"></div><span class="bar-l">S8</span></div>
+          </div>
+          <div class="legend">
+            <span><i style="background:var(--ok)"></i>≥ 70% das doses confirmadas</span>
+            <span><i style="background:var(--warn)"></i>abaixo da meta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-h">
+        <h2><svg viewBox="0 0 24 24"><use href="#i-cal"/></svg>Agenda de hoje</h2>
+        <button class="link" data-toast="Agenda completa da semana.">Ver semana</button>
+      </div>
+      <div class="rows">
+        <button class="row" data-go="atendimento">
+          <span class="av b" style="font-size:10.5px">08:30</span>
+          <span class="row-m"><span class="row-n">Helena Barbosa <span class="chip">Retorno</span></span><span class="row-d">Pós-facectomia OE · D+30 · avaliar acuidade final</span></span>
+          <span class="row-e"><span class="chip o"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Atendida</span></span>
+        </button>
+        <button class="row" data-go="atendimento">
+          <span class="av b" style="font-size:10.5px">09:15</span>
+          <span class="row-m"><span class="row-n">José Carlos Ferreira <span class="chip c">Encaixe urgente</span></span><span class="row-d">Glaucoma bilateral · aferir PIO · revisar adesão ao colírio</span></span>
+          <span class="row-e"><span class="chip b">Em andamento</span></span>
+        </button>
+        <button class="row" data-go="atendimento">
+          <span class="av b" style="font-size:10.5px">10:00</span>
+          <span class="row-m"><span class="row-n">Marcos Antunes <span class="chip">Primeira consulta</span></span><span class="row-d">Queixa de baixa visual progressiva bilateral há 6 meses</span></span>
+          <span class="row-e"><span class="chip">Aguardando</span></span>
+        </button>
+        <button class="row" data-go="conversas">
+          <span class="av b" style="font-size:10.5px">11:00</span>
+          <span class="row-m"><span class="row-n">Maria A. Santos <span class="chip a"><svg viewBox="0 0 24 24"><use href="#i-video"/></svg>Teleconsulta</span></span><span class="row-d">Sala segura já criada · avaliação de dor pós-op D+3</span></span>
+          <span class="row-e"><span class="chip w">Em 45 min</span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">
+        <h2><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>O que a IA fez nas últimas 24 h</h2>
+        <span class="ai-tag"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>Assistente</span>
+      </div>
+      <div class="card-b" style="display:flex;flex-direction:column;gap:12px">
+        <dl class="kv" style="grid-template-columns:1fr auto;gap:9px 14px">
+          <dt style="color:var(--ink-2);font-size:12.5px">Orientações pós-op enviadas por WhatsApp</dt><dd>34</dd>
+          <dt style="color:var(--ink-2);font-size:12.5px">Vídeos de técnica entregues e assistidos</dt><dd>21 / 28</dd>
+          <dt style="color:var(--ink-2);font-size:12.5px">Check-ins respondidos pelos pacientes</dt><dd>61 / 68</dd>
+          <dt style="color:var(--ink-2);font-size:12.5px">Conversas escalonadas para você</dt><dd style="color:var(--crit)">3</dd>
+          <dt style="color:var(--ink-2);font-size:12.5px">Exames pré-analisados</dt><dd>8</dd>
+          <dt style="color:var(--ink-2);font-size:12.5px">Prontuários rascunhados na consulta</dt><dd>3</dd>
+        </dl>
+        <div class="guard">
+          <svg viewBox="0 0 24 24"><use href="#i-shield"/></svg>
+          <span>Nada aqui virou conduta sozinho. Mensagens saem de modelos que você aprovou, laudos e prontuários ficam em rascunho até <strong>sua assinatura digital</strong>, e toda escalada de risco é registrada em trilha de auditoria.</span>
+        </div>
+        <button class="btn btn-a btn-block" data-go="exames"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Revisar as 11 pendências</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ PACIENTES ═════════ -->
+<section class="page" id="p-pacientes">
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div style="flex:1;min-width:230px;display:flex;align-items:center;gap:9px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)">
+      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:1.9;color:var(--muted);fill:none;flex-shrink:0"><use href="#i-search"/></svg>
+      <input id="pq" placeholder="Buscar por nome, diagnóstico, procedimento ou protocolo" style="flex:1;border:0;background:none;outline:none;font-size:13px;min-width:0">
+    </div>
+    <button class="btn btn-g" style="height:36px"><svg viewBox="0 0 24 24"><use href="#i-filter"/></svg>Filtros</button>
+    <button class="btn btn-g" style="height:36px"><svg viewBox="0 0 24 24"><use href="#i-out"/></svg>Exportar</button>
+    <button class="btn btn-p" style="height:36px"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>Novo paciente</button>
+  </div>
+
+  <div class="card">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr>
+          <th>Paciente</th><th>Diagnóstico principal</th><th>Protocolo ativo</th>
+          <th style="text-align:right">Adesão</th><th style="text-align:right">Risco</th><th>Situação</th><th></th>
+        </tr></thead>
+        <tbody id="ptb">
+          <tr data-k="maria santos facectomia catarata pos-op"><td><div style="display:flex;align-items:center;gap:10px"><span class="av c" style="width:30px;height:30px;border-radius:8px;font-size:10.5px">MS</span><div><div style="font-weight:600">Maria A. Santos</div><div class="hint">67 anos · fem.</div></div></div></td><td>Catarata senil — facectomia OD</td><td>Pós-facectomia · <span class="mono">D+3 de 30</span></td><td style="text-align:right"><span class="num" style="color:var(--ok)">92%</span></td><td style="text-align:right"><span class="num" style="color:var(--crit);font-weight:600">9.1</span></td><td><span class="sev c"><i></i>Crítico</span></td><td><button class="btn btn-g btn-sm" data-go="paciente">Abrir</button></td></tr>
+          <tr data-k="roberto lima vitrectomia descolamento retina"><td><div style="display:flex;align-items:center;gap:10px"><span class="av c" style="width:30px;height:30px;border-radius:8px;font-size:10.5px">RL</span><div><div style="font-weight:600">Roberto Lima</div><div class="hint">61 anos · masc.</div></div></div></td><td>Membrana epirretiniana — vitrectomia OS</td><td>Pós-vitrectomia · <span class="mono">D+6 de 45</span></td><td style="text-align:right"><span class="num" style="color:var(--ok)">85%</span></td><td style="text-align:right"><span class="num" style="color:var(--crit);font-weight:600">8.8</span></td><td><span class="sev c"><i></i>Crítico</span></td><td><button class="btn btn-g btn-sm" data-go="paciente">Abrir</button></td></tr>
+          <tr data-k="jose carlos ferreira glaucoma pio colirio"><td><div style="display:flex;align-items:center;gap:10px"><span class="av c" style="width:30px;height:30px;border-radius:8px;font-size:10.5px">JF</span><div><div style="font-weight:600">José Carlos Ferreira</div><div class="hint">58 anos · masc.</div></div></div></td><td>Glaucoma primário de ângulo aberto</td><td>Crônico · <span class="mono">mês 14</span></td><td style="text-align:right"><span class="num" style="color:var(--crit)">45%</span></td><td style="text-align:right"><span class="num" style="color:var(--crit);font-weight:600">8.4</span></td><td><span class="sev c"><i></i>Crítico</span></td><td><button class="btn btn-g btn-sm" data-go="paciente">Abrir</button></td></tr>
+          <tr data-k="ana paula ribeiro retinopatia diabetica"><td><div style="display:flex;align-items:center;gap:10px"><span class="av w" style="width:30px;height:30px;border-radius:8px;font-size:10.5px">AR</span><div><div style="font-weight:600">Ana Paula Ribeiro</div><div class="hint">44 anos · fem.</div></div></div></td><td>Retinopatia diabética proliferativa</td><td>Crônico · <span class="mono">mês 8</span></td><td style="text-align:right"><span class="num" style="color:var(--warn)">42%</span></td><td style="text-align:right"><span class="num" style="color:var(--warn);font-weight:600">7.2</span></td><td><span class="sev w"><i></i>Atenção</span></td><td><button class="btn btn-g btn-sm" data-go="paciente">Abrir</button></td></tr>
+          <tr data-k="celia souza dmri drusas retinografia"><td><div style="display:flex;align-items:center;gap:10px"><span class="av w" style="width:30px;height:30px;border-radius:8px;font-size:10.5px">CS</span><div><div style="font-weight:600">Célia Souza</div><div class="hint">72 anos · fem.</div></div></div></td><td>DMRI seca — suspeita de progressão</td><td>Pós-facectomia · <span class="mono">D+12 de 30</span></td><td style="text-align:right"><span class="num" style="color:var(--ok)">88%</span></td><td style="text-align:right"><span class="num" style="color:var(--warn);font-weight:600">5.6</span></td><td><span class="sev w"><i></i>Atenção</span></td><td><button class="btn btn-g btn-sm" data-go="paciente">Abrir</button></td></tr>
+          <tr data-k="helena barbosa facectomia alta"><td><div style="display:flex;align-items:center;gap:10px"><span class="av o" style="width:30px;height:30px;border-radius:8px;font-size:10.5px">HB</span><div><div style="font-weight:600">Helena Barbosa</div><div class="hint">69 anos · fem.</div></div></div></td><td>Catarata senil — facectomia OE</td><td>Pós-facectomia · <span class="mono">D+30 de 30</span></td><td style="text-align:right"><span class="num" style="color:var(--ok)">96%</span></td><td style="text-align:right"><span class="num" style="color:var(--ok);font-weight:600">1.4</span></td><td><span class="sev o"><i></i>Estável</span></td><td><button class="btn btn-g btn-sm" data-go="paciente">Abrir</button></td></tr>
+          <tr data-k="marcos antunes lasik ceratite refrativa"><td><div style="display:flex;align-items:center;gap:10px"><span class="av o" style="width:30px;height:30px;border-radius:8px;font-size:10.5px">MA</span><div><div style="font-weight:600">Marcos Antunes</div><div class="hint">33 anos · masc.</div></div></div></td><td>Miopia — LASIK bilateral</td><td>Pós-LASIK · <span class="mono">D+9 de 28</span></td><td style="text-align:right"><span class="num" style="color:var(--ok)">100%</span></td><td style="text-align:right"><span class="num" style="color:var(--ok);font-weight:600">0.9</span></td><td><span class="sev o"><i></i>Estável</span></td><td><button class="btn btn-g btn-sm" data-go="paciente">Abrir</button></td></tr>
+          <tr data-k="pedro martins dmri anti-vegf injecao"><td><div style="display:flex;align-items:center;gap:10px"><span class="av o" style="width:30px;height:30px;border-radius:8px;font-size:10.5px">PM</span><div><div style="font-weight:600">Pedro Martins</div><div class="hint">78 anos · masc.</div></div></div></td><td>DMRI exsudativa — anti-VEGF</td><td>Injeções · <span class="mono">ciclo 5 de 6</span></td><td style="text-align:right"><span class="num" style="color:var(--ok)">91%</span></td><td style="text-align:right"><span class="num" style="color:var(--ok);font-weight:600">2.8</span></td><td><span class="sev o"><i></i>Estável</span></td><td><button class="btn btn-g btn-sm" data-go="paciente">Abrir</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="hint" id="pcount">8 de 142 pacientes · ordenado por risco</p>
+</section>
+
+<!-- ═════════ ATENDIMENTO ═════════ -->
+<section class="page" id="p-atendimento">
+  <div class="ws">
+
+    <div class="ws-col ws-ctx">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-hist"/></svg>Contexto do paciente</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:11px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="av c" style="width:38px;height:38px;border-radius:10px;font-size:12px">JF</span>
+            <div style="min-width:0">
+              <div style="font-size:13.5px;font-weight:600">José Carlos Ferreira</div>
+              <div class="hint">58 anos · 14º mês de acompanhamento</div>
+            </div>
+          </div>
+          <div class="guard">
+            <svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>
+            <span><strong>Resumo de 9 consultas anteriores.</strong> POAA bilateral desde jan/2025, PIO-alvo &lt; 16 mmHg nunca sustentada. Adesão irregular documentada em 4 retornos, sempre associada a interrupção por custo. Escavação em progressão lenta OD.</span>
+          </div>
+          <button class="link" data-go="paciente">Abrir histórico completo<svg viewBox="0 0 24 24" width="12" height="12" style="stroke-width:2.4"><use href="#i-chev"/></svg></button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-drop"/></svg>Em uso</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:9px;font-size:12.5px">
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><span>Timolol 0,5% AO</span><span class="chip c">interrompido</span></div>
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><span>Brimonidina 0,2% AO</span><span class="chip c">interrompido</span></div>
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><span>Losartana 50 mg</span><span class="chip o">em uso</span></div>
+          <hr style="border:0;border-top:1px solid var(--line-soft)">
+          <div><div class="hint" style="margin-bottom:4px">Alergias</div><span class="chip w">Sulfa — rash</span></div>
+          <div><div class="hint" style="margin-bottom:4px">Cirurgias</div><span style="font-size:12px">Nenhuma cirurgia ocular</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-pulse"/></svg>PIO — 12 meses</h2></div>
+        <div class="card-b">
+          <div class="bars" style="height:64px">
+            <div class="bar-g"><div class="bar" style="height:44%;background:var(--ok)"></div><span class="bar-l">set</span></div>
+            <div class="bar-g"><div class="bar" style="height:50%;background:var(--ok)"></div><span class="bar-l">nov</span></div>
+            <div class="bar-g"><div class="bar" style="height:62%;background:var(--warn)"></div><span class="bar-l">fev</span></div>
+            <div class="bar-g"><div class="bar" style="height:70%;background:var(--warn)"></div><span class="bar-l">mai</span></div>
+            <div class="bar-g"><div class="bar" style="height:100%;background:var(--crit)"></div><span class="bar-l">hoje</span></div>
+          </div>
+          <div class="legend"><span><i style="background:var(--crit)"></i>OD 32 mmHg · alvo &lt; 16</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-col">
+      <div class="card pad">
+        <div class="card-h">
+          <h2><svg viewBox="0 0 24 24"><use href="#i-pen"/></svg>Suas anotações da consulta</h2>
+          <span class="chip">Texto livre · do seu jeito</span>
+        </div>
+        <div class="pad-tools">
+          <button class="tok" data-ins="AV cc OD 20/  OS 20/">AV cc</button>
+          <button class="tok" data-ins="PIO OD  OS  (Goldmann)">PIO</button>
+          <button class="tok" data-ins="BMC: ">Biomicroscopia</button>
+          <button class="tok" data-ins="FO: disco  escavação  mácula ">Fundoscopia</button>
+          <button class="tok" data-ins="Gonio: ">Gonioscopia</button>
+          <button class="tok" data-ins="Refração: ">Refração</button>
+          <button class="tok" data-ins="Conduta: ">Conduta</button>
+        </div>
+        <textarea class="pad-ta" id="pad" spellcheck="false">JCF 58a retorno glaucoma POAA bilat
+qx: parou colírio há ~4 dias, acabou o frasco e não conseguiu
+comprar. nega dor. refere "vista embaçando de tarde"
+
+AV cc OD 20/40  OS 20/30
+PIO 9h20  OD 32  OS 29  (Goldmann)
+BMC: córnea transparente, CA formada, sem cel/flare,
+     esclerose nuclear +1 AO
+FO: disco OD escavação 0.8, rima inferior afilada; OS 0.7
+    sem hemorragia de disco hoje
+Gonio: aberto grau III AO
+CV mai/26: defeito arqueado superior OD, MD -6.2
+
+Conduta: reiniciar timolol 0,5% 12/12h + brimonidina 0,2%
+12/12h AO. discutir SLT. retorno 3 sem c/ PIO.
+orientar oclusão nasolacrimal</textarea>
+        <div class="pad-foot">
+          <span class="rec"><i></i>Ditado por voz ativo</span>
+          <span class="hint">Salvo há 12 s</span>
+          <button class="btn btn-a btn-sm" style="margin-left:auto" data-toast="Prontuário reprocessado a partir das suas anotações."><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>Reprocessar</button>
+          <button class="btn btn-g btn-sm" data-toast="Anexo de exame aberto."><svg viewBox="0 0 24 24"><use href="#i-file"/></svg>Anexar exame</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">
+          <h2><svg viewBox="0 0 24 24"><use href="#i-cmp"/></svg>Divergências com o histórico</h2>
+          <span class="chip w">2 para confirmar</span>
+        </div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:9px">
+          <div class="note w">
+            <svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>
+            <span><b>Escavação OD 0.8</b> hoje; em 12/02/2026 constava <b>0.7</b>. Se confirmado, isso caracteriza progressão estrutural e muda a conduta sugerida.
+              <span style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-sm btn-g" data-toast="Confirmado: progressão estrutural registrada.">Confirmar 0.8</button><button class="btn btn-sm btn-g" data-toast="Mantido 0.7 — divergência descartada.">Manter 0.7</button></span></span>
+          </div>
+          <div class="note w">
+            <svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>
+            <span>Campo visual mais recente é de <b>mai/2026</b> (3 meses). O protocolo de glaucoma da clínica pede CV a cada 6 meses ou imediato se houver progressão de disco.
+              <span style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-sm btn-g" data-toast="Campo visual solicitado e agendado.">Solicitar CV agora</button><button class="btn btn-sm btn-g" data-toast="Alerta silenciado neste atendimento.">Não é necessário</button></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-col">
+      <div class="card ws-sticky">
+        <div class="card-h">
+          <h2><svg viewBox="0 0 24 24"><use href="#i-note"/></svg>Prontuário estruturado</h2>
+          <span class="ai-tag"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>Rascunho</span>
+        </div>
+
+        <div class="chart-out">
+          <div class="co-sec">
+            <div class="co-h"><h3>Queixa e história atual</h3><span class="acts"><button class="mini" title="Editar" data-toast="Bloco liberado para edição."><svg viewBox="0 0 24 24"><use href="#i-pen"/></svg></button></span></div>
+            <p class="co-body">Paciente de 58 anos em acompanhamento de <strong>glaucoma primário de ângulo aberto bilateral</strong>, retorna referindo <strong>interrupção do tratamento tópico há aproximadamente 4 dias</strong> por término do frasco e impossibilidade de compra. Nega dor ocular. Relata embaçamento visual vespertino.</p>
+          </div>
+
+          <div class="co-sec">
+            <div class="co-h"><h3>Exame oftalmológico</h3><span class="acts"><button class="mini" title="Editar" data-toast="Bloco liberado para edição."><svg viewBox="0 0 24 24"><use href="#i-pen"/></svg></button></span></div>
+            <dl class="kv">
+              <dt>AV c/ correção</dt><dd>OD 20/40 · OS 20/30</dd>
+              <dt>PIO (Goldmann, 9h20)</dt><dd style="color:var(--crit)">OD 32 · OS 29 mmHg</dd>
+              <dt>Biomicroscopia</dt><dd>Córnea transparente, CA formada, sem células ou flare, esclerose nuclear +1 AO</dd>
+              <dt>Fundoscopia</dt><dd>Escavação OD 0,8 com afilamento de rima inferior · OS 0,7 · sem hemorragia de disco</dd>
+              <dt>Gonioscopia</dt><dd>Ângulo aberto grau III AO</dd>
+              <dt>Campo visual</dt><dd>mai/2026 — defeito arqueado superior OD, MD −6,2 dB</dd>
+            </dl>
+          </div>
+
+          <div class="co-sec">
+            <div class="co-h"><h3>Hipóteses diagnósticas</h3><span class="acts"><button class="mini" title="Adicionar hipótese" data-toast="Nova hipótese adicionada manualmente."><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg></button></span></div>
+            <div class="hyp">
+              <div class="hyp-i">
+                <div class="hyp-t">
+                  <span class="hyp-n">POAA descompensado por interrupção terapêutica<span class="cid">H40.1</span></span>
+                  <span class="conf" style="color:var(--crit)">91%<span class="conf-bar"><i style="width:91%;background:var(--crit)"></i></span></span>
+                </div>
+                <p class="hyp-w"><em>Base:</em> PIO 32/29 mmHg contra 18/17 registradas em mai/2026, com relato explícito de suspensão do colírio há 4 dias e ângulo aberto à gonioscopia.</p>
+              </div>
+              <div class="hyp-i">
+                <div class="hyp-t">
+                  <span class="hyp-n">Progressão estrutural glaucomatosa OD<span class="cid">H40.1</span></span>
+                  <span class="conf" style="color:var(--warn)">64%<span class="conf-bar"><i style="width:64%;background:var(--warn)"></i></span></span>
+                </div>
+                <p class="hyp-w"><em>Base:</em> escavação anotada hoje em 0,8 contra 0,7 em fev/2026, com afilamento de rima inferior compatível com o defeito arqueado superior do campo visual. <strong>Depende da divergência à esquerda ser confirmada.</strong></p>
+              </div>
+              <div class="hyp-i">
+                <div class="hyp-t">
+                  <span class="hyp-n">Barreira de acesso ao medicamento<span class="cid">Z91.1</span></span>
+                  <span class="conf" style="color:var(--warn)">88%<span class="conf-bar"><i style="width:88%;background:var(--warn)"></i></span></span>
+                </div>
+                <p class="hyp-w"><em>Base:</em> quarta interrupção documentada por custo em 14 meses. Sem tratar a causa, a conduta medicamentosa tende a falhar de novo.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="co-sec">
+            <div class="co-h"><h3>Conduta registrada</h3><span class="acts"><button class="mini" title="Editar" data-toast="Bloco liberado para edição."><svg viewBox="0 0 24 24"><use href="#i-pen"/></svg></button></span></div>
+            <p class="co-body">Reintroduzir <strong>maleato de timolol 0,5%</strong> 12/12 h e <strong>brimonidina 0,2%</strong> 12/12 h AO. Orientada oclusão nasolacrimal após instilação. Discutida <strong>SLT</strong> como alternativa poupadora de colírio. Retorno em 3 semanas para curva tensional.</p>
+          </div>
+
+          <div class="co-sec">
+            <div class="co-h"><h3>Sugestões para você decidir</h3><span class="ai-tag">Opcional</span></div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div class="note b"><svg viewBox="0 0 24 24"><use href="#i-info"/></svg><span>Considerar <b>encaminhamento à assistência farmacêutica</b> — pelo padrão de recaída, é o fator que mais explica a descompensação.</span></div>
+              <div class="note b"><svg viewBox="0 0 24 24"><use href="#i-info"/></svg><span>Ativar o protocolo <b>Glaucoma — reinício de tratamento</b>: lembrete diário de colírio por 21 dias e confirmação de compra do frasco em 48 h.</span></div>
+            </div>
+          </div>
+
+          <div class="sign">
+            <span class="hint" style="flex:1;min-width:150px">Rascunho gerado pela IA. Nada é salvo no prontuário sem sua revisão.</span>
+            <button class="btn btn-g btn-sm" data-toast="Rascunho salvo. Você pode retomar depois.">Salvar rascunho</button>
+            <button class="btn btn-p btn-sm" data-toast="Prontuário assinado digitalmente e arquivado no histórico."><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Revisar e assinar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═════════ PACIENTE ═════════ -->
+<section class="page" id="p-paciente">
+  <div class="card">
+    <div class="hero">
+      <div class="hero-av">JF</div>
+      <div class="hero-m">
+        <div class="hero-n">José Carlos Ferreira</div>
+        <div class="hero-sub">
+          <span><svg viewBox="0 0 24 24" fill="none"><use href="#i-users"/></svg>58 anos · masculino</span>
+          <span><svg viewBox="0 0 24 24" fill="none"><use href="#i-phone"/></svg>(41) 9 9988-7766</span>
+          <span><svg viewBox="0 0 24 24" fill="none"><use href="#i-cal"/></svg>paciente desde jan/2025</span>
+          <span><svg viewBox="0 0 24 24" fill="none"><use href="#i-file"/></svg>prontuário 04127</span>
+        </div>
+        <div class="hero-tags">
+          <span class="chip b">Glaucoma primário de ângulo aberto</span>
+          <span class="chip">Protocolo crônico · mês 14</span>
+          <span class="chip c">Risco crítico 8.4</span>
+          <span class="chip o"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Consentiu WhatsApp</span>
+        </div>
+      </div>
+      <div class="hero-k">
+        <div><div class="v" style="color:var(--crit)">32</div><div class="l">PIO OD hoje</div></div>
+        <div><div class="v" style="color:var(--warn)">45%</div><div class="l">adesão</div></div>
+        <div><div class="v">9</div><div class="l">consultas</div></div>
+        <div><div class="v">14</div><div class="l">meses</div></div>
+      </div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true">Linha do tempo</button>
+      <button class="tab" role="tab" aria-selected="false" data-toast="9 prontuários assinados desde jan/2025.">Prontuários</button>
+      <button class="tab" role="tab" aria-selected="false" data-toast="14 exames arquivados: retinografia, OCT e campo visual.">Exames</button>
+      <button class="tab" role="tab" aria-selected="false" data-toast="Abrindo a conversa deste paciente." data-go="conversas">Conversas</button>
+      <button class="tab" role="tab" aria-selected="false" data-toast="Consentimentos e trilha de acesso deste paciente." data-go="privacidade">Consentimentos</button>
+    </div>
+  </div>
+
+  <div class="gmain">
+    <div class="card">
+      <div class="card-h">
+        <h2><svg viewBox="0 0 24 24"><use href="#i-hist"/></svg>Linha do tempo clínica</h2>
+        <span class="hint">consultas, exames, mensagens e alertas no mesmo fio</span>
+      </div>
+      <div class="tl">
+        <div class="tl-i"><div class="tl-when">Hoje<br>09:15</div><div class="tl-mid"><span class="tl-dot b"></span></div><div class="tl-body">
+          <div class="tl-t">Consulta de retorno — encaixe urgente <span class="ai-tag">Rascunho aberto</span></div>
+          <div class="tl-d">PIO 32/29 mmHg. Interrupção do colírio há 4 dias. Reintrodução de timolol e brimonidina; SLT em discussão.</div>
+        </div></div>
+        <div class="tl-i"><div class="tl-when">Hoje<br>07:40</div><div class="tl-mid"><span class="tl-dot c"></span></div><div class="tl-body">
+          <div class="tl-t">Alerta de risco disparado <span class="chip c">Crítico 8.4</span></div>
+          <div class="tl-d">Quarto dia consecutivo sem confirmação de dose. Regra “glaucoma + 72 h sem adesão” escalou para encaixe no mesmo dia.</div>
+        </div></div>
+        <div class="tl-i"><div class="tl-when">25 ago<br>20:10</div><div class="tl-mid"><span class="tl-dot w"></span></div><div class="tl-body">
+          <div class="tl-t">Resposta no WhatsApp</div>
+          <div class="tl-d">“Acabou o colírio e não tenho como comprar essa semana.” — classificado como <b>barreira de acesso</b>, não como esquecimento.</div>
+        </div></div>
+        <div class="tl-i"><div class="tl-when">22 ago</div><div class="tl-mid"><span class="tl-dot a"></span></div><div class="tl-body">
+          <div class="tl-t">Vídeo entregue e assistido</div>
+          <div class="tl-d">“Oclusão nasolacrimal: como instilar o colírio sem desperdiçar” · 1 min 40 s · assistido integralmente.</div>
+        </div></div>
+        <div class="tl-i"><div class="tl-when">14 mai</div><div class="tl-mid"><span class="tl-dot"></span></div><div class="tl-body">
+          <div class="tl-t">Campo visual — 24-2 SITA</div>
+          <div class="tl-d">Defeito arqueado superior OD · MD −6,2 dB · laudo assinado em 15/05/2026.</div>
+        </div></div>
+        <div class="tl-i"><div class="tl-when">14 mai</div><div class="tl-mid"><span class="tl-dot b"></span></div><div class="tl-body">
+          <div class="tl-t">Consulta de acompanhamento</div>
+          <div class="tl-d">PIO 18/17 mmHg sob tratamento. Escavação OD 0,7. Conduta mantida.</div>
+        </div></div>
+        <div class="tl-i"><div class="tl-when">12 fev</div><div class="tl-mid"><span class="tl-dot"></span></div><div class="tl-body">
+          <div class="tl-t">Retinografia AO + OCT de camada de fibras</div>
+          <div class="tl-d">Escavação OD 0,7 · afilamento inicial de rima inferior · RNFL inferior no limite inferior da normalidade.</div>
+        </div></div>
+        <div class="tl-i"><div class="tl-when">jan 2025</div><div class="tl-mid"><span class="tl-dot o"></span></div><div class="tl-body">
+          <div class="tl-t">Primeira consulta e diagnóstico</div>
+          <div class="tl-d">POAA bilateral confirmado. PIO inicial 26/24 mmHg. Início de timolol 0,5%.</div>
+        </div></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-layers"/></svg>Protocolo ativo</h2><span class="chip o">rodando</span></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:11px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Glaucoma — acompanhamento crônico</div>
+            <div class="hint" style="margin-top:3px">mês 14 · lembrete diário de colírio · check-in semanal · curva tensional trimestral</div>
+          </div>
+          <div class="prog-row">
+            <div class="prog-top"><span>Doses confirmadas nos últimos 30 dias</span><b style="color:var(--crit)">45%</b></div>
+            <div class="prog"><i style="width:45%;background:var(--crit)"></i></div>
+          </div>
+          <div class="prog-row">
+            <div class="prog-top"><span>Check-ins respondidos</span><b style="color:var(--warn)">62%</b></div>
+            <div class="prog"><i style="width:62%;background:var(--warn)"></i></div>
+          </div>
+          <button class="btn btn-g btn-block btn-sm" data-toast="Protocolo trocado para “Glaucoma — reinício de tratamento”."><svg viewBox="0 0 24 24"><use href="#i-layers"/></svg>Trocar protocolo</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg>Consentimentos</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><div style="font-size:12.5px;font-weight:500">Contato por WhatsApp</div><div class="hint">assinado em 09/01/2025</div></div><button class="sw" role="switch" aria-checked="true" aria-label="Contato por WhatsApp"></button></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><div style="font-size:12.5px;font-weight:500">Teleconsulta</div><div class="hint">assinado em 09/01/2025</div></div><button class="sw" role="switch" aria-checked="true" aria-label="Teleconsulta"></button></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><div style="font-size:12.5px;font-weight:500">Uso das imagens na base anônima</div><div class="hint">revogável a qualquer momento</div></div><button class="sw" role="switch" aria-checked="true" aria-label="Uso das imagens na base anônima"></button></div>
+          <div class="note b"><svg viewBox="0 0 24 24"><use href="#i-info"/></svg><span>Revogar o terceiro item remove os exames deste paciente da base de conhecimento na próxima sincronização, sem afetar o prontuário.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CENTRAL DE RISCO ═════════ -->
+<section class="page" id="p-risco">
+  <div class="g3">
+    <div class="met" style="border-color:var(--crit-line)">
+      <div class="met-l"><span class="sev c"><i></i>Crítico</span></div>
+      <div class="met-v" style="color:var(--crit)">3</div>
+      <div class="met-s">retorno ou teleconsulta em até 24 h</div>
+    </div>
+    <div class="met" style="border-color:var(--warn-line)">
+      <div class="met-l"><span class="sev w"><i></i>Atenção</span></div>
+      <div class="met-v" style="color:var(--warn)">8</div>
+      <div class="met-s">reforço de orientação ou reagendamento</div>
+    </div>
+    <div class="met">
+      <div class="met-l"><span class="sev o"><i></i>Resolvidos nas últimas 24 h</span></div>
+      <div class="met-v" style="color:var(--ok)">12</div>
+      <div class="met-s">9 pela IA · 3 por você</div>
+    </div>
+  </div>
+
+  <div class="gmain">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>Precisa de decisão em até 24 h</h2><span class="chip c">3 abertos</span></div>
+        <div class="rows">
+          <div class="row crit">
+            <span class="av c">MS</span>
+            <span class="row-m">
+              <span class="row-n">Maria A. Santos <span class="chip">Facectomia OD · D+3</span></span>
+              <span class="row-d"><b>Dor 8/10, halos coloridos e hiperemia progressiva.</b> Tríade compatível com hipertensão ocular aguda ou processo inflamatório precoce — dentro da janela de endoftalmite.</span>
+              <span style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap">
+                <button class="btn btn-sm btn-c" data-toast="Teleconsulta criada. Link enviado ao paciente."><svg viewBox="0 0 24 24"><use href="#i-video"/></svg>Teleconsulta agora</button>
+                <button class="btn btn-sm btn-g" data-toast="Encaixe de urgência criado para hoje às 11h.">Encaixar hoje</button>
+                <button class="btn btn-sm btn-g" data-go="conversas">Ver conversa</button>
+              </span>
+            </span>
+            <span class="row-e"><span class="score"><span class="score-v" style="color:var(--crit)">9.1</span><span class="score-l">risco</span></span></span>
+          </div>
+          <div class="row crit">
+            <span class="av c">RL</span>
+            <span class="row-m">
+              <span class="row-n">Roberto Lima <span class="chip">Vitrectomia OS · D+6</span></span>
+              <span class="row-d"><b>Moscas volantes novas e fotopsias há 1 dia.</b> Sintomas de tração vítreo-retiniana; risco de descolamento exige mapeamento de retina com indentação.</span>
+              <span style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap">
+                <button class="btn btn-sm btn-c" data-toast="Encaixe de urgência criado para hoje.">Encaixar hoje</button>
+                <button class="btn btn-sm btn-g" data-toast="Mapeamento de retina solicitado.">Solicitar mapeamento</button>
+                <button class="btn btn-sm btn-g" data-go="conversas">Ver conversa</button>
+              </span>
+            </span>
+            <span class="row-e"><span class="score"><span class="score-v" style="color:var(--crit)">8.8</span><span class="score-l">risco</span></span></span>
+          </div>
+          <div class="row crit">
+            <span class="av c">JF</span>
+            <span class="row-m">
+              <span class="row-n">José Carlos Ferreira <span class="chip">Glaucoma · crônico</span></span>
+              <span class="row-d"><b>Quarto dia sem confirmação de dose</b>, com PIO já limítrofe no último registro e barreira de custo declarada por escrito.</span>
+              <span style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap">
+                <button class="btn btn-sm btn-g" data-go="atendimento">Abrir atendimento</button>
+                <button class="btn btn-sm btn-g" data-toast="Encaminhamento à assistência farmacêutica registrado.">Assistência farmacêutica</button>
+              </span>
+            </span>
+            <span class="row-e"><span class="score"><span class="score-v" style="color:var(--crit)">8.4</span><span class="score-l">risco</span></span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg>Pode esperar, mas não muito</h2><span class="chip w">8 abertos</span></div>
+        <div class="rows">
+          <button class="row warn"><span class="av w">AR</span><span class="row-m"><span class="row-n">Ana Paula Ribeiro</span><span class="row-d">Três check-ins sem resposta e retorno atrasado em 3 semanas · retinopatia diabética proliferativa</span></span><span class="row-e"><span class="chip w">Reagendar</span></span></button>
+          <button class="row warn"><span class="av w">CS</span><span class="row-m"><span class="row-n">Célia Souza</span><span class="row-d">Hiperemia leve sem dor no D+12 · provável irritação por conservante, mas sem foto enviada</span></span><span class="row-e"><span class="chip w">Pedir foto</span></span></button>
+          <button class="row warn"><span class="av w">PM</span><span class="row-m"><span class="row-n">Pedro Martins</span><span class="row-d">Ciclo 5 de anti-VEGF vence em 6 dias e ainda não confirmou presença</span></span><span class="row-e"><span class="chip w">Confirmar</span></span></button>
+          <button class="row warn"><span class="av w">MA</span><span class="row-m"><span class="row-n">Marcos Antunes</span><span class="row-d">Relatou olho seco moderado no D+9 pós-LASIK · dentro do esperado, monitorar</span></span><span class="row-e"><span class="chip">Monitorar</span></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-info"/></svg>Como o risco é calculado</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:11px">
+          <p class="hint" style="line-height:1.6">O score combina cinco entradas. Ele nunca decide sozinho — ordena a sua fila.</p>
+          <div class="prog-row"><div class="prog-top"><span>Sintomas de alarme relatados</span><b>peso 40%</b></div><div class="prog"><i style="width:40%;background:var(--crit)"></i></div></div>
+          <div class="prog-row"><div class="prog-top"><span>Fase do protocolo e janela de risco</span><b>peso 25%</b></div><div class="prog"><i style="width:25%;background:var(--warn)"></i></div></div>
+          <div class="prog-row"><div class="prog-top"><span>Adesão medida ao tratamento</span><b>peso 15%</b></div><div class="prog"><i style="width:15%;background:var(--brand)"></i></div></div>
+          <div class="prog-row"><div class="prog-top"><span>Comorbidades e histórico</span><b>peso 12%</b></div><div class="prog"><i style="width:12%;background:var(--brand)"></i></div></div>
+          <div class="prog-row"><div class="prog-top"><span>Silêncio do paciente</span><b>peso 8%</b></div><div class="prog"><i style="width:8%;background:var(--muted)"></i></div></div>
+          <div class="guard"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg><span>Os pesos são definidos por você nos protocolos, não pelo modelo. Cada alerta guarda quais entradas o dispararam, e isso fica na trilha de auditoria.</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>Sinais de alarme monitorados</h2></div>
+        <div class="card-b" style="display:flex;flex-wrap:wrap;gap:6px">
+          <span class="chip c">Dor ocular intensa</span>
+          <span class="chip c">Baixa súbita de visão</span>
+          <span class="chip c">Halos coloridos</span>
+          <span class="chip c">Fotopsias e moscas novas</span>
+          <span class="chip c">Sombra em cortina</span>
+          <span class="chip w">Secreção purulenta</span>
+          <span class="chip w">Hiperemia progressiva</span>
+          <span class="chip w">Fotofobia intensa</span>
+          <span class="chip w">Náusea com dor ocular</span>
+          <span class="chip">Sensação de corpo estranho</span>
+          <span class="chip">Lacrimejamento</span>
+          <button class="chip b" data-toast="Editor de sinais de alarme aberto."><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>Adicionar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CONVERSAS ═════════ -->
+<section class="page" id="p-conversas">
+  <div class="ws">
+
+    <div class="ws-col ws-ctx">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>Conversas</h2><span class="chip w">7 abertas</span></div>
+        <div class="rows">
+          <button class="row crit" style="background:var(--surface-2)"><span class="av c">MS</span><span class="row-m"><span class="row-n">Maria A. Santos</span><span class="row-d">“a dor tá muito forte e eu tô vendo…”</span></span><span class="row-e"><span class="hint mono">22 min</span></span></button>
+          <button class="row crit"><span class="av c">RL</span><span class="row-m"><span class="row-n">Roberto Lima</span><span class="row-d">“apareceram uns pontinhos pretos e uns…”</span></span><span class="row-e"><span class="hint mono">1 h</span></span></button>
+          <button class="row warn"><span class="av w">JF</span><span class="row-m"><span class="row-n">José C. Ferreira</span><span class="row-d">“acabou o colírio e não tenho como…”</span></span><span class="row-e"><span class="hint mono">ontem</span></span></button>
+          <button class="row"><span class="av o">HB</span><span class="row-m"><span class="row-n">Helena Barbosa</span><span class="row-d">“tudo certo, obrigada doutor!”</span></span><span class="row-e"><span class="chip o"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span></span></button>
+          <button class="row"><span class="av o">MA</span><span class="row-m"><span class="row-n">Marcos Antunes</span><span class="row-d">Check-in D+9 respondido</span></span><span class="row-e"><span class="chip o"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-col">
+      <div class="card">
+        <div class="card-h">
+          <h2><span class="av c" style="width:28px;height:28px;border-radius:8px;font-size:10px">MS</span>Maria A. Santos</h2>
+          <span class="chip">Facectomia OD · D+3 de 30</span>
+          <button class="btn btn-g btn-sm" data-go="paciente">Prontuário</button>
+        </div>
+        <div class="thread">
+          <div class="day"><span>Sábado, 23 de agosto — alta cirúrgica</span></div>
+
+          <div class="msg out">
+            <div class="bub">Olá, Maria! Aqui é o assistente da Clínica Visão Norte, acompanhando sua recuperação a pedido do Dr. Rafael. Nos próximos 30 dias vou te lembrar dos colírios e perguntar como você está. Se algo parecer errado, eu chamo o médico na hora. 💙</div>
+            <div class="msg-meta"><svg viewBox="0 0 24 24" fill="none"><use href="#i-check"/></svg>14:20 · modelo aprovado pelo médico</div>
+          </div>
+
+          <div class="msg out">
+            <div class="bub">Hoje à noite começa o esquema de colírios do olho direito. Assista antes de aplicar o primeiro:
+              <div class="vid"><div class="vid-th"><svg viewBox="0 0 24 24" fill="none"><use href="#i-play"/></svg></div><div><div class="vid-t">Como aplicar o colírio sem encostar no olho</div><div class="vid-s">1 min 12 s · Dr. Rafael Mendes</div></div></div>
+            </div>
+            <div class="msg-meta"><svg viewBox="0 0 24 24" fill="none"><use href="#i-check"/></svg>14:21 · assistido integralmente às 19:48</div>
+          </div>
+
+          <div class="day"><span>Segunda, 25 de agosto — D+2</span></div>
+
+          <div class="msg out">
+            <div class="bub">Bom dia, Maria! Como está o olho operado hoje?
+              <div class="quick"><button data-toast="Resposta rápida simulada.">Tudo bem</button><button data-toast="Resposta rápida simulada.">Um incômodo leve</button><button data-toast="Resposta rápida simulada.">Estou com dor</button><button data-toast="Resposta rápida simulada.">Enxergando pior</button></div>
+            </div>
+            <div class="msg-meta"><svg viewBox="0 0 24 24" fill="none"><use href="#i-check"/></svg>08:00 · check-in diário</div>
+          </div>
+
+          <div class="msg in"><div class="bub">Tudo bem, só um pouco de areia no olho</div><div class="msg-meta">08:34</div></div>
+
+          <div class="msg out">
+            <div class="bub">Ótimo. Sensação de areia é comum nos primeiros dias e costuma melhorar. Continue com o colírio e o protetor à noite. Qualquer dor forte, me avise na hora.</div>
+            <div class="msg-meta"><svg viewBox="0 0 24 24" fill="none"><use href="#i-check"/></svg>08:35 · resposta dentro do protocolo</div>
+          </div>
+
+          <div class="day"><span>Hoje, 26 de agosto — D+3</span></div>
+
+          <div class="msg in">
+            <div class="bub">a dor tá muito forte desde a madrugada, e eu tô vendo uns círculos coloridos em volta da luz. o olho tá bem vermelho também</div>
+            <div class="msg-meta">07:38</div>
+          </div>
+
+          <div class="msg out">
+            <div class="bub">Maria, obrigado por avisar. Esses sintomas precisam de avaliação médica hoje mesmo. Já acionei o Dr. Rafael e a clínica vai te ligar em minutos. <strong>Não aplique nenhum colírio novo até falar com ele</strong> e mantenha o olho protegido.</div>
+            <div class="msg-meta"><svg viewBox="0 0 24 24" fill="none"><use href="#i-check"/></svg>07:38 · escalonamento automático</div>
+          </div>
+
+          <div class="escal">
+            <div class="note c">
+              <svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>
+              <span><b>Conversa escalonada para o médico às 07:38.</b> A IA parou de conduzir e passou a apenas registrar. Nenhuma orientação clínica nova foi enviada desde então.</span>
+            </div>
+          </div>
+        </div>
+        <div class="compose">
+          <input placeholder="Escreva como médico — sua mensagem sai identificada com seu nome">
+          <button class="iconbtn" data-toast="Vídeo da biblioteca anexado."><svg viewBox="0 0 24 24"><use href="#i-video"/></svg></button>
+          <button class="btn btn-p btn-sm" data-toast="Mensagem enviada como Dr. Rafael Mendes."><svg viewBox="0 0 24 24"><use href="#i-send"/></svg>Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-col">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-pulse"/></svg>Leitura de risco</h2><span class="ai-tag"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>Triagem</span></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:13px">
+          <div class="gauge">
+            <svg width="66" height="66" viewBox="0 0 66 66" aria-hidden="true">
+              <circle cx="33" cy="33" r="27" fill="none" stroke="var(--surface-3)" stroke-width="7"/>
+              <circle cx="33" cy="33" r="27" fill="none" stroke="var(--crit)" stroke-width="7" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="15" transform="rotate(-90 33 33)"/>
+              <text x="33" y="38" text-anchor="middle" fill="var(--crit)" font-size="16" font-weight="600" font-family="IBM Plex Mono, monospace">9.1</text>
+            </svg>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--crit)">Risco crítico</div>
+              <div class="hint" style="margin-top:3px;line-height:1.5">Avaliação presencial ou teleconsulta recomendada em <b>menos de 24 h</b>.</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="hint" style="margin-bottom:7px">Sinais detectados na mensagem</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <span class="chip c">Dor intensa</span><span class="chip c">Halos coloridos</span><span class="chip w">Hiperemia</span><span class="chip">Início madrugada</span>
+            </div>
+          </div>
+
+          <div class="note c">
+            <svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>
+            <span>A combinação dor + halos + olho vermelho no <b>D+3</b> é a que a clínica classificou como não-esperada. Diferenciais registrados no protocolo: hipertensão ocular aguda, uveíte pós-operatória e endoftalmite precoce.</span>
+          </div>
+
+          <div class="guard"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg><span>Triagem de urgência, não diagnóstico. O diferencial acima veio do <b>seu</b> protocolo de pós-facectomia, não de uma conclusão do modelo.</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-video"/></svg>Teleconsulta</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn btn-c btn-block" data-toast="Sala criada. Link único enviado por WhatsApp, válido por 30 minutos."><svg viewBox="0 0 24 24"><use href="#i-video"/></svg>Abrir sala segura agora</button>
+          <p class="hint" style="line-height:1.6">Link de uso único, sala fechada ao fim do atendimento. Registro da teleconsulta entra no prontuário automaticamente, com data, duração e consentimento vinculados.</p>
+          <hr style="border:0;border-top:1px solid var(--line-soft)">
+          <button class="btn btn-g btn-block btn-sm" data-toast="Encaixe de urgência criado para hoje às 11h."><svg viewBox="0 0 24 24"><use href="#i-cal"/></svg>Encaixar presencial hoje</button>
+          <button class="btn btn-g btn-block btn-sm" data-toast="Secretaria acionada para ligar agora."><svg viewBox="0 0 24 24"><use href="#i-phone"/></svg>Pedir ligação da secretaria</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═════════ EXAMES ═════════ -->
+<section class="page" id="p-exames">
+  <div class="ws">
+
+    <div class="ws-col ws-ctx">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-scan"/></svg>Fila de análise</h2><span class="chip a">8</span></div>
+        <div class="rows">
+          <button class="row crit" style="background:var(--surface-2)"><span class="av c" style="border-radius:7px">OD</span><span class="row-m"><span class="row-n">José C. Ferreira</span><span class="row-d">Retinografia OD · há 12 min</span></span></button>
+          <button class="row crit"><span class="av c" style="border-radius:7px">OS</span><span class="row-m"><span class="row-n">Ana P. Ribeiro</span><span class="row-d">OCT de mácula · há 28 min</span></span></button>
+          <button class="row warn"><span class="av w" style="border-radius:7px">AO</span><span class="row-m"><span class="row-n">Roberto Lima</span><span class="row-d">Campo visual 24-2 · há 45 min</span></span></button>
+          <button class="row warn"><span class="av w" style="border-radius:7px">OS</span><span class="row-m"><span class="row-n">Célia Souza</span><span class="row-d">Retinografia OS · há 2 h</span></span></button>
+          <button class="row"><span class="av o" style="border-radius:7px">OD</span><span class="row-m"><span class="row-n">Pedro Martins</span><span class="row-d">OCT de mácula · há 3 h</span></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-col">
+      <div class="viewer">
+        <div class="v-top">
+          <div class="v-t"><svg viewBox="0 0 24 24" fill="none" style="width:15px;height:15px;stroke-width:1.9"><use href="#i-eye"/></svg>Retinografia OD · José Carlos Ferreira · 58 anos</div>
+          <div class="v-tools">
+            <button class="v-btn on" id="ov">Marcações</button>
+            <button class="v-btn" data-toast="Zoom aplicado."><svg viewBox="0 0 24 24" fill="none"><use href="#i-zoom"/></svg></button>
+            <button class="v-btn" data-toast="Visualização redefinida.">Reset</button>
+          </div>
+        </div>
+        <div class="fundus">
+          <div class="fundus-img">
+            <svg class="vessel" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <g fill="none" stroke="#5E1608" stroke-linecap="round" opacity=".75">
+                <path d="M68 44 C60 40 50 34 40 26" stroke-width="1.5"/>
+                <path d="M40 26 C34 20 30 16 24 12" stroke-width="1"/>
+                <path d="M40 26 C36 22 28 22 20 20" stroke-width=".8"/>
+                <path d="M68 44 C60 48 50 54 42 62" stroke-width="1.6"/>
+                <path d="M42 62 C36 70 32 78 28 88" stroke-width="1"/>
+                <path d="M42 62 C34 64 26 66 16 68" stroke-width=".8"/>
+                <path d="M68 44 C74 36 80 28 86 20" stroke-width="1.2"/>
+                <path d="M68 44 C76 50 82 60 88 72" stroke-width="1.2"/>
+                <path d="M68 44 C64 52 58 60 52 70" stroke-width=".7"/>
+                <path d="M68 44 C66 34 64 26 62 16" stroke-width=".7"/>
+              </g>
+            </svg>
+          </div>
+          <div class="det c" id="d1" style="left:56%;top:30%;width:19%;height:24%"><span class="det-l">Escavação aumentada · 0,78 E/D</span></div>
+          <div class="det w" id="d2" style="left:30%;top:44%;width:15%;height:15%"><span class="det-l">Afilamento de rima inferior</span></div>
+          <div class="det o" id="d3" style="left:20%;top:64%;width:12%;height:12%"><span class="det-l">Drusas esparsas</span></div>
+        </div>
+        <div class="v-bot"><span>Retinografia digital · 45° · OD · 26/08/2026 · DICOM · 3072×2048</span><span style="margin-left:auto;color:#FF8497">Prioridade alta</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-cmp"/></svg>Comparativo longitudinal</h2><span class="chip c">progressão entre fev e hoje</span></div>
+        <div class="card-b">
+          <div class="serie">
+            <div class="serie-i"><div class="serie-th"></div><div class="serie-l">jan/25</div></div>
+            <div class="serie-i"><div class="serie-th"></div><div class="serie-l">fev/26</div></div>
+            <div class="serie-i"><div class="serie-th"></div><div class="serie-l">mai/26</div></div>
+            <div class="serie-i on"><div class="serie-th"></div><div class="serie-l">hoje</div></div>
+            <div style="margin-left:auto;font-size:12px;line-height:1.5;max-width:290px" class="hint">Escavação de <b style="color:var(--ink-2)">0,65 → 0,70 → 0,72 → 0,78</b> no mesmo eixo e mesma ampliação. O alinhamento é feito pelo disco óptico, não pelo enquadramento da foto.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-col">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>Achados sugeridos</h2><span class="ai-tag">3 achados</span></div>
+        <div>
+          <div class="find">
+            <div class="find-i" style="background:var(--crit-soft);color:var(--crit)"><svg viewBox="0 0 24 24" fill="none"><use href="#i-alert"/></svg></div>
+            <div class="find-m">
+              <div class="find-n"><span>Escavação de disco aumentada</span><span class="conf" style="color:var(--crit)">87%</span></div>
+              <div class="conf-bar" style="width:100%;margin-top:6px"><i style="width:87%;background:var(--crit)"></i></div>
+              <div class="find-d">Relação escavação/disco estimada em 0,78 no eixo vertical, compatível com neuropatia óptica glaucomatosa.</div>
+              <details class="why"><summary>Por que a IA marcou isso</summary><p>A borda da escavação foi segmentada em 0,78 do diâmetro vertical do disco, contra 0,72 na retinografia de mai/2026 sob a mesma ampliação. O modelo pesa também o afilamento de rima detectado no setor inferior. Modelo <span class="mono">retina-seg v2.4</span>, treinado em 41 mil retinografias públicas e ajustado com 380 exames validados nesta clínica.</p></details>
+            </div>
+          </div>
+          <div class="find">
+            <div class="find-i" style="background:var(--warn-soft);color:var(--warn)"><svg viewBox="0 0 24 24" fill="none"><use href="#i-alert"/></svg></div>
+            <div class="find-m">
+              <div class="find-n"><span>Afilamento de rima inferior</span><span class="conf" style="color:var(--warn)">63%</span></div>
+              <div class="conf-bar" style="width:100%;margin-top:6px"><i style="width:63%;background:var(--warn)"></i></div>
+              <div class="find-d">Setor inferior com espessura reduzida, coerente com o defeito arqueado superior do campo visual de mai/2026.</div>
+              <details class="why"><summary>Por que a IA marcou isso</summary><p>Correlação entre o setor inferior segmentado na imagem e o defeito superior registrado no campo visual do mesmo paciente. A confiança é intermediária porque a qualidade da imagem no setor inferior caiu por reflexo de flash.</p></details>
+            </div>
+          </div>
+          <div class="find">
+            <div class="find-i" style="background:var(--ok-soft);color:var(--ok)"><svg viewBox="0 0 24 24" fill="none"><use href="#i-info"/></svg></div>
+            <div class="find-m">
+              <div class="find-n"><span>Drusas esparsas em polo posterior</span><span class="conf" style="color:var(--ok)">41%</span></div>
+              <div class="conf-bar" style="width:100%;margin-top:6px"><i style="width:41%;background:var(--ok)"></i></div>
+              <div class="find-d">Achado incidental de baixa confiança. Sugerido apenas registrar para comparação futura.</div>
+              <details class="why"><summary>Por que a IA marcou isso</summary><p>Pequenos pontos hiper-refletivos no polo posterior. A baixa confiança reflete a sobreposição com artefatos de iluminação — o modelo foi calibrado para não afirmar drusas abaixo de 60%.</p></details>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Sua decisão</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:8px">
+          <div class="guard" style="margin-bottom:3px"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg><span>Sugestão de apoio à decisão. O laudo só existe depois que você assina — e é o seu texto que vale.</span></div>
+          <button class="btn btn-p btn-block" data-toast="Laudo gerado a partir dos achados aceitos, aguardando sua assinatura."><svg viewBox="0 0 24 24"><use href="#i-file"/></svg>Aceitar achados e redigir laudo</button>
+          <button class="btn btn-g btn-block" data-toast="Editor de laudo aberto em branco."><svg viewBox="0 0 24 24"><use href="#i-pen"/></svg>Escrever laudo do zero</button>
+          <button class="btn btn-g btn-block" data-toast="Marcado como divergente. Isso alimenta o ajuste do modelo."><svg viewBox="0 0 24 24"><use href="#i-x"/></svg>Discordo dos achados</button>
+          <button class="btn btn-g btn-block" data-toast="Nova captura solicitada ao setor de imagem.">Rejeitar imagem por qualidade</button>
+          <hr style="border:0;border-top:1px solid var(--line-soft);margin:3px 0">
+          <button class="btn btn-a btn-block btn-sm" data-go="base"><svg viewBox="0 0 24 24"><use href="#i-book"/></svg>Ver casos semelhantes na base</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═════════ BASE DE CONHECIMENTO ═════════ -->
+<section class="page" id="p-base">
+  <div class="card">
+    <div class="card-h">
+      <h2><svg viewBox="0 0 24 24"><use href="#i-userx"/></svg>Como um exame entra na base</h2>
+      <span class="chip o"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Nenhum dado identificável armazenado</span>
+    </div>
+    <div class="pipe">
+      <div class="pipe-s">
+        <span class="pipe-n">ORIGEM</span>
+        <span class="pipe-t"><svg viewBox="0 0 24 24" fill="none" style="color:var(--muted)"><use href="#i-file"/></svg>Exame do prontuário</span>
+        <span class="pipe-d">Imagem, laudo assinado e dados clínicos, ainda ligados ao paciente.</span>
+        <span class="pipe-c" style="color:var(--muted)">2.847 exames elegíveis</span>
+      </div>
+      <div class="pipe-s">
+        <span class="pipe-n">ETAPA 1</span>
+        <span class="pipe-t"><svg viewBox="0 0 24 24" fill="none" style="color:var(--crit)"><use href="#i-userx"/></svg>Remoção de identificadores</span>
+        <span class="pipe-d">Nome, CPF, prontuário, telefone, endereço e datas exatas saem do texto; metadados DICOM são reescritos.</span>
+        <span class="pipe-c" style="color:var(--crit)">14 campos removidos por exame</span>
+      </div>
+      <div class="pipe-s">
+        <span class="pipe-n">ETAPA 2</span>
+        <span class="pipe-t"><svg viewBox="0 0 24 24" fill="none" style="color:var(--warn)"><use href="#i-eye"/></svg>Conferência humana</span>
+        <span class="pipe-d">Um médico revisa antes de publicar. Nada entra automaticamente na base.</span>
+        <span class="pipe-c" style="color:var(--warn)">31 aguardando conferência</span>
+      </div>
+      <div class="pipe-s">
+        <span class="pipe-n">ETAPA 3</span>
+        <span class="pipe-t"><svg viewBox="0 0 24 24" fill="none" style="color:var(--ai)"><use href="#i-db"/></svg>Acervo anônimo</span>
+        <span class="pipe-d">Só imagem, achados, diagnóstico e desfecho, sob um código de caso sem volta ao paciente.</span>
+        <span class="pipe-c" style="color:var(--ai)">2.816 casos publicados</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gmain">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="rag">
+        <div class="rag-q"><svg viewBox="0 0 24 24" fill="none"><use href="#i-search"/></svg>Em pacientes com escavação ≥ 0,75 e PIO controlada, quantos progrediram no campo visual em 12 meses?</div>
+        <div class="rag-a">Entre os casos do acervo desta clínica, <strong>34 de 112</strong> pacientes com escavação ≥ 0,75 e PIO média abaixo de 16 mmHg apresentaram piora do MD superior a 1,5 dB em 12 meses <span class="cite">CASO-2411</span> <span class="cite">CASO-2673</span>. A progressão concentrou-se em quem já tinha <strong>afilamento de rima inferior documentado</strong> na retinografia inicial <span class="cite">CASO-1908</span>, padrão que aparece em 26 dos 34. Nos 78 restantes, o campo visual manteve-se estável <span class="cite">CASO-2210</span>.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span class="ai-tag"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>Resposta com fontes</span>
+          <span class="hint">4 casos citados de 112 recuperados · nenhum paciente identificado</span>
+          <button class="link" style="margin-left:auto" data-toast="Abrindo os 112 casos que sustentam esta resposta.">Ver todos os casos</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">
+          <h2><svg viewBox="0 0 24 24"><use href="#i-book"/></svg>Acervo de casos</h2>
+          <span class="chip">glaucoma</span><span class="chip">retinografia</span>
+          <button class="link" data-toast="Filtros por diagnóstico, exame, desfecho e autor.">Filtrar</button>
+        </div>
+        <div class="card-b" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:12px">
+          <div class="kb-card" data-toast="Caso 2411 aberto — sem qualquer dado de identificação.">
+            <div class="kb-th"></div>
+            <div class="kb-b"><span class="caseid">CASO-2411</span><div class="kb-t">POAA com progressão apesar de PIO controlada</div><div class="kb-m"><span class="chip">Retinografia</span><span class="chip">E/D 0,80</span></div></div>
+          </div>
+          <div class="kb-card" data-toast="Caso 2673 aberto.">
+            <div class="kb-th oct"></div>
+            <div class="kb-b"><span class="caseid">CASO-2673</span><div class="kb-t">Afilamento de RNFL inferior sem defeito perimétrico</div><div class="kb-m"><span class="chip">OCT</span><span class="chip">pré-perimétrico</span></div></div>
+          </div>
+          <div class="kb-card" data-toast="Caso 1908 aberto.">
+            <div class="kb-th cv"></div>
+            <div class="kb-b"><span class="caseid">CASO-1908</span><div class="kb-t">Defeito arqueado superior com rima inferior afilada</div><div class="kb-m"><span class="chip">Campo visual</span><span class="chip">MD −6,4</span></div></div>
+          </div>
+          <div class="kb-card" data-toast="Caso 2210 aberto.">
+            <div class="kb-th"></div>
+            <div class="kb-b"><span class="caseid">CASO-2210</span><div class="kb-t">Escavação fisiológica em disco grande — sem progressão</div><div class="kb-m"><span class="chip">Retinografia</span><span class="chip">controle 24 m</span></div></div>
+          </div>
+          <div class="kb-card" data-toast="Caso 3102 aberto.">
+            <div class="kb-th oct"></div>
+            <div class="kb-b"><span class="caseid">CASO-3102</span><div class="kb-t">Edema macular cistoide pós-facectomia — Irvine-Gass</div><div class="kb-m"><span class="chip">OCT</span><span class="chip">D+42</span></div></div>
+          </div>
+          <div class="kb-card" data-toast="Caso 2955 aberto.">
+            <div class="kb-th"></div>
+            <div class="kb-b"><span class="caseid">CASO-2955</span><div class="kb-t">Retinopatia diabética proliferativa com neovasos de disco</div><div class="kb-m"><span class="chip">Retinografia</span><span class="chip">pré-panfoto</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-file"/></svg>O que sobra de um laudo</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:11px">
+          <div>
+            <div class="hint" style="margin-bottom:6px">Original no prontuário</div>
+            <div style="font-family:var(--f-mono);font-size:11px;line-height:1.85;padding:11px;border-radius:9px;background:var(--surface-2);border:1px solid var(--line)">
+              Paciente: José Carlos Ferreira<br>
+              CPF 043.***.***-21 · Pront. 04127<br>
+              Data: 26/08/2026 · Clínica Visão Norte<br>
+              Retinografia OD: escavação 0,78, rima<br>
+              inferior afilada, drusas esparsas.
+            </div>
+          </div>
+          <div style="display:grid;place-items:center;color:var(--muted)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:17px;height:17px;stroke-width:2;transform:rotate(90deg)"><use href="#i-chev"/></svg></div>
+          <div>
+            <div class="hint" style="margin-bottom:6px">O que vai para a base</div>
+            <div style="font-family:var(--f-mono);font-size:11px;line-height:1.85;padding:11px;border-radius:9px;background:var(--ai-soft);border:1px solid var(--ai-line)">
+              Caso: <span class="caseid">CASO-2847</span><br>
+              <span class="redact">████████████</span> · <span class="redact">██████████</span><br>
+              Faixa etária 55–59 · masc. · 3º trim. 2026<br>
+              Retinografia OD: escavação 0,78, rima<br>
+              inferior afilada, drusas esparsas.
+            </div>
+          </div>
+          <div class="note b"><svg viewBox="0 0 24 24"><use href="#i-info"/></svg><span>Idade vira faixa e a data vira trimestre de propósito: idade e data exatas, combinadas, voltam a identificar a pessoa.</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-users"/></svg>Quem alimenta a base</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px"><span class="av b">RM</span><div style="flex:1"><div style="font-size:12.5px;font-weight:600">Dr. Rafael Mendes</div><div class="hint">1.204 casos · 96% conferidos</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="av a">LC</span><div style="flex:1"><div style="font-size:12.5px;font-weight:600">Dra. Letícia Camargo</div><div class="hint">892 casos · 99% conferidos</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="av o">EA</span><div style="flex:1"><div style="font-size:12.5px;font-weight:600">Dr. Eduardo Antunes</div><div class="hint">720 casos · 94% conferidos</div></div></div>
+          <button class="btn btn-g btn-block btn-sm" data-toast="31 casos aguardando sua conferência."><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Conferir 31 pendentes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ PRIVACIDADE ═════════ -->
+<section class="page" id="p-privacidade">
+  <div class="card">
+    <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Separação entre identidade e conhecimento clínico</h2></div>
+    <div class="card-b" style="display:grid;grid-template-columns:1fr 132px 1fr;gap:12px;align-items:stretch">
+      <div class="vault a">
+        <div class="vault-t"><svg viewBox="0 0 24 24" fill="none"><use href="#i-lock"/></svg>Cofre de identificação</div>
+        <ul>
+          <li>Nome, CPF, contato, endereço</li>
+          <li>Prontuário assinado e vinculado</li>
+          <li>Conversas de WhatsApp</li>
+          <li>Consentimentos e revogações</li>
+        </ul>
+        <div class="hint" style="margin-top:auto;padding-top:8px;line-height:1.5">Criptografado, acesso só por profissional vinculado ao paciente, cada leitura registrada.</div>
+      </div>
+      <div class="bridge">
+        <div class="bridge-b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><use href="#i-userx"/></svg>
+          Passagem de mão única<br>via anonimização
+        </div>
+      </div>
+      <div class="vault b">
+        <div class="vault-t"><svg viewBox="0 0 24 24" fill="none"><use href="#i-db"/></svg>Acervo clínico anônimo</div>
+        <ul>
+          <li>Imagens sem metadados de origem</li>
+          <li>Achados, diagnóstico e desfecho</li>
+          <li>Faixa etária, sexo, trimestre</li>
+          <li>Código de caso sem volta ao paciente</li>
+        </ul>
+        <div class="hint" style="margin-top:auto;padding-top:8px;line-height:1.5">É esta base que treina e consulta a IA. Ela não guarda chave de reidentificação.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg>Consentimentos por finalidade</h2><span class="chip o">142 pacientes</span></div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Finalidade</th><th style="text-align:right">Aceitaram</th><th style="text-align:right">Recusaram</th><th>Padrão</th></tr></thead>
+          <tbody>
+            <tr><td>Atendimento e prontuário</td><td style="text-align:right" class="num">142</td><td style="text-align:right" class="num">0</td><td><span class="chip">obrigatório</span></td></tr>
+            <tr><td>Contato e orientação por WhatsApp</td><td style="text-align:right" class="num">131</td><td style="text-align:right" class="num">11</td><td><button class="sw" role="switch" aria-checked="true" aria-label="WhatsApp por padrão"></button></td></tr>
+            <tr><td>Teleconsulta</td><td style="text-align:right" class="num">128</td><td style="text-align:right" class="num">14</td><td><button class="sw" role="switch" aria-checked="true" aria-label="Teleconsulta por padrão"></button></td></tr>
+            <tr><td>Uso anônimo em base de conhecimento</td><td style="text-align:right" class="num">109</td><td style="text-align:right" class="num">33</td><td><button class="sw off-c" role="switch" aria-checked="false" aria-label="Base anônima por padrão"></button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-b" style="border-top:1px solid var(--line-soft)">
+        <div class="note b"><svg viewBox="0 0 24 24"><use href="#i-info"/></svg><span>O uso na base de conhecimento entra <b>desligado por padrão</b>: é opt-in explícito, separado do consentimento de atendimento, e revogável sem afetar o cuidado.</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-hist"/></svg>Trilha de auditoria</h2><button class="link" data-toast="Exportando trilha completa em CSV assinado.">Exportar</button></div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Quando</th><th>Quem</th><th>O quê</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">09:22</td><td>Dr. Rafael Mendes</td><td>Abriu prontuário 04127</td></tr>
+            <tr><td class="mono">07:38</td><td><span class="chip a">Assistente</span></td><td>Escalou conversa de MS ao médico plantonista</td></tr>
+            <tr><td class="mono">07:38</td><td><span class="chip a">Assistente</span></td><td>Enviou mensagem de modelo <span class="mono">alarme-pos-op-v3</span></td></tr>
+            <tr><td class="mono">ontem 18:04</td><td>Ana Freitas · secretaria</td><td>Consultou agenda — <span style="color:var(--ok)">sem acesso clínico</span></td></tr>
+            <tr><td class="mono">ontem 16:40</td><td>Dra. Letícia Camargo</td><td>Publicou <span class="caseid">CASO-2843</span> após conferência</td></tr>
+            <tr><td class="mono">ontem 11:12</td><td>Sistema</td><td>Removeu 4 exames da base — consentimento revogado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card">
+      <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Segurança</h2></div>
+      <div class="card-b" style="display:flex;flex-direction:column;gap:11px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:12.5px">Verificação em duas etapas obrigatória</span><button class="sw" role="switch" aria-checked="true" aria-label="Duas etapas"></button></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:12.5px">Assinatura digital ICP-Brasil nos laudos</span><button class="sw" role="switch" aria-checked="true" aria-label="Assinatura digital"></button></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:12.5px">Bloqueio de sessão após 10 min ociosos</span><button class="sw" role="switch" aria-checked="true" aria-label="Bloqueio de sessão"></button></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:12.5px">Exportação em massa de prontuários</span><button class="sw off-c" role="switch" aria-checked="false" aria-label="Exportação em massa"></button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>Regra do WhatsApp</h2></div>
+      <div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+        <p class="hint" style="line-height:1.6">A mensagem trafega por servidores da Meta. Por isso o conteúdo clínico detalhado nunca vai no corpo da mensagem.</p>
+        <div class="note o"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Vai por WhatsApp: orientação, lembrete, vídeo, pergunta de check-in, aviso de retorno.</span></div>
+        <div class="note c"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg><span>Não vai: laudo, exame, hipótese diagnóstica, prescrição. Isso abre em link autenticado dentro do sistema.</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h2><svg viewBox="0 0 24 24"><use href="#i-cal"/></svg>Retenção</h2></div>
+      <div class="card-b" style="display:flex;flex-direction:column;gap:11px;font-size:12.5px">
+        <div style="display:flex;justify-content:space-between;gap:10px"><span>Prontuário e laudos</span><b class="mono">20 anos</b></div>
+        <div style="display:flex;justify-content:space-between;gap:10px"><span>Conversas de WhatsApp</span><b class="mono">24 meses</b></div>
+        <div style="display:flex;justify-content:space-between;gap:10px"><span>Gravação de teleconsulta</span><b class="mono">não gravada</b></div>
+        <div style="display:flex;justify-content:space-between;gap:10px"><span>Trilha de auditoria</span><b class="mono">5 anos</b></div>
+        <div style="display:flex;justify-content:space-between;gap:10px"><span>Acervo anônimo</span><b class="mono">indeterminado</b></div>
+        <p class="hint" style="line-height:1.55;margin-top:2px">A guarda mínima de 20 anos do prontuário segue a norma do CFM e prevalece sobre pedido de exclusão.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </div><!-- /view -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<div class="scrim" id="scrim">
+  <div class="pal" role="dialog" aria-label="Busca e comandos" aria-modal="true">
+    <div class="pal-in">
+      <svg viewBox="0 0 24 24" fill="none"><use href="#i-search"/></svg>
+      <input id="palq" placeholder="Ir para uma tela, buscar paciente ou executar uma ação…" autocomplete="off">
+      <kbd>Esc</kbd>
+    </div>
+    <div class="pal-list" id="pall"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><use href="#i-check"/></svg><span id="toast-t"></span></div>
+
+<script>
+document.documentElement.lang = "pt-BR";
+
+const PAGES = {
+  painel:      ["Painel", "Quarta-feira, 26 de agosto · 14 atendimentos hoje · 3 pacientes em janela crítica"],
+  pacientes:   ["Pacientes", "142 em acompanhamento · 11 com risco acima do limiar do protocolo"],
+  atendimento: ["Atendimento", "José Carlos Ferreira · retorno de glaucoma · encaixe das 09:15"],
+  paciente:    ["José Carlos Ferreira", "Glaucoma primário de ângulo aberto · 14 meses de acompanhamento"],
+  risco:       ["Central de risco", "3 críticos · 8 em atenção · ordenados pelo tempo até a decisão"],
+  conversas:   ["Conversas", "Acompanhamento por WhatsApp · 7 abertas · 2 escalonadas para você"],
+  exames:      ["Exames e imagem", "8 exames pré-analisados aguardando sua validação"],
+  base:        ["Base de conhecimento", "2.816 casos anônimos · alimentados e conferidos pelos médicos da clínica"],
+  privacidade: ["Privacidade e LGPD", "Consentimentos, trilha de auditoria e política de retenção"]
+};
+const NAVLESS = new Set(["paciente"]);
+const HOME = "painel";
+let cur = HOME;
+
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+function go(id){
+  if(!PAGES[id]) return;
+  const el = document.getElementById("p-" + id);
+  if(!el) return;
+  $$(".page").forEach(p => p.classList.remove("on"));
+  el.classList.add("on");
+  $$(".nav-i").forEach(n => n.removeAttribute("aria-current"));
+  const nav = document.querySelector('.nav-i[data-go="' + id + '"]');
+  if(nav) nav.setAttribute("aria-current", "page");
+  $("#ttl").textContent = PAGES[id][0];
+  $("#sub").textContent = PAGES[id][1];
+  $("#back").style.display = NAVLESS.has(id) ? "grid" : "none";
+  $("#view").scrollTop = 0;
+  cur = id;
+}
+
+let tmr;
+function toast(msg){
+  clearTimeout(tmr);
+  $("#toast-t").textContent = msg;
+  $("#toast").classList.add("on");
+  tmr = setTimeout(() => $("#toast").classList.remove("on"), 3200);
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-toast]");
+  if(t) toast(t.dataset.toast);
+  const g = e.target.closest("[data-go]");
+  if(g){ go(g.dataset.go); close(); }
+  const sw = e.target.closest(".sw");
+  if(sw){
+    const on = sw.getAttribute("aria-checked") === "true";
+    sw.setAttribute("aria-checked", String(!on));
+    toast(on ? "Preferência desativada." : "Preferência ativada.");
+  }
+  const tab = e.target.closest(".tab");
+  if(tab && !tab.dataset.go){
+    tab.parentElement.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", "false"));
+    tab.setAttribute("aria-selected", "true");
+  }
+  const tok = e.target.closest(".tok");
+  if(tok){
+    const ta = $("#pad");
+    const at = ta.selectionStart;
+    ta.value = ta.value.slice(0, at) + "\n" + tok.dataset.ins + ta.value.slice(at);
+    ta.focus();
+    ta.selectionStart = ta.selectionEnd = at + tok.dataset.ins.length + 1;
+  }
+});
+
+$("#back").addEventListener("click", () => go("pacientes"));
+$("#collapse").addEventListener("click", () => $("#app").classList.toggle("collapsed"));
+
+/* ── tema ── */
+const media = window.matchMedia("(prefers-color-scheme: dark)");
+function paintThemeIcon(){
+  const dark = document.documentElement.dataset.theme
+    ? document.documentElement.dataset.theme === "dark"
+    : media.matches;
+  $("#theme-ico").innerHTML = '<use href="#' + (dark ? "i-sun" : "i-moon") + '"/>';
+  $("#theme").title = dark ? "Mudar para tema claro" : "Mudar para tema escuro";
+}
+$("#theme").addEventListener("click", () => {
+  const dark = document.documentElement.dataset.theme
+    ? document.documentElement.dataset.theme === "dark"
+    : media.matches;
+  document.documentElement.dataset.theme = dark ? "light" : "dark";
+  paintThemeIcon();
+});
+media.addEventListener("change", paintThemeIcon);
+paintThemeIcon();
+
+/* ── marcações do exame ── */
+$("#ov").addEventListener("click", e => {
+  const on = e.currentTarget.classList.toggle("on");
+  ["d1", "d2", "d3"].forEach(id => document.getElementById(id).style.display = on ? "block" : "none");
+  toast(on ? "Marcações da IA visíveis." : "Marcações ocultas — imagem original.");
+});
+
+/* ── busca de pacientes ── */
+const pq = $("#pq");
+if(pq) pq.addEventListener("input", () => {
+  const q = pq.value.trim().toLowerCase();
+  let n = 0;
+  $$("#ptb tr").forEach(r => {
+    const hit = !q || (r.dataset.k + " " + r.textContent.toLowerCase()).includes(q);
+    r.style.display = hit ? "" : "none";
+    if(hit) n++;
+  });
+  $("#pcount").textContent = n + (q ? " resultado" + (n === 1 ? "" : "s") : " de 142 pacientes") + " · ordenado por risco";
+});
+
+/* ── paleta de comandos ── */
+const CMDS = [
+  { t: "Painel do dia",                 i: "i-grid",  g: "painel" },
+  { t: "Pacientes",                     i: "i-users", g: "pacientes" },
+  { t: "Abrir atendimento assistido",   i: "i-note",  g: "atendimento" },
+  { t: "Central de risco",              i: "i-alert", g: "risco" },
+  { t: "Conversas do WhatsApp",         i: "i-chat",  g: "conversas" },
+  { t: "Exames e imagem",               i: "i-scan",  g: "exames" },
+  { t: "Base de conhecimento anônima",  i: "i-book",  g: "base" },
+  { t: "Privacidade e LGPD",            i: "i-shield",g: "privacidade" },
+  { t: "José Carlos Ferreira · glaucoma",     i: "i-users", g: "paciente" },
+  { t: "Maria A. Santos · pós-facectomia D+3",i: "i-chat",  g: "conversas" },
+  { t: "Iniciar teleconsulta",          i: "i-video", a: "Sala segura criada. Link único enviado ao paciente." },
+  { t: "Novo paciente",                 i: "i-plus",  a: "Formulário de cadastro aberto." },
+  { t: "Alternar tema claro e escuro",  i: "i-moon",  a: "__theme" }
+];
+let sel = 0, list = CMDS;
+
+function render(){
+  const box = $("#pall");
+  if(!list.length){ box.innerHTML = '<div class="pal-empty">Nada encontrado.</div>'; return; }
+  box.innerHTML = list.map((c, k) =>
+    '<button class="pal-i' + (k === sel ? " sel" : "") + '" data-k="' + k + '">' +
+    '<svg viewBox="0 0 24 24" fill="none"><use href="#' + c.i + '"/></svg>' + c.t +
+    (c.g ? '<span class="k">ir para</span>' : '<span class="k">ação</span>') + "</button>"
+  ).join("");
+}
+function run(c){
+  if(!c) return;
+  close();
+  if(c.g) go(c.g);
+  else if(c.a === "__theme") $("#theme").click();
+  else toast(c.a);
+}
+function open(){
+  $("#scrim").classList.add("on");
+  $("#palq").value = ""; list = CMDS; sel = 0; render();
+  setTimeout(() => $("#palq").focus(), 30);
+}
+function close(){ $("#scrim").classList.remove("on"); }
+
+$("#openpal").addEventListener("click", open);
+$("#scrim").addEventListener("click", e => { if(e.target === $("#scrim")) close(); });
+$("#pall").addEventListener("click", e => {
+  const b = e.target.closest(".pal-i");
+  if(b) run(list[+b.dataset.k]);
+});
+$("#palq").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  list = CMDS.filter(c => c.t.toLowerCase().includes(q));
+  sel = 0; render();
+});
+document.addEventListener("keydown", e => {
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k"){ e.preventDefault(); open(); return; }
+  if(!$("#scrim").classList.contains("on")) return;
+  if(e.key === "Escape"){ close(); }
+  else if(e.key === "ArrowDown"){ e.preventDefault(); sel = Math.min(sel + 1, list.length - 1); render(); }
+  else if(e.key === "ArrowUp"){ e.preventDefault(); sel = Math.max(sel - 1, 0); render(); }
+  else if(e.key === "Enter"){ e.preventDefault(); run(list[sel]); }
+});
+
+go(HOME);
+</script>

@@ -1,0 +1,741 @@
+<title>Proposta RetinAI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#F1F4FA; --paper:#FFFFFF; --paper-2:#F7F9FD; --paper-3:#E7ECF7;
+  --line:#D6DEEC; --line-soft:#E7ECF6;
+  --ink:#0E1626; --ink-2:#37435A; --muted:#69758A;
+  --brand:#2F5BD8; --brand-soft:#E5EBFB; --brand-line:#BCCBF4;
+  --crit:#BE3247; --crit-soft:#FBE6EA; --crit-line:#F0C0C9;
+  --warn:#965E05; --warn-soft:#FAEFD8; --warn-line:#EBD1A0;
+  --ok:#06735C;   --ok-soft:#DCF1EB;   --ok-line:#ABDACE;
+  --ai:#5C3CBE;   --ai-soft:#EAE5FB;   --ai-line:#CBBCF2;
+  --sh:0 1px 2px rgba(14,22,38,.05), 0 12px 30px -20px rgba(14,22,38,.3);
+  --f-d:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-s:"IBM Plex Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+    --line:#26324F; --line-soft:#1B2540;
+    --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+    --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+    --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+    --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+    --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+    --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+    --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+  --line:#26324F; --line-soft:#1B2540;
+  --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+  --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+  --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+  --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+  --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+  --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+  --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-s);font-size:15.5px;line-height:1.72;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+::selection{background:var(--brand-soft);color:var(--ink)}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.doc{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+@media (min-width:1080px){
+  .doc{grid-template-columns:minmax(0,1fr) 208px;gap:56px;align-items:start}
+  .doc > .toc{position:sticky;top:34px;display:block}
+}
+.col{max-width:720px;min-width:0}
+
+/* ── MASTHEAD ── */
+.mast{padding:56px 0 34px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--f-m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
+.mast h1{font-family:var(--f-d);font-weight:400;font-size:clamp(40px,7vw,68px);line-height:.98;letter-spacing:-.025em;margin:18px 0 0;text-wrap:balance}
+.mast h1 em{font-style:italic;color:var(--brand)}
+.lede{font-size:clamp(17px,2.2vw,20px);line-height:1.62;color:var(--ink-2);margin-top:20px;max-width:38em;text-wrap:pretty}
+.meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:26px;font-family:var(--f-m);font-size:11.5px;color:var(--muted)}
+.meta b{color:var(--ink-2);font-weight:500}
+
+/* ── SEÇÕES ── */
+section{padding:46px 0;border-bottom:1px solid var(--line-soft)}
+section:last-of-type{border-bottom:0}
+.sec-n{font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);letter-spacing:.1em}
+h2{font-family:var(--f-d);font-weight:400;font-size:clamp(26px,3.6vw,36px);line-height:1.1;letter-spacing:-.02em;margin:9px 0 0;text-wrap:balance}
+h3{font-size:15.5px;font-weight:600;letter-spacing:-.01em;margin:34px 0 10px}
+h4{font-size:13px;font-weight:600;margin:0 0 6px}
+p{margin:16px 0;max-width:66ch;text-wrap:pretty}
+p:first-of-type{margin-top:20px}
+strong{font-weight:600;color:var(--ink)}
+a{color:var(--brand);text-decoration-thickness:1px;text-underline-offset:2px}
+ul,ol{margin:16px 0;padding-left:0;list-style:none;max-width:66ch;display:flex;flex-direction:column;gap:9px}
+li{padding-left:20px;position:relative}
+ul li::before{content:"";position:absolute;left:3px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.65}
+ol{counter-reset:o}
+ol li{counter-increment:o}
+ol li::before{content:counter(o);position:absolute;left:0;top:0;font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);line-height:1.9}
+
+/* ── TESE ── */
+.thesis{border-left:3px solid var(--brand);padding:4px 0 4px 24px;margin:30px 0}
+.thesis p{font-family:var(--f-d);font-size:clamp(21px,2.9vw,27px);line-height:1.32;color:var(--ink);margin:0;letter-spacing:-.012em}
+
+/* ── TOC ── */
+.toc{display:none;font-size:12.5px}
+.toc-t{font-family:var(--f-m);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-bottom:11px;border-bottom:1px solid var(--line)}
+.toc ol{margin:11px 0 0;gap:1px}
+.toc li{padding:0}
+.toc li::before{display:none}
+.toc a{display:flex;gap:9px;padding:5px 8px;border-radius:7px;color:var(--muted);text-decoration:none;line-height:1.4}
+.toc a:hover{background:var(--paper-3);color:var(--ink)}
+.toc a.on{color:var(--brand);background:var(--brand-soft);font-weight:600}
+.toc a span{font-family:var(--f-m);font-size:10.5px;opacity:.75;padding-top:1px}
+
+/* ── CARTÕES ── */
+.grid{display:grid;gap:14px;margin:24px 0}
+@media (min-width:640px){.grid.two{grid-template-columns:1fr 1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:18px 20px;box-shadow:var(--sh)}
+.card h4{display:flex;align-items:center;gap:9px;font-size:14px;margin-bottom:8px}
+.card p{font-size:13.5px;line-height:1.65;color:var(--ink-2);margin:0}
+.card p + p{margin-top:10px}
+.tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-m);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--paper-3);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.tag.b{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
+.tag.c{background:var(--crit-soft);color:var(--crit);border-color:var(--crit-line)}
+.tag.w{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+.tag.o{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-line)}
+.tag.a{background:var(--ai-soft);color:var(--ai);border-color:var(--ai-line)}
+.mod{border-left:3px solid var(--brand)}
+.mod .num{font-family:var(--f-m);font-size:11px;font-weight:600;color:var(--brand)}
+.need{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line-soft);margin-top:13px;padding-top:11px;line-height:1.6}
+.need b{color:var(--ink-2);font-weight:600}
+
+/* ── CALLOUT ── */
+.call{border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:24px 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 13px;align-items:start;background:var(--paper)}
+.call .ic{grid-column:1;grid-row:1;font-family:var(--f-m);font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;margin-top:2px;letter-spacing:.04em}
+.call p{grid-column:2;margin:0;font-size:14px;line-height:1.62;max-width:none;overflow-wrap:break-word}
+.call p + p{margin-top:9px}
+.call.c{background:var(--crit-soft);border-color:var(--crit-line)}
+.call.c .ic{background:var(--crit);color:var(--bg)}
+.call.w{background:var(--warn-soft);border-color:var(--warn-line)}
+.call.w .ic{background:var(--warn);color:var(--bg)}
+.call.o{background:var(--ok-soft);border-color:var(--ok-line)}
+.call.o .ic{background:var(--ok);color:var(--bg)}
+.call.b{background:var(--brand-soft);border-color:var(--brand-line)}
+.call.b .ic{background:var(--brand);color:var(--bg)}
+.call.a{background:var(--ai-soft);border-color:var(--ai-line)}
+.call.a .ic{background:var(--ai);color:var(--bg)}
+
+/* ── TABELAS ── */
+.tw{overflow-x:auto;margin:24px 0;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+th{text-align:left;font-family:var(--f-m);font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:11px 15px;background:var(--paper-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:12px 15px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.55;color:var(--ink-2)}
+tr:last-child td{border-bottom:0}
+td strong{color:var(--ink)}
+.num-c{font-family:var(--f-m);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ── FLUXO ── */
+.flow{display:grid;gap:10px;margin:26px 0}
+@media (min-width:760px){.flow{grid-template-columns:repeat(5,1fr);gap:0}}
+.step{background:var(--paper);border:1px solid var(--line);padding:14px 15px;position:relative;border-radius:11px}
+@media (min-width:760px){
+  .step{border-radius:0;border-right:0}
+  .step:first-child{border-radius:11px 0 0 11px}
+  .step:last-child{border-radius:0 11px 11px 0;border-right:1px solid var(--line)}
+  .step:not(:last-child)::after{content:"";position:absolute;right:-7px;top:50%;transform:translateY(-50%) rotate(45deg);width:12px;height:12px;background:var(--paper);border-top:1px solid var(--line);border-right:1px solid var(--line);z-index:2}
+}
+.step-n{font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--brand)}
+.step-t{font-size:13px;font-weight:600;margin:5px 0 4px;line-height:1.35}
+.step-d{font-size:11.5px;color:var(--muted);line-height:1.5}
+.step.hot{background:var(--crit-soft);border-color:var(--crit-line)}
+.step.hot::after{background:var(--crit-soft);border-color:var(--crit-line)}
+.step.hot .step-n{color:var(--crit)}
+
+/* ── ARQUITETURA ── */
+.stack{display:flex;flex-direction:column;gap:9px;margin:26px 0}
+.layer{border:1px solid var(--line);border-radius:12px;background:var(--paper);overflow:hidden}
+.layer-h{display:flex;align-items:center;gap:10px;padding:9px 15px;background:var(--paper-2);border-bottom:1px solid var(--line-soft)}
+.layer-h h4{margin:0;font-size:12.5px}
+.layer-h .side{margin-left:auto;font-family:var(--f-m);font-size:10.5px;color:var(--muted)}
+.layer-b{padding:12px 15px;display:flex;flex-wrap:wrap;gap:8px}
+.node{font-size:12px;padding:6px 11px;border-radius:8px;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-2);line-height:1.4}
+.node b{font-weight:600;color:var(--ink)}
+.node.b{background:var(--brand-soft);border-color:var(--brand-line)}
+.node.a{background:var(--ai-soft);border-color:var(--ai-line)}
+.node.c{background:var(--crit-soft);border-color:var(--crit-line)}
+.node.o{background:var(--ok-soft);border-color:var(--ok-line)}
+
+/* ── FASES ── */
+.phase{display:grid;grid-template-columns:auto 1fr;gap:0 18px;position:relative}
+.phase-l{display:flex;flex-direction:column;align-items:center;width:34px}
+.phase-d{width:12px;height:12px;border-radius:50%;background:var(--brand);border:3px solid var(--bg);box-shadow:0 0 0 1.5px var(--brand);margin-top:20px;flex-shrink:0}
+.phase-d.soft{background:var(--bg);box-shadow:0 0 0 1.5px var(--line)}
+.phase-line{flex:1;width:1.5px;background:var(--line);margin:6px 0 -6px}
+.phase:last-child .phase-line{display:none}
+.phase-b{padding:14px 0 20px;min-width:0}
+.phase-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 12px}
+.phase-t h4{font-size:15px;margin:0}
+.phase-b p{font-size:13.5px;margin:8px 0 0;color:var(--ink-2)}
+.phase-b ul{margin:9px 0 0;gap:5px;font-size:13px}
+.phase-b li{color:var(--ink-2)}
+
+/* ── DECISÕES ── */
+.dec{border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:16px 18px;margin:14px 0}
+.dec h4{font-size:14.5px;display:flex;gap:9px;align-items:baseline}
+.dec h4 .q{font-family:var(--f-m);font-size:11px;color:var(--brand);font-weight:600;flex-shrink:0}
+.dec p{font-size:13.5px;margin:9px 0 0;color:var(--ink-2)}
+.dec .rec{margin-top:11px;padding-top:11px;border-top:1px solid var(--line-soft);font-size:13px;color:var(--ink-2)}
+.dec .rec b{color:var(--brand);font-weight:600}
+
+/* ── CTA / RODAPÉ ── */
+.cta{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;margin:32px 0 0;box-shadow:var(--sh)}
+.cta h3{margin:0 0 8px;font-size:17px}
+.cta a.btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 17px;border-radius:10px;background:var(--brand);color:var(--bg);font-size:14px;font-weight:600;text-decoration:none}
+.cta a.btn:hover{filter:brightness(1.1)}
+footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
+.ph{background:var(--warn-soft);border-bottom:1.5px dashed var(--warn);padding:0 3px;color:var(--warn);font-weight:500}
+
+/* ── TEMA ── */
+.tbtn{position:fixed;right:16px;bottom:16px;z-index:20;width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;box-shadow:var(--sh);display:grid;place-items:center;font-size:16px;line-height:1}
+.tbtn:hover{border-color:var(--brand-line);color:var(--brand)}
+</style>
+
+<div class="wrap">
+<header class="mast">
+  <div class="eyebrow">Proposta de software · v1 · agosto de 2026</div>
+  <h1>RetinAI:<br>o intervalo entre <em>a alta e o retorno</em></h1>
+  <p class="lede">Uma plataforma de acompanhamento oftalmológico que ocupa o espaço onde hoje não existe nada — o tempo em que o paciente está em casa, sozinho, decidindo se aquela dor é normal.</p>
+  <div class="meta">
+    <span>Para <b>Dr. Miguel</b></span>
+    <span>Direção clínica <b>Dr. Miguel</b></span>
+    <span>Produto e engenharia <b>Arimã Noel Gomes</b></span>
+  </div>
+</header>
+
+<div class="doc">
+<main class="col">
+
+<section id="s1">
+  <div class="sec-n">01</div>
+  <h2>O problema não está na consulta. Está no que vem depois dela.</h2>
+
+  <p>Um paciente sai de uma facectomia com um frasco de colírio, um curativo, um papel com horários e uma explicação de dois minutos dada num corredor. A partir dali, durante trinta dias, quem julga se algo está errado é ele — sem formação clínica, com o olho ocluído, provavelmente idoso, muitas vezes sozinho em casa.</p>
+
+  <p>Esse arranjo falha de três maneiras previsíveis, e todas as três são invisíveis para a clínica até que virem urgência:</p>
+
+  <ul>
+    <li><strong>O paciente não distingue o esperado do sinal de alarme.</strong> Sensação de areia no D+2 é normal; dor forte com halos coloridos no D+3 não é. Para quem está do lado de dentro do olho, as duas coisas são apenas “incômodo”.</li>
+    <li><strong>A técnica é executada errado.</strong> Colírio que escorre pela face, dedo encostando na ponta do frasco, curativo mal fixado, oclusão nasolacrimal que ninguém ensinou. A prescrição estava certa; a execução não.</li>
+    <li><strong>Quem piora só volta quando não dá mais para adiar.</strong> A janela em que uma complicação aguda pós-operatória se instala é curta, e o sintoma que a denuncia é subjetivo — dor, halo, baixa de visão. O paciente espera para não incomodar, e chega ao pronto-socorro num estágio pior do que precisava.</li>
+  </ul>
+
+  <p>No crônico o problema é o oposto e igualmente silencioso. Glaucoma e retinopatia diabética não doem. A adesão ao colírio despenca — por custo, por esquecimento, por desânimo — e ninguém percebe até a próxima consulta, três meses depois, com a pressão intraocular alta e campo visual já perdido. Perda de campo visual em glaucoma não volta.</p>
+
+  <div class="thesis"><p>Hoje, entre uma consulta e a seguinte, o médico está cego. Não porque falte competência — porque falta canal.</p></div>
+
+  <h3>E do lado de dentro da clínica</h3>
+  <p>Há um segundo problema, menor em drama e maior em frequência: o prontuário é escrito às pressas entre um paciente e outro. Fica abreviado, telegráfico, feito para o próprio autor lembrar — e por isso quase inútil quando o mesmo paciente volta oito meses depois, ou quando outro médico assume o caso. O histórico existe, mas está espalhado em nove registros que ninguém tem tempo de reler antes de uma consulta de quinze minutos.</p>
+</section>
+
+<section id="s2">
+  <div class="sec-n">02</div>
+  <h2>A proposta</h2>
+
+  <div class="thesis"><p>RetinAI acompanha o paciente por WhatsApp com o protocolo que o médico escreveu, mede risco a cada resposta, e devolve ao médico uma fila ordenada por urgência — e, dentro da consulta, transforma anotação livre em prontuário estruturado com o histórico junto.</p></div>
+
+  <p>São dois movimentos que se alimentam. O acompanhamento gera dados que o atendimento usa: quando José chega para o retorno, o sistema já sabe que ele ficou quatro dias sem confirmar dose e escreveu por que. E o atendimento gera o protocolo que o acompanhamento executa: a conduta registrada na consulta liga automaticamente o plano de mensagens dos trinta dias seguintes.</p>
+
+  <p>Nada disso substitui julgamento clínico. A ambição é mais estreita e mais concreta: <strong>encurtar o tempo entre um paciente começar a piorar e o médico ficar sabendo.</strong></p>
+</section>
+
+<section id="s3">
+  <div class="sec-n">03</div>
+  <h2>Quatro módulos</h2>
+  <p>Cada um responde a uma necessidade específica que você já descreveu. Nenhum depende dos outros para funcionar, o que permite entregar em ordem.</p>
+
+  <div class="grid two">
+    <div class="card mod">
+      <div class="num">MÓDULO I</div>
+      <h4>Atendimento assistido e prontuário longitudinal</h4>
+      <p>Você escreve como sempre escreveu — abreviado, telegráfico, do seu jeito, ou por ditado de voz. A IA lê essa anotação e monta o prontuário estruturado: queixa, história, exame por segmento, hipóteses com CID e justificativa, conduta, retorno.</p>
+      <p>O rascunho fica em rascunho até você assinar. Cada hipótese vem com a base que a sustenta, e você aceita, edita ou descarta bloco a bloco.</p>
+      <p>Antes disso, ele compara o que você escreveu hoje com o que está registrado no histórico e aponta divergências: escavação de 0,8 hoje contra 0,7 em fevereiro é progressão estrutural ou erro de digitação? A pergunta aparece no momento em que ainda dá para responder.</p>
+      <div class="need"><b>Precisa de você:</b> o formato de prontuário que você considera correto, e uns 20 exemplos reais anonimizados para calibrar.</div>
+    </div>
+
+    <div class="card mod">
+      <div class="num">MÓDULO II</div>
+      <h4>Acompanhamento ativo por WhatsApp</h4>
+      <p>Ao final da consulta ou da alta cirúrgica, um protocolo é ativado. Nos dias seguintes o paciente recebe, no WhatsApp que ele já usa: orientação escrita no momento certo, vídeo curto de técnica gravado por você, lembrete de colírio, e um check-in com botões de resposta rápida.</p>
+      <p>As mensagens saem de modelos que você aprovou. A IA escolhe qual enviar e quando, interpreta o que o paciente responde, e responde de volta apenas o que o protocolo já prevê. Fora disso, ela para e chama você.</p>
+      <p>Quando a conversa exige exame, uma teleconsulta é aberta em sala com link de uso único, e o registro entra no prontuário com data, duração e consentimento vinculados.</p>
+      <div class="need"><b>Precisa de você:</b> os protocolos por procedimento e 8 a 12 vídeos curtos — a voz e o rosto precisam ser seus, é isso que faz o paciente assistir.</div>
+    </div>
+
+    <div class="card mod">
+      <div class="num">MÓDULO III</div>
+      <h4>Mapa de risco e fila de retorno</h4>
+      <p>Cada resposta do paciente, cada dose não confirmada e cada silêncio alimentam um score. O score não diagnostica — ele ordena a sua fila e decide o que vira alerta.</p>
+      <p>Os pesos são seus, definidos no protocolo: sintoma de alarme relatado, fase do pós-operatório, adesão medida, comorbidades, tempo sem contato. Todo alerta guarda quais entradas o dispararam.</p>
+      <p>O resultado prático é uma tela que responde a uma única pergunta: <strong>quem precisa de você nas próximas 24 horas, e por quê.</strong></p>
+      <div class="need"><b>Precisa de você:</b> a lista de sinais de alarme por procedimento e o que cada um deve disparar — encaixe, teleconsulta ou só observação.</div>
+    </div>
+
+    <div class="card mod">
+      <div class="num">MÓDULO IV</div>
+      <h4>Base de conhecimento e análise de exames</h4>
+      <p>Os exames e laudos que a clínica já produz viram um acervo consultável — sem nome, sem CPF, sem prontuário, sem data exata, sem metadado de origem. Só imagem, achados, diagnóstico e desfecho, sob um código de caso que não volta ao paciente.</p>
+      <p>É esse acervo que sustenta duas coisas: perguntas clínicas respondidas com casos citados da própria clínica, e a análise assistida de retinografia, OCT e campo visual — com marcação na imagem, grau de confiança e a razão de cada achado.</p>
+      <p>A entrada no acervo é opt-in do paciente e passa por conferência de um médico. Nada é publicado automaticamente.</p>
+      <div class="need"><b>Precisa de você:</b> 200 a 300 casos validados para a base inicial, e a decisão regulatória da seção 07.</div>
+    </div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="sec-n">04</div>
+  <h2>Duas jornadas, do começo ao fim</h2>
+
+  <h3>Maria, 67 anos, facectomia do olho direito</h3>
+
+  <div class="flow">
+    <div class="step"><div class="step-n">D0 · ALTA</div><div class="step-t">Protocolo ativado</div><div class="step-d">Apresentação do assistente e vídeo de aplicação do colírio antes da primeira dose.</div></div>
+    <div class="step"><div class="step-n">D1–D2</div><div class="step-t">Check-in diário</div><div class="step-d">“Como está o olho hoje?” com quatro botões. Areia no olho recebe tranquilização dentro do protocolo.</div></div>
+    <div class="step hot"><div class="step-n">D3 · 07h38</div><div class="step-t">Sinal de alarme</div><div class="step-d">“Dor forte e círculos coloridos.” Dor + halos + hiperemia é combinação não-esperada.</div></div>
+    <div class="step hot"><div class="step-n">D3 · 07h38</div><div class="step-t">Escalonamento</div><div class="step-d">A IA para de conduzir, orienta não aplicar nada e aciona o médico. Score 9,1.</div></div>
+    <div class="step"><div class="step-n">D3 · 08h10</div><div class="step-t">Decisão médica</div><div class="step-d">Teleconsulta em sala segura ou encaixe presencial no mesmo dia — a decisão é sua.</div></div>
+  </div>
+
+  <p>O ganho não é a IA ter acertado o diagnóstico — ela não diagnosticou nada. O ganho é que <strong>o intervalo entre o sintoma aparecer e você saber dele caiu de “até a Maria decidir ligar” para trinta e dois minutos</strong>, e você recebeu isso já classificado, com a conversa inteira anexada.</p>
+
+  <h3>José, 58 anos, glaucoma em acompanhamento há 14 meses</h3>
+
+  <div class="flow">
+    <div class="step"><div class="step-n">DIA −1</div><div class="step-t">Resposta no WhatsApp</div><div class="step-d">“Acabou o colírio e não tenho como comprar.” Classificado como barreira de acesso, não como esquecimento.</div></div>
+    <div class="step hot"><div class="step-n">DIA 0 · 07h40</div><div class="step-t">Alerta disparado</div><div class="step-d">Quarto dia sem dose confirmada em paciente com PIO limítrofe. Regra do protocolo pede encaixe no mesmo dia.</div></div>
+    <div class="step"><div class="step-n">09h15</div><div class="step-t">Consulta</div><div class="step-d">Você abre o atendimento já com o resumo das 9 consultas anteriores e a curva de PIO na tela.</div></div>
+    <div class="step"><div class="step-n">09h28</div><div class="step-t">Prontuário montado</div><div class="step-d">Suas anotações viram prontuário estruturado. Uma divergência de escavação é levantada para você confirmar.</div></div>
+    <div class="step"><div class="step-n">09h31</div><div class="step-t">Assinatura</div><div class="step-d">Você revisa, corrige e assina. O novo protocolo de reinício de tratamento já sai ativado.</div></div>
+  </div>
+
+  <p>Aqui o ganho é diferente. A IA percebeu um padrão que estava distribuído em quatorze meses de prontuário e que ninguém tinha tempo de reler: <strong>é a quarta interrupção por custo</strong>. Trocar o colírio outra vez não resolve. O que resolve é encaminhar para assistência farmacêutica ou discutir SLT — e essa leitura só aparece quando alguém lê o histórico inteiro antes da consulta.</p>
+</section>
+
+<section id="s5">
+  <div class="sec-n">05</div>
+  <h2>Onde a IA entra — e onde ela não entra</h2>
+
+  <p>Essa fronteira precisa estar escrita antes de existir código, porque é ela que define responsabilidade. O sistema opera em três níveis, e cada função pertence a exatamente um deles.</p>
+
+  <div class="grid">
+    <div class="card" style="border-left:3px solid var(--ok)">
+      <h4><span class="tag o">Nível 1</span> Executa sozinha</h4>
+      <p>Enviar conteúdo que você já aprovou, no momento que o protocolo define. Coletar respostas de check-in. Lembrar de dose. Organizar fila, agrupar histórico, transcrever, indexar. Registrar tudo em auditoria.</p>
+      <p><strong>Por quê:</strong> nenhuma dessas ações produz conteúdo clínico novo. A IA é logística aqui, não clínica.</p>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--ai)">
+      <h4><span class="tag a">Nível 2</span> Propõe, você decide</h4>
+      <p>Score de risco e classificação de urgência. Rascunho de prontuário e hipóteses diagnósticas. Achados em imagem. Sugestão de resposta ao paciente fora do roteiro. Detecção de divergência com o histórico.</p>
+      <p><strong>Regra:</strong> toda saída de nível 2 carrega grau de confiança, a razão explícita do que a gerou e a versão do modelo. Nada vira registro clínico sem sua assinatura.</p>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--crit)">
+      <h4><span class="tag c">Nível 3</span> Nunca</h4>
+      <p>Emitir diagnóstico como conclusão. Prescrever. Alterar dose. Dar alta. Dizer ao paciente que está tudo bem quando ele relatou sintoma fora do protocolo. Responder pergunta clínica que o protocolo não previu.</p>
+      <p><strong>Comportamento:</strong> diante de qualquer uma dessas, a IA para de conduzir, avisa o paciente que o médico foi acionado e passa a apenas registrar.</p>
+    </div>
+  </div>
+
+  <div class="call a"><span class="ic">NOTA</span><p>Quando você discorda de uma sugestão, esse desacordo é registrado como dado. É assim que os pesos de risco e os limiares de confiança são ajustados ao longo do tempo — com o seu julgamento, não com o do modelo.</p></div>
+</section>
+
+<section id="s6">
+  <div class="sec-n">06</div>
+  <h2>Privacidade, LGPD e sigilo médico</h2>
+
+  <p>Dado de saúde é dado pessoal sensível pela LGPD (Lei 13.709/2018, art. 5º, II), e sigilo médico é obrigação ética autônoma, anterior e independente da lei de dados. A arquitetura precisa refletir isso na estrutura, não numa política escrita depois.</p>
+
+  <h3>Dois cofres separados</h3>
+
+  <div class="grid two">
+    <div class="card" style="border-left:3px solid var(--crit)">
+      <h4>Cofre de identificação</h4>
+      <p>Nome, CPF, contato, endereço, prontuário assinado, conversas de WhatsApp, consentimentos.</p>
+      <p>Criptografado em repouso, acesso restrito a profissional vinculado àquele paciente, cada leitura registrada em trilha imutável.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--ai)">
+      <h4>Acervo clínico anônimo</h4>
+      <p>Imagem sem metadado de origem, achados, diagnóstico, desfecho, faixa etária, sexo e trimestre.</p>
+      <p>É esta base — e só ela — que treina e alimenta a IA de conhecimento. Não guarda chave de reidentificação.</p>
+    </div>
+  </div>
+
+  <p>A passagem entre os dois é de mão única. O pipeline remove identificadores diretos do texto e reescreve as tags de identificação do DICOM; em seguida trata os quase-identificadores, que são o erro mais comum nesse tipo de projeto: <strong>idade exata vira faixa e data exata vira trimestre</strong>, porque idade, data e diagnóstico combinados voltam a apontar para uma pessoa específica numa clínica de porte médio. Depois disso, um médico confere antes de publicar.</p>
+
+  <div class="call b"><span class="ic">POR QUÊ</span><p>O art. 12 da LGPD estabelece que dados anonimizados deixam de ser dados pessoais — <em>desde que a anonimização não seja reversível</em>. É essa condição que justifica todo o cuidado com quase-identificadores: uma anonimização frágil não é anonimização, e a base inteira volta a ser dado sensível.</p></div>
+
+  <h3>Bases legais</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Finalidade</th><th>Base legal</th><th>Consentimento</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Atendimento e prontuário</strong></td><td>Tutela da saúde, em procedimento realizado por profissional de saúde — art. 11, II, “f”</td><td>Não depende de consentimento; o registro é obrigação do médico</td></tr>
+      <tr><td><strong>Contato e orientação por WhatsApp</strong></td><td>Consentimento específico e destacado — art. 11, I</td><td>Sim, separado e revogável</td></tr>
+      <tr><td><strong>Teleconsulta</strong></td><td>Tutela da saúde + consentimento exigido pela norma do CFM</td><td>Sim, registrado em prontuário</td></tr>
+      <tr><td><strong>Uso no acervo anônimo</strong></td><td>Consentimento antes da anonimização; após anonimizar, art. 12 afasta a LGPD</td><td>Sim — <strong>opt-in, desligado por padrão</strong></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>O consentimento para a base de conhecimento tem que ser desligado por padrão e totalmente separado do consentimento de atendimento. Revogá-lo remove os exames daquele paciente do acervo na sincronização seguinte, e não pode ter nenhum efeito sobre o cuidado que ele recebe.</p>
+
+  <h3>A regra do WhatsApp</h3>
+  <p>Mensagem de WhatsApp trafega por servidores da Meta. Isso é aceitável para orientação, lembrete, vídeo e pergunta de check-in. Não é aceitável para laudo, imagem de exame, hipótese diagnóstica ou prescrição — esses abrem em link autenticado dentro do sistema, e o WhatsApp carrega só o aviso de que há algo para ver.</p>
+
+  <div class="call w"><span class="ic">ATENÇÃO</span><p>A LGPD veda, no art. 11, §4º, a comunicação e o uso compartilhado de dados de saúde com objetivo de obter vantagem econômica, com exceções específicas. Isso não impede cobrar pelo software — impede <strong>vender ou compartilhar a base</strong> com terceiros. Se em algum momento surgir a ideia de licenciar o acervo, essa é a primeira coisa a checar com um advogado.</p></div>
+
+  <h3>Retenção</h3>
+  <ul>
+    <li><strong>Prontuário e laudos — 20 anos.</strong> A guarda mínima decorre da norma do CFM sobre prontuário eletrônico e prevalece sobre pedido de exclusão do titular.</li>
+    <li><strong>Conversas de WhatsApp — 24 meses.</strong> São contexto clínico, mas não são prontuário; o que for clinicamente relevante é transposto para o registro.</li>
+    <li><strong>Teleconsulta — não gravada.</strong> Grava-se o fato, a duração e o registro clínico, não o vídeo. Gravar cria um passivo que não compensa.</li>
+    <li><strong>Trilha de auditoria — 5 anos.</strong> É ela que demonstra conformidade quando alguém perguntar.</li>
+  </ul>
+
+  <p>Fecham o conjunto: relatório de impacto à proteção de dados antes do piloto, um encarregado nomeado, e um plano de resposta a incidente escrito antes de precisar dele.</p>
+</section>
+
+<section id="s7">
+  <div class="sec-n">07</div>
+  <h2>Regulatório: a decisão que não é nossa para tomar sozinhos</h2>
+
+  <p>Três normas incidem sobre este produto, e duas delas são tranquilas.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Norma</th><th>O que exige</th><th>Situação</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CFM 2.314/2022</strong><br>Telemedicina</td><td>Consentimento do paciente, registro em prontuário, plataforma com padrões de segurança e sigilo, autonomia do médico para decidir se o caso é atendível a distância</td><td><span class="tag o">Endereçável no produto</span></td></tr>
+      <tr><td><strong>CFM 1.821/2007</strong><br>Prontuário eletrônico</td><td>Requisitos técnicos de guarda e integridade; certificação SBIS/CFM se a clínica for eliminar o papel</td><td><span class="tag o">Endereçável — decidir se buscamos a certificação</span></td></tr>
+      <tr><td><strong>ANVISA RDC 657/2022</strong><br>Software como dispositivo médico</td><td>Regularização de software que faz diagnóstico, triagem ou recomendação terapêutica</td><td><span class="tag c">Precisa de parecer especializado</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>O Módulo IV — análise de imagem de retina — é o que puxa a discussão de dispositivo médico. Os demais módulos são, em essência, registro clínico e comunicação com paciente, e não têm esse problema.</p>
+
+  <div class="call c"><span class="ic">RISCO 1</span>
+    <p>Existem dois caminhos, e a escolha muda o cronograma e o custo do Módulo IV.</p>
+    <p><strong>Caminho A — apoio à decisão com validação obrigatória.</strong> O software não emite conclusão diagnóstica: marca regiões, dá grau de confiança, e nada existe como laudo sem sua assinatura. É o desenho do protótipo. Reduz a exposição, mas <em>não a elimina</em> — a fronteira entre “apoio” e “triagem” é interpretativa.</p>
+    <p><strong>Caminho B — buscar o registro.</strong> Custo e prazo relevantes, exige sistema de qualidade e evidência clínica. Só se justifica se a ideia for licenciar o produto para outras clínicas.</p>
+    <p><strong>Minha recomendação:</strong> caminho A na primeira versão, uso restrito à sua própria clínica, e uma consultoria de assuntos regulatórios contratada <em>antes</em> de o Módulo IV entrar em desenvolvimento — não depois. É o maior risco do projeto e o único que pode invalidar trabalho já feito.</p>
+  </div>
+
+  <p>Sobre responsabilidade: o ato médico é indelegável. Nenhuma cláusula contratual transfere para o software a responsabilidade por uma conduta. O desenho de níveis da seção 05 existe justamente para que essa fronteira seja verificável no código e na trilha de auditoria, e não apenas afirmada num termo de uso.</p>
+</section>
+
+<section id="s8">
+  <div class="sec-n">08</div>
+  <h2>Arquitetura</h2>
+
+  <div class="stack">
+    <div class="layer">
+      <div class="layer-h"><h4>Canais</h4><span class="side">onde as pessoas estão</span></div>
+      <div class="layer-b">
+        <span class="node b"><b>WhatsApp Business Cloud API</b> — oficial, via provedor homologado</span>
+        <span class="node b"><b>Aplicação web do médico</b> — desktop e tablet</span>
+        <span class="node b"><b>Sala de vídeo</b> — link de uso único</span>
+        <span class="node"><b>Área do paciente</b> — link autenticado para conteúdo clínico</span>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-h"><h4>Aplicação</h4><span class="side">regra de negócio e orquestração</span></div>
+      <div class="layer-b">
+        <span class="node">API principal — <b>TypeScript / NestJS</b></span>
+        <span class="node">Motor de protocolos e agendamento de mensagens</span>
+        <span class="node">Motor de risco — regras com pesos definidos pelo médico</span>
+        <span class="node">Fila de trabalhos assíncronos</span>
+        <span class="node o">Trilha de auditoria imutável</span>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-h"><h4>Serviços de IA</h4><span class="side">sempre atrás da aplicação, nunca exposta ao canal</span></div>
+      <div class="layer-b">
+        <span class="node a"><b>Claude (Opus 5 / Sonnet 5)</b> — estruturação de prontuário, interpretação de resposta do paciente, redação de rascunho</span>
+        <span class="node a"><b>Modelo de visão para retina</b> — segmentação e achados</span>
+        <span class="node a"><b>RAG sobre o acervo anônimo</b> — busca vetorial com citação de casos</span>
+        <span class="node a">Camada de guarda — filtros de nível 3 e detecção de sinal de alarme</span>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-h"><h4>Dados</h4><span class="side">a separação dos cofres é física, não lógica</span></div>
+      <div class="layer-b">
+        <span class="node c"><b>PostgreSQL — cofre de identificação</b>, isolamento por clínica no nível da linha</span>
+        <span class="node a"><b>PostgreSQL + pgvector — acervo anônimo</b>, base separada</span>
+        <span class="node">Armazenamento de objetos para imagem e DICOM, criptografado</span>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-h"><h4>Infraestrutura</h4><span class="side">região brasileira</span></div>
+      <div class="layer-b">
+        <span class="node o">Nuvem em região no Brasil</span>
+        <span class="node o">Verificação em duas etapas obrigatória</span>
+        <span class="node o">Assinatura digital ICP-Brasil nos documentos médicos</span>
+        <span class="node o">Backup com teste de restauração periódico</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Três decisões técnicas que valem explicar</h3>
+  <ul>
+    <li><strong>WhatsApp pela API oficial, não por gateway não homologado.</strong> Custa mais por mensagem e exige aprovação de modelos, mas gateway informal quebra sem aviso e coloca dado de saúde em infraestrutura sem contrato — inaceitável aqui.</li>
+    <li><strong>Sala de vídeo com link de uso único, em vez de Meet.</strong> O Meet é conveniente, mas o link tende a ficar aberto e reutilizável, o que conflita com a exigência de sala fechada e sigilo. Uma sala dedicada que expira ao fim do atendimento resolve, com registro automático no prontuário. Se você preferir manter o Meet pela familiaridade, dá para fazer — só é preciso saber que o controle de acesso fica mais fraco.</li>
+    <li><strong>A IA nunca fala direto com o canal.</strong> Toda saída passa pela camada de guarda da aplicação, que verifica se aquilo é nível 1, e barra o resto. Sem isso, uma resposta inesperada do modelo chegaria ao paciente sem filtro.</li>
+  </ul>
+</section>
+
+<section id="s9">
+  <div class="sec-n">09</div>
+  <h2>Roadmap</h2>
+  <p>Cinco fases, entregando em ordem de valor clínico. Prazos assumem eu em dedicação principal e você em torno de duas horas por semana de validação — se qualquer um dos dois mudar, os números mudam junto.</p>
+
+  <div style="margin:26px 0">
+    <div class="phase">
+      <div class="phase-l"><div class="phase-d"></div><div class="phase-line"></div></div>
+      <div class="phase-b">
+        <div class="phase-t"><h4>Fase 0 · Descoberta clínica e jurídica</h4><span class="tag">3 a 4 semanas</span></div>
+        <p>Nada de código. É a fase que decide se as outras dão certo.</p>
+        <ul>
+          <li>Escrever os protocolos de acompanhamento com você, procedimento por procedimento</li>
+          <li>Fechar a lista de sinais de alarme e o que cada um dispara</li>
+          <li>Definir o formato de prontuário que você considera correto</li>
+          <li>Termos de consentimento por finalidade e relatório de impacto à proteção de dados</li>
+          <li>Contratar o parecer regulatório sobre o Módulo IV</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-l"><div class="phase-d"></div><div class="phase-line"></div></div>
+      <div class="phase-b">
+        <div class="phase-t"><h4>Fase 1 · Núcleo do atendimento</h4><span class="tag">8 a 10 semanas</span><span class="tag b">Módulo I</span></div>
+        <p>O sistema já vale a pena mesmo que pare aqui: substitui o prontuário atual.</p>
+        <ul>
+          <li>Cadastro de pacientes, agenda e autenticação com duas etapas</li>
+          <li>Tela de atendimento com anotação livre e ditado por voz</li>
+          <li>Prontuário estruturado pela IA, com aceite bloco a bloco e assinatura digital</li>
+          <li>Histórico longitudinal e detecção de divergência com registros anteriores</li>
+          <li>Trilha de auditoria funcionando desde o primeiro dia</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-l"><div class="phase-d"></div><div class="phase-line"></div></div>
+      <div class="phase-b">
+        <div class="phase-t"><h4>Fase 2 · Acompanhamento por WhatsApp</h4><span class="tag">6 a 8 semanas</span><span class="tag b">Módulos II e III</span></div>
+        <p>Aqui entra o piloto: um único procedimento, 20 a 30 pacientes, você acompanhando de perto.</p>
+        <ul>
+          <li>Integração com a API oficial e aprovação dos modelos de mensagem</li>
+          <li>Motor de protocolos, biblioteca de vídeos e check-ins com resposta rápida</li>
+          <li>Motor de risco, central de alertas e escalonamento para o médico</li>
+          <li>Piloto controlado com medição de tudo o que a seção 10 define</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-l"><div class="phase-d"></div><div class="phase-line"></div></div>
+      <div class="phase-b">
+        <div class="phase-t"><h4>Fase 3 · Teleconsulta e acervo anônimo</h4><span class="tag">6 a 8 semanas</span><span class="tag b">Módulo IV, parte 1</span></div>
+        <ul>
+          <li>Sala de vídeo com link único e registro automático em prontuário</li>
+          <li>Pipeline de anonimização com conferência humana obrigatória</li>
+          <li>Acervo consultável com respostas citando casos da própria clínica</li>
+          <li>Carga inicial dos 200 a 300 casos validados</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-l"><div class="phase-d soft"></div></div>
+      <div class="phase-b">
+        <div class="phase-t"><h4>Fase 4 · Análise de imagem</h4><span class="tag">10 a 14 semanas</span><span class="tag c">condicionada ao parecer regulatório</span></div>
+        <ul>
+          <li>Visualizador de retinografia, OCT e campo visual com comparação longitudinal</li>
+          <li>Achados assistidos com marcação, confiança e explicação</li>
+          <li>Registro estruturado de concordância e discordância do médico</li>
+        </ul>
+        <p>Esta fase só começa depois que a seção 07 estiver resolvida. Começá-la antes é assumir o risco de jogar trabalho fora.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="call b"><span class="ic">MARCO</span><p>O ponto de decisão real do projeto é o fim da Fase 2. Se o piloto mostrar que o tempo até o médico saber de um sinal de alarme caiu de forma consistente, o resto se justifica sozinho. Se não mostrar, é melhor descobrir ali — com 20 pacientes e cinco meses — do que depois.</p></div>
+</section>
+
+<section id="s10">
+  <div class="sec-n">10</div>
+  <h2>Como saber se funcionou</h2>
+  <p>Todas essas medidas precisam de linha de base coletada <strong>antes</strong> de ligar o sistema. Sem isso, qualquer número depois vira opinião.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Medida</th><th>Por que importa</th><th>Meta no piloto</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Tempo entre o primeiro sinal de alarme e o contato do médico</strong></td><td>É a métrica central. Todo o resto é meio para melhorar esta</td><td class="num-c">&lt; 2 h em horário útil</td></tr>
+      <tr><td><strong>Complicações identificadas antes de o paciente procurar pronto-socorro</strong></td><td>Mede se o canal está funcionando de verdade ou só gerando conversa</td><td class="num-c">acompanhar tendência</td></tr>
+      <tr><td><strong>Adesão medida ao tratamento</strong></td><td>No crônico, é o que determina desfecho</td><td class="num-c">+ 15 pontos vs. base</td></tr>
+      <tr><td><strong>Tempo de escrita do prontuário por consulta</strong></td><td>Se o sistema não devolver tempo ao médico, ele é abandonado</td><td class="num-c">− 40%</td></tr>
+      <tr><td><strong>Rascunhos aceitos sem edição estrutural</strong></td><td>Qualidade real da estruturação por IA</td><td class="num-c">&gt; 70%</td></tr>
+      <tr><td><strong>Alertas que você considerou desnecessários</strong></td><td>Fadiga de alerta mata o produto mais rápido que erro</td><td class="num-c">&lt; 20%</td></tr>
+      <tr><td><strong>Retornos não comparecidos</strong></td><td>Efeito colateral mensurável e financeiramente visível</td><td class="num-c">acompanhar tendência</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="s11">
+  <div class="sec-n">11</div>
+  <h2>Riscos</h2>
+
+  <div class="tw"><table>
+    <thead><tr><th style="width:26%">Risco</th><th style="width:14%">Gravidade</th><th>Mitigação</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Módulo IV enquadrado como dispositivo médico</strong></td><td><span class="tag c">Alta</span></td><td>Parecer regulatório contratado na Fase 0; Módulo IV é a última fase justamente para poder ser cortado sem derrubar o resto</td></tr>
+      <tr><td><strong>Falso negativo na triagem</strong> — paciente crítico classificado como leve</td><td><span class="tag c">Alta</span></td><td>Limiares calibrados para errar do lado do excesso; qualquer sintoma da lista de alarme escalona independentemente do score; toda conversa fica visível ao médico, mesmo as não escalonadas</td></tr>
+      <tr><td><strong>Fadiga de alerta</strong> — excesso de escalonamento faz o médico ignorar tudo</td><td><span class="tag w">Média</span></td><td>Medir alertas descartados desde o piloto; ajustar pesos com o seu feedback; separar “decidir em 24 h” de “pode esperar”</td></tr>
+      <tr><td><strong>Alucinação no prontuário</strong> — IA registra o que não foi dito</td><td><span class="tag c">Alta</span></td><td>Cada bloco carrega a base que o gerou; aceite bloco a bloco; assinatura obrigatória; auditoria comparando anotação original e texto final</td></tr>
+      <tr><td><strong>Paciente não entende ou não responde</strong> — idoso, baixa escolaridade, sem smartphone</td><td><span class="tag w">Média</span></td><td>Botões em vez de texto livre; vídeo em vez de texto; cadastro de cuidador como contato alternativo; silêncio prolongado é sinal, não ausência de sinal</td></tr>
+      <tr><td><strong>Mudança de política da Meta</strong> para mensagens de saúde</td><td><span class="tag w">Média</span></td><td>Camada de canal abstraída desde o início; SMS e ligação da secretaria como alternativa; conteúdo clínico já fora do WhatsApp por desenho</td></tr>
+      <tr><td><strong>Incidente de segurança com dado sensível</strong></td><td><span class="tag c">Alta</span></td><td>Separação de cofres, criptografia, duas etapas, mínimo privilégio, auditoria; plano de resposta escrito antes do piloto; sem exportação em massa por padrão</td></tr>
+      <tr><td><strong>Abandono por atrito</strong> — o sistema toma mais tempo do que devolve</td><td><span class="tag w">Média</span></td><td>Fase 1 entrega ganho isolado antes de qualquer obrigação nova; tempo de prontuário é métrica de piloto; se subir, é falha de produto</td></tr>
+      <tr><td><strong>Projeto de dois</strong> — ambos com outras prioridades</td><td><span class="tag w">Média</span></td><td>Fases curtas com entrega utilizável; a Fase 1 sozinha já justifica o esforço; acordo de sociedade escrito antes de começar</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="s12">
+  <div class="sec-n">12</div>
+  <h2>O que eu preciso de você</h2>
+
+  <p>A parte de engenharia é minha. A parte que não dá para terceirizar é sua, e sem ela o produto vira um chatbot genérico — que é exatamente o que não queremos.</p>
+
+  <ol>
+    <li><strong>Os protocolos escritos.</strong> Cinco ou seis, um por procedimento e condição principal: pós-facectomia, pós-vitrectomia, pós-LASIK, glaucoma crônico, retinopatia diabética. O que enviar, em que dia, e o que fazer com cada resposta.</li>
+    <li><strong>A lista de sinais de alarme por procedimento</strong>, e o que cada um deve disparar — encaixe no mesmo dia, teleconsulta, ou apenas observar.</li>
+    <li><strong>De 8 a 12 vídeos curtos</strong>, de um a dois minutos, gravados por você. Aplicação de colírio, oclusão nasolacrimal, troca de curativo, posicionamento pós-vitrectomia, o que é esperado e o que não é. Gravados no celular mesmo — o que importa é ser você.</li>
+    <li><strong>De 200 a 300 casos validados</strong> para a carga inicial do acervo, com laudo conferido.</li>
+    <li><strong>Cerca de duas horas por semana</strong> nas Fases 1 e 2, para validar o que sai e corrigir o que estiver clinicamente errado.</li>
+    <li><strong>A decisão da seção 07</strong>, tomada com o parecer regulatório em mãos.</li>
+  </ol>
+</section>
+
+<section id="s13">
+  <div class="sec-n">13</div>
+  <h2>Decisões abertas</h2>
+  <p>Cinco perguntas que precisam de resposta antes da Fase 1. Coloquei minha recomendação em cada uma, mas nenhuma está fechada.</p>
+
+  <div class="dec">
+    <h4><span class="q">D1</span>Qual procedimento entra no piloto?</h4>
+    <p>Fazer um só, bem feito, ensina mais do que cinco pela metade.</p>
+    <div class="rec"><b>Recomendo</b> pós-facectomia: alto volume, janela de risco bem definida, sinais de alarme claros e desfecho verificável em 30 dias.</div>
+  </div>
+
+  <div class="dec">
+    <h4><span class="q">D2</span>Qual caminho regulatório para o Módulo IV?</h4>
+    <p>Apoio à decisão com validação obrigatória, ou buscar registro como dispositivo médico.</p>
+    <div class="rec"><b>Recomendo</b> apoio à decisão na v1, uso restrito à sua clínica, e consultoria regulatória contratada na Fase 0 — antes de escrever uma linha do módulo.</div>
+  </div>
+
+  <div class="dec">
+    <h4><span class="q">D3</span>Meet ou sala de vídeo dedicada?</h4>
+    <p>Familiaridade contra controle de acesso e registro automático.</p>
+    <div class="rec"><b>Recomendo</b> sala dedicada com link de uso único. Se a familiaridade do Meet pesar mais para você, é viável — com controle de acesso mais fraco.</div>
+  </div>
+
+  <div class="dec">
+    <h4><span class="q">D4</span>Produto para a sua clínica ou para vender a outras?</h4>
+    <p>Muda arquitetura, custo e exigência regulatória. Produto de mercado precisa de multi-clínica desde o primeiro dia e provavelmente de registro na ANVISA.</p>
+    <div class="rec"><b>Recomendo</b> construir a separação por clínica desde já — é barato agora e caro depois — mas focar exclusivamente na sua clínica até o fim da Fase 2.</div>
+  </div>
+
+  <div class="dec">
+    <h4><span class="q">D5</span>Como formalizamos a sociedade?</h4>
+    <p>Divisão de participação, propriedade do código e da base, quem responde tecnicamente pelo software, e o que acontece se um dos dois sair.</p>
+    <div class="rec"><b>Recomendo</b> acordo escrito antes da Fase 1. É a conversa mais desconfortável e a mais barata de ter agora.</div>
+  </div>
+</section>
+
+<div class="cta">
+  <h3>Próximo passo</h3>
+  <p style="margin:0;font-size:14.5px;color:var(--ink-2)">Navegue pelo protótipo antes da nossa próxima conversa — ele é clicável e cobre as nove telas descritas aqui, com dados fictícios. Depois marcamos duas horas para escrever juntos o protocolo de pós-facectomia. Com esse protocolo na mão, a Fase 0 começa.</p>
+  <a class="btn" href="https://claude.ai/code/artifact/ff86657a-da29-4bd1-9e90-6e0635ecfe36">Abrir o protótipo navegável →</a>
+</div>
+
+<footer>
+  <p style="max-width:66ch;margin:0">Documento de proposta, versão 1, agosto de 2026. Todos os nomes de pacientes, imagens, exames e números do protótipo são fictícios. As referências a LGPD, resoluções do CFM e RDC da ANVISA são um mapa do que precisa ser verificado, não parecer jurídico — a seção 07 depende de consultoria especializada contratada.</p>
+</footer>
+
+</main>
+
+<nav class="toc" aria-label="Sumário">
+  <div class="toc-t">Nesta proposta</div>
+  <ol>
+    <li><a href="#s1"><span>01</span>O problema</a></li>
+    <li><a href="#s2"><span>02</span>A proposta</a></li>
+    <li><a href="#s3"><span>03</span>Quatro módulos</a></li>
+    <li><a href="#s4"><span>04</span>Duas jornadas</a></li>
+    <li><a href="#s5"><span>05</span>Onde a IA entra</a></li>
+    <li><a href="#s6"><span>06</span>LGPD e sigilo</a></li>
+    <li><a href="#s7"><span>07</span>Regulatório</a></li>
+    <li><a href="#s8"><span>08</span>Arquitetura</a></li>
+    <li><a href="#s9"><span>09</span>Roadmap</a></li>
+    <li><a href="#s10"><span>10</span>Como medir</a></li>
+    <li><a href="#s11"><span>11</span>Riscos</a></li>
+    <li><a href="#s12"><span>12</span>O que preciso de você</a></li>
+    <li><a href="#s13"><span>13</span>Decisões abertas</a></li>
+  </ol>
+</nav>
+</div>
+</div>
+
+<button class="tbtn" id="tbtn" title="Alternar tema" aria-label="Alternar tema claro e escuro">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" id="tico"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+</button>
+
+<script>
+document.documentElement.lang = "pt-BR";
+
+var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+var SUN  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+var mq = window.matchMedia("(prefers-color-scheme: dark)");
+function isDark(){
+  var d = document.documentElement.dataset.theme;
+  return d ? d === "dark" : mq.matches;
+}
+function paint(){ document.getElementById("tico").innerHTML = isDark() ? SUN : MOON; }
+document.getElementById("tbtn").addEventListener("click", function(){
+  document.documentElement.dataset.theme = isDark() ? "light" : "dark";
+  paint();
+});
+mq.addEventListener("change", paint);
+paint();
+
+var links = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+var secs = links.map(function(a){ return document.querySelector(a.getAttribute("href")); });
+var obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(!e.isIntersecting) return;
+    var i = secs.indexOf(e.target);
+    if(i < 0) return;
+    links.forEach(function(a){ a.classList.remove("on"); });
+    links[i].classList.add("on");
+  });
+}, { rootMargin: "-15% 0px -70% 0px", threshold: 0 });
+secs.forEach(function(s){ if(s) obs.observe(s); });
+</script>
