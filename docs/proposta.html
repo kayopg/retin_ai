@@ -148,6 +148,7 @@ td strong{color:var(--ink)}
 @media (min-width:760px){.flow{grid-template-columns:repeat(5,1fr);gap:0}}
 .step{background:var(--paper);border:1px solid var(--line);padding:14px 15px;position:relative;border-radius:11px}
 @media (min-width:760px){
+  .flow.f3{grid-template-columns:repeat(3,1fr)}
   .step{border-radius:0;border-right:0}
   .step:first-child{border-radius:11px 0 0 11px}
   .step:last-child{border-radius:0 11px 11px 0;border-right:1px solid var(--line)}
@@ -159,6 +160,10 @@ td strong{color:var(--ink)}
 .step.hot{background:var(--crit-soft);border-color:var(--crit-line)}
 .step.hot::after{background:var(--crit-soft);border-color:var(--crit-line)}
 .step.hot .step-n{color:var(--crit)}
+.step.soft{background:var(--paper-2);border-style:dashed}
+.step.soft::after{background:var(--paper-2);border-style:dashed}
+.step.soft .step-n{color:var(--muted)}
+.step.soft .step-t{color:var(--ink-2)}
 
 /* ── ARQUITETURA ── */
 .stack{display:flex;flex-direction:column;gap:9px;margin:26px 0}
@@ -257,8 +262,27 @@ footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
   <p>Nada disso substitui julgamento clínico. A ambição é mais estreita e mais concreta: <strong>encurtar o tempo entre um paciente começar a piorar e o médico ficar sabendo.</strong></p>
 
   <h3>Para onde isso vai</h3>
-  <p>O RetinAI é um produto para vender, não uma ferramenta interna. O caminho é <strong>clínicas oftalmológicas particulares primeiro, órgãos públicos depois</strong>. A sua clínica é o primeiro cliente e o campo de prova — não o destino.</p>
-  <p>Isso está escrito logo aqui, e não no fim, porque muda decisões que aparecem ao longo de todo o documento: separação entre clínicas desde a primeira linha de código, quem responde legalmente pelos dados de cada paciente, e o peso regulatório do módulo de análise de imagem. A seção 07 é a que mais sente esse efeito.</p>
+  <p>O RetinAI não é uma ferramenta interna, mas também não nasce como produto de prateleira. São três etapas de mercado, e cada uma só começa depois que a anterior se provar.</p>
+
+  <div class="flow f3">
+    <div class="step">
+      <div class="step-n">ETAPA 1 · COMPROMETIDA</div>
+      <div class="step-t">Piloto sem comercialização</div>
+      <div class="step-d">Uma clínica particular — a sua. Sem contrato, sem cobrança, sem cliente externo. O objetivo é provar que a proposta clínica funciona e medir o custo real de operar.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">ETAPA 2 · COMPROMETIDA</div>
+      <div class="step-t">Venda a clínicas particulares</div>
+      <div class="step-d">Começa se a Etapa 1 se validar. É aqui que entram contrato, papel de operador de dados, isolamento entre clínicas e a exigência regulatória cheia.</div>
+    </div>
+    <div class="step soft">
+      <div class="step-n">ETAPA 3 · HIPÓTESE</div>
+      <div class="step-t">Venda a órgãos públicos</div>
+      <div class="step-d">Ainda é uma ideia, não um plano. Depende de a Etapa 2 se sustentar e de um levantamento sério de exigências que hoje não temos.</div>
+    </div>
+  </div>
+
+  <p>A distinção entre <strong>comprometido</strong> e <strong>hipótese</strong> é importante e vale carregar por todo o documento: decisão que só vale para a Etapa 3 não deve custar prazo hoje. Mas duas coisas precisam ser feitas desde já porque são caras demais para refazer depois — <strong>a separação entre clínicas no banco de dados</strong> e <strong>a trilha de auditoria</strong>. O resto pode esperar a etapa que o exigir. A seção 07 é a que mais sente esse efeito.</p>
 </section>
 
 <section id="s3">
@@ -450,22 +474,26 @@ footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
 
   <div class="call c"><span class="ic">MUDOU</span>
     <p>Uma versão anterior deste documento tratava a análise de imagem como uso interno da sua clínica, e recomendava o caminho de menor exposição. <strong>Com a decisão de comercializar, essa recomendação não se sustenta.</strong></p>
-    <p>Software usado dentro da própria clínica, por quem o construiu, é uma situação. Software distribuído a terceiros, que passa a operar sem a supervisão dos autores, é outra — e é exatamente o que a regularização sanitária existe para cobrir. Vender torna o registro provável, e a venda para órgãos públicos torna-o praticamente certo.</p>
+    <p>Software usado dentro da própria clínica, por quem o construiu, é uma situação. Software distribuído a terceiros, que passa a operar sem a supervisão dos autores, é outra — e é exatamente o que a regularização sanitária existe para cobrir. <strong>O gatilho é a Etapa 2</strong>, a primeira venda; não o piloto, e não a Etapa 3.</p>
   </div>
 
-  <h3>O que a venda acrescenta</h3>
+  <h3>O que cada etapa exige</h3>
   <div class="tw"><table>
-    <thead><tr><th>Exigência</th><th>Clínica particular</th><th>Órgão público</th></tr></thead>
+    <thead><tr><th>Exigência</th><th>Etapa 1 · piloto</th><th>Etapa 2 · venda particular</th><th>Etapa 3 · público</th></tr></thead>
     <tbody>
-      <tr><td><strong>Registro ANVISA do Módulo IV</strong></td><td>Provável</td><td><span class="tag c">Praticamente certo</span></td></tr>
-      <tr><td><strong>Certificação SBIS/CFM do prontuário</strong></td><td>Diferencial comercial</td><td><span class="tag c">Normalmente exigida em edital</span></td></tr>
-      <tr><td><strong>Acessibilidade digital</strong></td><td>Boa prática</td><td><span class="tag c">Obrigatória — e-MAG</span></td></tr>
-      <tr><td><strong>Interoperabilidade com a RNDS</strong></td><td>Dispensável</td><td><span class="tag w">Esperada em saúde pública</span></td></tr>
-      <tr><td><strong>Licitação</strong></td><td>Contrato direto</td><td><span class="tag w">Lei 14.133/2021</span></td></tr>
+      <tr><td><strong>Registro ANVISA do Módulo IV</strong></td><td><span class="tag o">Dispensável</span></td><td><span class="tag c">Provável — tratar como necessário</span></td><td><span class="tag c">Certo</span></td></tr>
+      <tr><td><strong>Contrato de operador de dados</strong></td><td><span class="tag o">Não se aplica</span></td><td><span class="tag c">Obrigatório</span></td><td><span class="tag c">Obrigatório</span></td></tr>
+      <tr><td><strong>Isolamento entre clínicas</strong></td><td><span class="tag w">Construir desde já</span></td><td><span class="tag c">Obrigatório</span></td><td><span class="tag c">Obrigatório</span></td></tr>
+      <tr><td><strong>Certificação SBIS/CFM do prontuário</strong></td><td><span class="tag o">Dispensável</span></td><td><span class="tag w">Diferencial comercial</span></td><td><span class="tag c">Normalmente exigida em edital</span></td></tr>
+      <tr><td><strong>Acessibilidade digital</strong></td><td><span class="tag o">Boa prática</span></td><td><span class="tag w">Boa prática</span></td><td><span class="tag c">Obrigatória — e-MAG</span></td></tr>
+      <tr><td><strong>Interoperabilidade com a RNDS</strong></td><td><span class="tag o">Dispensável</span></td><td><span class="tag o">Dispensável</span></td><td><span class="tag w">Esperada</span></td></tr>
+      <tr><td><strong>Licitação</strong></td><td><span class="tag o">Não se aplica</span></td><td><span class="tag o">Contrato direto</span></td><td><span class="tag w">Lei 14.133/2021</span></td></tr>
     </tbody>
   </table></div>
 
-  <p>Nenhuma dessas linhas muda o que construímos nas Fases 1 a 3 — elas mudam o que precisa existir <em>em volta</em> do produto antes de vendê-lo. A consequência prática é de sequência, não de arquitetura: o piloto e as três primeiras fases seguem exatamente como planejado, e o esforço de conformidade entra em paralelo, a partir do momento em que a primeira venda virar meta concreta.</p>
+  <p>Ler essa tabela por coluna é o ponto: <strong>a Etapa 1 quase não exige nada.</strong> O piloto pode começar já, e nada do que está listado atrasa uma linha de código das Fases 0 a 3. A conformidade entra em paralelo, quando a Etapa 2 virar meta concreta — com a única exceção do isolamento entre clínicas, que é barato agora e caríssimo depois.</p>
+
+  <p>E a última coluna não deve custar prazo hoje. Enquanto a Etapa 3 for hipótese, o certo é <em>não fechar portas</em> — evitar decisões que a tornariam impossível — sem gastar esforço antecipado para satisfazê-la.</p>
 
   <div class="call c"><span class="ic">RISCO 1</span>
     <p>Existem dois caminhos, e a escolha muda o cronograma e o custo do Módulo IV.</p>
@@ -647,7 +675,7 @@ footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
       <tr><td><strong>Módulo IV enquadrado como dispositivo médico</strong> — agravado por ser produto de venda</td><td><span class="tag c">Alta</span></td><td>Parecer regulatório contratado na Fase 0; registro planejado como pré-requisito da primeira venda, não como correção depois; Módulo IV é a última fase justamente para poder ser adiado sem travar o produto</td></tr>
       <tr><td><strong>Responsabilidade como operador</strong> — vazamento em clínica cliente respinga em nós</td><td><span class="tag c">Alta</span></td><td>Contrato de tratamento de dados com cada cliente; isolamento real entre clínicas; nenhum acesso nosso a dado identificável sem chamado registrado; plano de resposta a incidente acordado antes da assinatura</td></tr>
       <tr><td><strong>Acervo comum entre clínicas barrado juridicamente</strong></td><td><span class="tag w">Média</span></td><td>Começar isolado por clínica, que é reversível; abrir o acervo comum só com parecer e autorização contratual — decisão D4</td></tr>
-      <tr><td><strong>Barreira de entrada no setor público</strong> — certificação, acessibilidade, licitação</td><td><span class="tag w">Média</span></td><td>Tratar o público como fase posterior e explícita, não como extensão natural do particular; levantar exigências de edital antes de prometer prazo</td></tr>
+      <tr><td><strong>Barreira de entrada no setor público</strong> — certificação, acessibilidade, licitação</td><td><span class="tag">Baixa hoje</span></td><td>A Etapa 3 é hipótese, não compromisso: o risco só se materializa se ela for adiante. Por ora, apenas não fechar portas — nenhum esforço antecipado. Antes de prometer qualquer prazo, levantar exigências de edital de verdade</td></tr>
       <tr><td><strong>Falso negativo na triagem</strong> — paciente crítico classificado como leve</td><td><span class="tag c">Alta</span></td><td>Limiares calibrados para errar do lado do excesso; qualquer sintoma da lista de alarme escalona independentemente do score; toda conversa fica visível ao médico, mesmo as não escalonadas</td></tr>
       <tr><td><strong>Fadiga de alerta</strong> — excesso de escalonamento faz o médico ignorar tudo</td><td><span class="tag w">Média</span></td><td>Medir alertas descartados desde o piloto; ajustar pesos com o seu feedback; separar “decidir em 24 h” de “pode esperar”</td></tr>
       <tr><td><strong>Alucinação no prontuário</strong> — IA registra o que não foi dito</td><td><span class="tag c">Alta</span></td><td>Cada bloco carrega a base que o gerou; aceite bloco a bloco; assinatura obrigatória; auditoria comparando anotação original e texto final</td></tr>
@@ -662,6 +690,79 @@ footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
 
 <section id="s12">
   <div class="sec-n">12</div>
+  <h2>Modelo de negócio</h2>
+
+  <p>Nada aqui está fechado — são três formas de cobrar, com o que cada uma ganha e o que cada uma quebra. Antes delas, vale olhar onde o dinheiro sai, porque é isso que descarta as opções ruins.</p>
+
+  <h3>Onde está o custo de servir um cliente</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Item</th><th>Como é cobrado de nós</th><th>Cresce com</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Conversas de WhatsApp</strong></td><td>Por conversa iniciada pela clínica, na categoria utilidade</td><td><span class="tag c">Pacientes monitorados</span></td></tr>
+      <tr><td><strong>Uso da IA</strong></td><td>Por volume de texto processado — prontuário, triagem, consulta ao acervo</td><td><span class="tag c">Pacientes e consultas</span></td></tr>
+      <tr><td><strong>Armazenamento de imagem</strong></td><td>Por volume, e a guarda mínima é de 20 anos</td><td><span class="tag c">Exames — e nunca diminui</span></td></tr>
+      <tr><td><strong>Vídeo de teleconsulta</strong></td><td>Por minuto de sala aberta</td><td><span class="tag w">Escalonamentos</span></td></tr>
+      <tr><td><strong>Infraestrutura base</strong></td><td>Servidores, banco, backup</td><td><span class="tag o">Praticamente fixo</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call b"><span class="ic">A LINHA</span><p>O custo de servir uma clínica varia com <strong>pacientes em acompanhamento</strong>, não com médicos cadastrados. Uma clínica com 2 médicos e 800 pacientes em pós-operatório custa mais para servir do que uma com 6 médicos e 100. Qualquer modelo que ignore isso vai machucar exatamente nos melhores clientes — os que mais usam.</p></div>
+
+  <h3>Cenário A — Assinatura por médico</h3>
+  <p>Valor fixo por médico ativo, por mês. É o modelo que o mercado de software já entende sem explicação.</p>
+  <ul>
+    <li><strong>A favor:</strong> previsível para os dois lados, trivial de explicar numa reunião, fecha venda rápido.</li>
+    <li><strong>Contra:</strong> descola o preço do custo e do valor. O que a clínica compra não é acesso ao sistema — é paciente acompanhado. Cobrar por assento é cobrar pela coisa errada.</li>
+    <li><strong>Quando faz sentido:</strong> nas primeiras vendas, enquanto o volume é pequeno e a simplicidade vale mais que a margem.</li>
+  </ul>
+
+  <h3>Cenário B — Plataforma + faixa de pacientes</h3>
+  <p>Mensalidade base por clínica — prontuário, histórico, acervo, usuários à vontade — mais uma faixa de pacientes em acompanhamento ativo.</p>
+  <ul>
+    <li><strong>A favor:</strong> o preço acompanha o custo e o valor ao mesmo tempo, e a receita cresce junto com o sucesso do cliente.</li>
+    <li><strong>Contra:</strong> exige definir “acompanhamento ativo” com precisão contratual, e a conta fica menos previsível para o cliente.</li>
+  </ul>
+
+  <div class="call c"><span class="ic">CUIDADO</span>
+    <p>Se as faixas forem estreitas, este modelo cria o pior incentivo possível: <strong>o médico deixa de colocar paciente no monitoramento para não estourar a faixa.</strong> A cobrança passaria a trabalhar contra o objetivo clínico do produto.</p>
+    <p>Faixas largas resolvem. A conversa sobre faixa acontece uma vez por ano, com a administração da clínica — <em>nunca</em> no consultório, na hora de decidir sobre um paciente.</p>
+  </div>
+
+  <h3>Cenário C — Por episódio de acompanhamento</h3>
+  <p>Cobrança por episódio ativado: uma cirurgia gera um pacote de 30 dias de acompanhamento.</p>
+  <ul>
+    <li><strong>A favor:</strong> o alinhamento mais direto que existe entre preço e valor. A clínica já precifica o procedimento e embute o custo ali, e o retorno é trivial de demonstrar.</li>
+    <li><strong>Contra:</strong> receita sazonal e imprevisível — e, principalmente, <strong>não cobre doença crônica</strong>. Glaucoma e retinopatia diabética não têm episódio, têm acompanhamento contínuo. Ficariam de fora justamente as condições em que o produto mais previne perda irreversível.</li>
+  </ul>
+
+  <h3>Números para calibrar</h3>
+  <p>As faixas abaixo são <strong>hipóteses de partida, não pesquisa de mercado</strong>. Servem para a conversa ter algo concreto no meio.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Cenário</th><th>Hipótese</th><th>O que precisa ser validado</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A</strong> · por médico</td><td class="num-c">R$ 400 a 700 / médico / mês</td><td>Quanto uma clínica de porte médio já gasta hoje com software de gestão</td></tr>
+      <tr><td><strong>B</strong> · plataforma + faixa</td><td class="num-c">R$ 900 a 1.500 base<br>+ faixas de 100 pacientes</td><td>O custo real por paciente monitorado — sai do piloto</td></tr>
+      <tr><td><strong>C</strong> · por episódio</td><td class="num-c">R$ 25 a 60 / episódio de 30 dias</td><td>Quanto disso a clínica consegue embutir no preço do procedimento</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call o"><span class="ic">DO PILOTO</span><p>O piloto da Fase 2 serve também para isto: <strong>medir o custo real de monitorar um paciente por 30 dias</strong> — mensagens, IA, armazenamento e vídeo somados. Sem esse número, qualquer preço é chute. Com ele, os três cenários viram uma conta.</p></div>
+
+  <h3>O que não fazer</h3>
+  <p><strong>Cobrar por mensagem enviada.</strong> Seria cobrar o cliente exatamente pela ação que o produto existe para incentivar. O mesmo raciocínio vale para cobrar por alerta gerado ou por teleconsulta aberta: tudo que se quer que aconteça mais precisa sair de graça na margem.</p>
+
+  <h3>Setor público é outro animal — e ainda é hipótese</h3>
+  <p>Órgão público compra por licitação, com contrato anual e quantitativo definido em edital — normalmente por unidade de saúde ou por população coberta, não por médico. Como a Etapa 3 ainda é uma ideia, modelar isso agora seria trabalho jogado fora.</p>
+  <p>O que importa hoje é uma coisa só, e é de graça: <strong>não desenhar o contrato particular de um jeito que impeça a adaptação depois.</strong> Preço por assento fixo, por exemplo, não tem tradução para edital — mais um argumento a favor do Cenário B.</p>
+
+  <div class="call b"><span class="ic">MINHA LEITURA</span>
+    <p><strong>Cenário B, com faixas largas</strong> — é o único que alinha preço, custo e valor ao mesmo tempo, e o único que traduz para o setor público depois.</p>
+    <p>Começar no <strong>A</strong> só se a primeira venda travar por complexidade. É melhor fechar o primeiro cliente com um preço simples e errado do que não fechar com um preço certo e difícil de explicar — desde que o contrato preveja a migração.</p>
+  </div>
+</section>
+
+<section id="s13">
+  <div class="sec-n">13</div>
   <h2>O que eu preciso de você</h2>
 
   <p>A parte de engenharia é minha. A parte que não dá para terceirizar é sua, e sem ela o produto vira um chatbot genérico — que é exatamente o que não queremos.</p>
@@ -676,8 +777,8 @@ footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
   </ol>
 </section>
 
-<section id="s13">
-  <div class="sec-n">13</div>
+<section id="s14">
+  <div class="sec-n">14</div>
   <h2>Decisões abertas</h2>
   <p>Cinco perguntas que precisam de resposta antes da Fase 1. Coloquei minha recomendação em cada uma, mas nenhuma está fechada. A pergunta “é para a sua clínica ou para vender?” saiu daqui: <strong>já está decidida</strong> — vender, e está registrada como premissa na seção 02.</p>
 
@@ -738,8 +839,9 @@ footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
     <li><a href="#s9"><span>09</span>Roadmap</a></li>
     <li><a href="#s10"><span>10</span>Como medir</a></li>
     <li><a href="#s11"><span>11</span>Riscos</a></li>
-    <li><a href="#s12"><span>12</span>O que preciso de você</a></li>
-    <li><a href="#s13"><span>13</span>Decisões abertas</a></li>
+    <li><a href="#s12"><span>12</span>Modelo de negócio</a></li>
+    <li><a href="#s13"><span>13</span>O que preciso de você</a></li>
+    <li><a href="#s14"><span>14</span>Decisões abertas</a></li>
   </ol>
 </nav>
 </div>

@@ -156,6 +156,9 @@ ul.pts li b{color:var(--ink);font-weight:600}
 .slide.hi .step.hot{background:rgba(255,132,151,.11);border-color:rgba(255,132,151,.3)}
 .slide.hi .step.hot .step-n{color:var(--hi-crit)}
 .slide.hi .step.hot .step-d{color:#E4B7BF}
+.step.soft{background:var(--paper-2);border-style:dashed}
+.step.soft .step-n{color:var(--muted)}
+.step.soft .step-t{color:var(--ink-2)}
 
 /* ── CIRCUITO ── */
 .loop{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:clamp(8px,1vw,14px);align-items:stretch;margin-top:clamp(16px,2.6vh,30px)}
@@ -242,6 +245,24 @@ td b{color:var(--ink);font-weight:600}
 .slide.hi .sig{color:var(--hi-mut)}
 .sig b{color:var(--ink-2);font-weight:500}
 .slide.hi .sig b{color:var(--hi-ink)}
+
+/* ── TELAS BAIXAS (projetor 16:10, notebook curto) ── */
+@media (max-height:720px) and (min-width:900px){
+  .slide{padding-top:clamp(10px,1.8vh,18px);padding-bottom:58px}
+  .eyebrow{margin-bottom:8px}
+  .lead{margin-top:10px}
+  .kicker{margin-top:12px}
+  .cards,.flow,.phases,.vaults{margin-top:13px}
+  .ba,.tw,.decs{margin-top:12px}
+  .rule{margin:12px 0}
+  ul.pts{margin-top:13px;gap:7px}
+  .card,.step,.ph,.box{padding:12px 14px}
+  td{padding:8px 15px}
+  th{padding:8px 15px}
+  .chat{gap:7px;padding:12px}
+  .msg{padding:7px 11px}
+  .pane-b{padding:12px}
+}
 
 /* ── CONTROLES ── */
 .bar{position:fixed;left:0;right:0;bottom:0;height:52px;display:flex;align-items:center;gap:10px;padding:0 clamp(12px,2vw,22px);background:linear-gradient(to top,var(--bg) 55%,transparent);z-index:30;pointer-events:none}
@@ -645,34 +666,69 @@ Conduta: reiniciar timolol + brimonidina
 </section>
 
 <!-- 18 -->
-<section class="slide" data-t="É um produto para vender">
+<section class="slide" data-t="Três etapas de mercado">
   <div class="in">
     <div class="eyebrow">A premissa que muda o resto</div>
-    <h2>Não é uma ferramenta interna. É um produto para <em>vender</em>.</h2>
-    <p class="lead">Clínicas oftalmológicas particulares primeiro, órgãos públicos depois. A sua clínica é o primeiro cliente e o campo de prova — não o destino.</p>
-    <div class="cards c4">
-      <div class="card c">
-        <h3>A ANVISA pesa mais</h3>
-        <p>Usar na própria casa é uma situação. Distribuir para terceiros, sem a nossa supervisão, é outra.</p>
+    <h2>Três etapas de mercado — e cada uma só começa se a anterior se provar.</h2>
+    <div class="flow f3">
+      <div class="step">
+        <div class="step-n">ETAPA 1 · COMBINADA</div>
+        <div class="step-t">Piloto, sem comercialização</div>
+        <div class="step-d">Só a sua clínica. Sem contrato, sem cobrança, sem cliente de fora. Provar que funciona e medir quanto custa operar.</div>
       </div>
-      <div class="card w">
-        <h3>Mudamos de papel</h3>
-        <p>A clínica cliente passa a ser a dona dos dados. Nós viramos prestador — e respondemos junto se algo der errado.</p>
+      <div class="step">
+        <div class="step-n">ETAPA 2 · COMBINADA</div>
+        <div class="step-t">Venda a clínicas particulares</div>
+        <div class="step-d">Começa se a Etapa 1 se validar. É aqui que entram contrato, responsabilidade sobre dados de terceiros e a exigência regulatória cheia.</div>
       </div>
-      <div class="card a">
-        <h3>O acervo vira decisão</h3>
-        <p>Comum entre clínicas é muito mais valioso e muito mais difícil de sustentar juridicamente.</p>
-      </div>
-      <div class="card b">
-        <h3>Separação desde a linha 1</h3>
-        <p>Cada clínica isolada da outra no banco. Reformar isso depois, com clientes rodando, é caríssimo.</p>
+      <div class="step soft">
+        <div class="step-n">ETAPA 3 · AINDA É IDEIA</div>
+        <div class="step-t">Venda a órgãos públicos</div>
+        <div class="step-d">Não é plano, é possibilidade. Depende da Etapa 2 se sustentar e de um levantamento que hoje não temos.</div>
       </div>
     </div>
-    <p class="kicker">O setor público acrescenta ainda certificação do prontuário, acessibilidade obrigatória e licitação. Nada disso muda o que construímos nas três primeiras fases — muda o que precisa existir <strong>em volta</strong> do produto antes de vendê-lo.</p>
+    <div class="cards c2">
+      <div class="card w">
+        <h3>Na Etapa 2, mudamos de papel</h3>
+        <p>A clínica cliente passa a ser a dona dos dados dos pacientes dela. Nós viramos prestador — e respondemos junto se algo der errado.</p>
+      </div>
+      <div class="card b">
+        <h3>Duas coisas não dá para deixar para depois</h3>
+        <p>Separar cada clínica da outra no banco, e o registro de quem acessou o quê. Baratas agora, caríssimas de refazer com clientes rodando.</p>
+      </div>
+    </div>
+    <p class="kicker"><strong>A Etapa 1 quase não exige nada</strong> — o piloto pode começar já. Tudo que a ANVISA, os contratos e as certificações pedem tem como gatilho a <strong>primeira venda</strong>, não o piloto. E o que só valeria para a Etapa 3 não deve custar prazo hoje: basta não fechar portas.</p>
   </div>
 </section>
 
 <!-- 19 -->
+<section class="slide" data-t="Como o produto se paga">
+  <div class="in">
+    <div class="eyebrow">Modelo de negócio · para discutir</div>
+    <h2>Como o produto se paga</h2>
+    <p class="lead">Nada fechado. O fato que descarta as opções ruins: <strong style="color:var(--ink)">o custo de atender uma clínica cresce com pacientes monitorados, não com médicos cadastrados.</strong></p>
+    <div class="cards c3">
+      <div class="card b">
+        <h3><span class="tag b">A</span> Por médico</h3>
+        <p>Valor fixo por médico, por mês. É o que o mercado já entende sem explicação.</p>
+        <p class="d">Fecha venda rápido — mas cobra pela coisa errada. O que a clínica compra é paciente acompanhado, não assento.</p>
+      </div>
+      <div class="card o">
+        <h3><span class="tag o">B</span> Plataforma + faixa de pacientes</h3>
+        <p>Mensalidade base com usuários à vontade, mais uma faixa de pacientes em acompanhamento ativo.</p>
+        <p class="d">Alinha preço, custo e valor ao mesmo tempo. Exige faixas largas — veja abaixo.</p>
+      </div>
+      <div class="card w">
+        <h3><span class="tag w">C</span> Por episódio</h3>
+        <p>Uma cirurgia gera um pacote de 30 dias de acompanhamento, embutido no preço do procedimento.</p>
+        <p class="d">O alinhamento mais direto que existe — mas não cobre glaucoma nem retinopatia, que não têm episódio.</p>
+      </div>
+    </div>
+    <p class="kicker"><strong>Minha leitura: B, com faixas largas.</strong> Faixa estreita faz o médico deixar de monitorar paciente para não estourá-la — a cobrança passaria a trabalhar contra o objetivo clínico. Pelo mesmo motivo, <strong>nunca cobrar por mensagem enviada</strong>: tudo que se quer que aconteça mais precisa sair de graça na margem.</p>
+  </div>
+</section>
+
+<!-- 20 -->
 <section class="slide" data-t="Como vamos construir">
   <div class="in">
     <div class="eyebrow">Plano</div>
@@ -688,7 +744,7 @@ Conduta: reiniciar timolol + brimonidina
   </div>
 </section>
 
-<!-- 20 -->
+<!-- 21 -->
 <section class="slide" data-t="Como saber se funcionou">
   <div class="in">
     <div class="eyebrow">Medição</div>
@@ -708,7 +764,7 @@ Conduta: reiniciar timolol + brimonidina
   </div>
 </section>
 
-<!-- 21 -->
+<!-- 22 -->
 <section class="slide" data-t="O que eu preciso de você">
   <div class="in">
     <div class="eyebrow">Divisão de trabalho</div>
@@ -725,7 +781,7 @@ Conduta: reiniciar timolol + brimonidina
   </div>
 </section>
 
-<!-- 22 -->
+<!-- 23 -->
 <section class="slide" data-t="Cinco decisões">
   <div class="in">
     <div class="eyebrow">Antes de começar</div>
@@ -741,7 +797,7 @@ Conduta: reiniciar timolol + brimonidina
   </div>
 </section>
 
-<!-- 23 -->
+<!-- 24 -->
 <section class="slide hi" data-t="Próximo passo">
   <div class="in">
     <div class="eyebrow">Próximo passo</div>
@@ -761,7 +817,7 @@ Conduta: reiniciar timolol + brimonidina
 <div class="bar">
   <button class="nb" id="prev" aria-label="Slide anterior"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
   <button class="nb" id="next" aria-label="Próximo slide"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
-  <span class="count" id="count">1 / 23</span>
+  <span class="count" id="count">1 / 24</span>
   <span class="track"><i id="prog"></i></span>
   <span class="hint">← → navega · S sumário · F tela cheia</span>
   <button class="nb" id="ov" aria-label="Sumário"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
