@@ -59,6 +59,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--f-s);font-size:15.5
 
 /* ── MASTHEAD ── */
 .mast{padding:56px 0 34px;border-bottom:1px solid var(--line)}
+.brandline{display:flex;align-items:center;gap:11px;margin-bottom:30px}
+.brandline svg{width:38px;height:38px;color:var(--brand);flex-shrink:0}
+.brandline b{font-size:22px;font-weight:700;letter-spacing:-.035em;color:var(--ink)}
+.brandline b i{font-style:normal;color:var(--brand)}
 .eyebrow{font-family:var(--f-m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:10px}
 .eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
 .mast h1{font-family:var(--f-d);font-weight:400;font-size:clamp(40px,7vw,68px);line-height:.98;letter-spacing:-.025em;margin:18px 0 0;text-wrap:balance}
@@ -214,8 +218,22 @@ footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
 .tbtn:hover{border-color:var(--brand-line);color:var(--brand)}
 </style>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="logo" viewBox="0 0 48 48">
+    <g transform="translate(24 24) scale(1.14) translate(-22 -24)">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <path d="M28 18C21 10.5 14.5 8 6.5 8.5" stroke-width="4.2"/>
+        <path d="M28 30C21 37.5 14.5 40 6.5 39.5" stroke-width="4.2"/>
+        <path d="M23.5 15C19 13 14 12.8 9.5 14" stroke-width="2.4"/>
+      </g>
+      <circle cx="31" cy="24" r="8.6" fill="currentColor"/>
+    </g>
+  </symbol>
+</defs></svg>
+
 <div class="wrap">
 <header class="mast">
+  <div class="brandline"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#logo"/></svg><b>Retin<i>AI</i></b></div>
   <div class="eyebrow">Proposta de software · v1 · agosto de 2026</div>
   <h1>RetinAI:<br>o intervalo entre <em>a alta e o retorno</em></h1>
   <p class="lede">Uma plataforma de acompanhamento oftalmológico que ocupa o espaço onde hoje não existe nada — o tempo em que o paciente está em casa, sozinho, decidindo se aquela dor é normal.</p>

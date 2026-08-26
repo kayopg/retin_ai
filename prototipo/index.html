@@ -121,7 +121,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .rail{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;overflow:hidden}
 .brand{display:flex;align-items:center;gap:10px;height:var(--top);padding:0 16px;border-bottom:1px solid var(--line);flex-shrink:0}
 .mark{width:30px;height:30px;border-radius:9px;background:var(--brand);display:grid;place-items:center;flex-shrink:0}
-.mark svg{width:19px;height:19px;display:block;color:var(--brand-fg)}
+.mark svg{width:20px;height:20px;display:block;color:var(--brand-fg)}
 .brand-t{font-weight:700;font-size:16px;letter-spacing:-.03em;white-space:nowrap}
 .brand-t span{color:var(--brand)}
 .app.collapsed .brand-t,.app.collapsed .nav-lbl,.app.collapsed .nav-txt,.app.collapsed .who-txt,.app.collapsed .ghost-mini span{display:none}
@@ -581,6 +581,27 @@ kbd{font-family:var(--f-mono);font-size:10px;border:1px solid var(--line);border
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<!-- ═══ MARCA · disco óptico com as arcadas vasculares ═══ -->
+<symbol id="logo" viewBox="0 0 48 48">
+  <g transform="translate(24 24) scale(1.14) translate(-22 -24)">
+    <g fill="none" stroke="currentColor" stroke-linecap="round">
+      <path d="M28 18C21 10.5 14.5 8 6.5 8.5" stroke-width="4.2"/>
+      <path d="M28 30C21 37.5 14.5 40 6.5 39.5" stroke-width="4.2"/>
+      <path d="M23.5 15C19 13 14 12.8 9.5 14" stroke-width="2.4"/>
+    </g>
+    <circle cx="31" cy="24" r="8.6" fill="currentColor"/>
+  </g>
+</symbol>
+<!-- versão reduzida: abaixo de 20px o ramo fino some, então sai de propósito -->
+<symbol id="logo-sm" viewBox="0 0 48 48">
+  <g transform="translate(24 24) scale(1.14) translate(-22 -24)">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="4.6">
+      <path d="M28 18C21 10.5 14.5 8 6.5 8.5"/>
+      <path d="M28 30C21 37.5 14.5 40 6.5 39.5"/>
+    </g>
+    <circle cx="31" cy="24" r="8.6" fill="currentColor"/>
+  </g>
+</symbol>
 <g id="i-eye" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></g>
 <g id="i-grid" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></g>
 <g id="i-users" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3.2"/><path d="M22 20v-2a4 4 0 0 0-3-3.87M16.5 4.2a3.2 3.2 0 0 1 0 5.6"/></g>
@@ -631,7 +652,7 @@ kbd{font-family:var(--f-mono);font-size:10px;border:1px solid var(--line);border
 
 <aside class="rail">
   <div class="brand">
-    <div class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-eye"/></svg></div>
+    <div class="mark"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#logo-sm"/></svg></div>
     <div class="brand-t">Retin<span>AI</span></div>
   </div>
   <nav class="nav" aria-label="Navegação principal">

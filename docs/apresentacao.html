@@ -71,6 +71,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .slide.hi .kicker{color:var(--hi-mut)}
 .slide.hi .rule{background:var(--hi-line)}
 
+/* ── MARCA ── */
+.markbig{width:clamp(54px,6.6vw,86px);height:clamp(54px,6.6vw,86px);color:var(--brand);display:block;margin-bottom:clamp(14px,2.4vh,26px)}
+.slide.hi .markbig{color:var(--hi-brand)}
+.marksm{width:clamp(34px,3.4vw,44px);height:clamp(34px,3.4vw,44px);color:var(--hi-brand);display:block;margin-top:clamp(16px,2.8vh,30px)}
+@media (max-height:720px) and (min-width:900px){.markbig{margin-bottom:12px}.marksm{margin-top:14px}}
+
 /* ── TIPOGRAFIA ── */
 .eyebrow{font-family:var(--f-m);font-size:clamp(10px,1.15vw,12.5px);font-weight:600;letter-spacing:.17em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:12px;margin-bottom:clamp(12px,2vh,22px)}
 .eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:160px}
@@ -297,11 +303,25 @@ td b{color:var(--ink);font-weight:600}
 .ov-i .t{font-size:13.5px;line-height:1.4}
 </style>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="logo" viewBox="0 0 48 48">
+    <g transform="translate(24 24) scale(1.14) translate(-22 -24)">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <path d="M28 18C21 10.5 14.5 8 6.5 8.5" stroke-width="4.2"/>
+        <path d="M28 30C21 37.5 14.5 40 6.5 39.5" stroke-width="4.2"/>
+        <path d="M23.5 15C19 13 14 12.8 9.5 14" stroke-width="2.4"/>
+      </g>
+      <circle cx="31" cy="24" r="8.6" fill="currentColor"/>
+    </g>
+  </symbol>
+</defs></svg>
+
 <div class="deck" id="deck">
 
 <!-- 1 -->
 <section class="slide on" data-t="Capa">
   <div class="in">
+    <svg class="markbig" viewBox="0 0 48 48" aria-hidden="true"><use href="#logo"/></svg>
     <div class="eyebrow">Proposta de software · agosto de 2026</div>
     <h1>RetinAI</h1>
     <p class="lead" style="font-size:clamp(17px,2.3vw,29px);color:var(--ink)">O intervalo entre <em class="i" style="color:var(--brand)">a alta e o retorno</em>.</p>
@@ -805,7 +825,8 @@ Conduta: reiniciar timolol + brimonidina
     <p class="lead">Com esse protocolo pronto, a Fase 0 começa. É o único insumo que trava tudo o mais.</p>
     <p class="kicker">Antes disso, dá uma volta no protótipo — ele é clicável, cobre as nove telas, e todos os dados são fictícios.</p>
     <a class="cta" href="https://claude.ai/code/artifact/ff86657a-da29-4bd1-9e90-6e0635ecfe36" target="_blank" rel="noopener">Abrir o protótipo navegável →</a>
-    <div class="sig" style="margin-top:clamp(24px,4vh,44px)">
+    <svg class="marksm" viewBox="0 0 48 48" aria-hidden="true"><use href="#logo"/></svg>
+    <div class="sig" style="margin-top:clamp(14px,2.2vh,22px)">
       <span>Proposta completa e detalhada · <b>documento à parte</b></span>
       <span>Código e histórico · <b>github.com/kayopg/retin_ai</b></span>
     </div>

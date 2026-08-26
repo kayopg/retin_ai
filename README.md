@@ -47,6 +47,25 @@ lateral recolhe. Todos os dados são fictícios.
 - **Tema** — três estados (claro, escuro e sistema). O escuro é nativo, não uma inversão:
   sala de exame oftalmológico trabalha com luz baixa.
 
+### Marca
+
+**Disco óptico** — o disco com as arcadas vasculares emergindo dele, reduzido a três traços e um
+círculo. A assimetria é anatômica: os vasos saem do disco e arqueiam para um lado só.
+
+Duas versões, definidas como `<symbol>` e coloridas por `currentColor`:
+
+| Símbolo | Quando usar |
+| --- | --- |
+| `#logo` | A partir de 20 px — completa, com o ramo fino |
+| `#logo-sm` | Abaixo de 20 px — sem o ramo fino, traço mais encorpado |
+
+A barra lateral do protótipo usa `#logo-sm` a 20 px. Assinatura: **Retin** em tom de texto,
+**AI** na cor de marca, sem espaço nem hífen.
+
+O ícone genérico de olho (`#i-eye`) continua no protótipo, mas só como ícone de interface —
+título do visualizador de exames e etapa de conferência da base de conhecimento. Marca e ícone
+de UI são coisas diferentes e não devem convergir.
+
 ### Paletas
 
 Três opções no protótipo, trocáveis pelo ícone de cores na barra superior (ou pela paleta de
