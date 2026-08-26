@@ -109,6 +109,10 @@ em.i{font-style:italic}
 .card.w{border-left:3px solid var(--warn)}
 .card.o{border-left:3px solid var(--ok)}
 .card.a{border-left:3px solid var(--ai)}
+.card ul.mini{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:3px}
+.card ul.mini li{padding-left:15px;position:relative;font-size:clamp(12px,1.12vw,14.5px);line-height:1.5;color:var(--ink-2)}
+.card ul.mini li::before{content:"";position:absolute;left:2px;top:.58em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.42}
+.card ul.mini li b{color:var(--ink);font-weight:600}
 
 .tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-m);font-size:clamp(9.5px,.95vw,11.5px);font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:6px;background:var(--paper-3);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
 .tag.b{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
@@ -785,19 +789,43 @@ Conduta: reiniciar timolol + brimonidina
 </section>
 
 <!-- 22 -->
-<section class="slide" data-t="O que eu preciso de você">
+<section class="slide" data-t="Divisão de trabalho">
   <div class="in">
     <div class="eyebrow">Divisão de trabalho</div>
-    <h2>A engenharia é comigo. Isto aqui não dá para terceirizar.</h2>
-    <ul class="pts">
-      <li><b>Cinco ou seis protocolos escritos</b> — pós-facectomia, pós-vitrectomia, pós-LASIK, glaucoma e retinopatia diabética. O que enviar, em que dia, e o que fazer com cada resposta.</li>
-      <li><b>A lista de sinais de alarme por procedimento</b>, e o que cada um dispara: encaixe no mesmo dia, teleconsulta, ou só observar.</li>
-      <li><b>De 8 a 12 vídeos de um a dois minutos</b>, gravados por você. Pode ser no celular — o que importa é ser a sua voz e o seu rosto, porque é isso que faz o paciente assistir.</li>
-      <li><b>De 200 a 300 casos já laudados</b> para a carga inicial do acervo.</li>
-      <li><b>Cerca de duas horas por semana</b> nas Fases 1 e 2, para conferir o que sai e corrigir o que estiver clinicamente errado.</li>
-      <li><b>A decisão da ANVISA</b>, com o parecer em mãos.</li>
-    </ul>
-    <p class="kicker">Sem isso, o produto vira um chatbot genérico — que é exatamente o que não queremos construir.</p>
+    <h2>Cada um tem uma parte que o outro não consegue fazer.</h2>
+    <div class="cards c3">
+      <div class="card b">
+        <h3><span class="tag b">Comigo</span> Ari</h3>
+        <ul class="mini">
+          <li><b>Arquitetura e código</b> dos quatro módulos</li>
+          <li><b>Integração oficial do WhatsApp</b> e aprovação dos modelos de mensagem</li>
+          <li><b>Motor de protocolos e de risco</b>, com os pesos que você definir</li>
+          <li><b>Anonimização</b>, infraestrutura, segurança e trilha de auditoria</li>
+          <li><b>Medir o piloto</b> — inclusive o custo real por paciente monitorado</li>
+          <li><b>Contratar e conduzir</b> o parecer regulatório e o jurídico</li>
+        </ul>
+      </div>
+      <div class="card o">
+        <h3><span class="tag o">Com você</span> Dr. Miguel</h3>
+        <ul class="mini">
+          <li><b>Cinco ou seis protocolos escritos</b> — o que enviar, em que dia, e o que fazer com cada resposta</li>
+          <li><b>Os sinais de alarme por procedimento</b>, e o que cada um dispara</li>
+          <li><b>De 8 a 12 vídeos</b> de um a dois minutos, com a sua voz e o seu rosto</li>
+          <li><b>De 200 a 300 casos já laudados</b> para a carga inicial do acervo</li>
+          <li><b>Cerca de duas horas por semana</b> nas Fases 1 e 2, conferindo o que sai</li>
+        </ul>
+      </div>
+      <div class="card a">
+        <h3><span class="tag a">Dos dois</span> Decisões</h3>
+        <ul class="mini">
+          <li><b>O caminho regulatório</b>, com o parecer em mãos</li>
+          <li><b>Qual procedimento</b> entra no piloto</li>
+          <li><b>O modelo de cobrança</b> e o preço</li>
+          <li><b>O acordo de sociedade</b> — participação, propriedade do código e da base, e o que acontece se um sair</li>
+        </ul>
+      </div>
+    </div>
+    <p class="kicker">A minha parte dá para acelerar contratando mais gente. <strong>A sua não.</strong> Protocolo clínico e vídeo com a sua cara são justamente as duas coisas que impedem isso de virar um chatbot genérico.</p>
   </div>
 </section>
 
