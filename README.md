@@ -40,13 +40,29 @@ lateral recolhe. Todos os dados são fictícios.
 
 ## Sistema de design
 
-- **Cor** — cobalto `#2F5BD8` sobre neutros de viés frio (`#EEF1F7` claro / `#080D1A` escuro).
-  Sinais semânticos separados da cor de marca: crítico `#C33449`, atenção `#9C6206`,
-  estável `#07775F`, IA `#6141C2`.
 - **Tipografia** — IBM Plex Sans na interface, IBM Plex Mono em dados clínicos (PIO, AV, scores),
-  Instrument Serif nos títulos da proposta.
+  Instrument Serif nos títulos da proposta e da apresentação.
 - **Tema** — três estados (claro, escuro e sistema). O escuro é nativo, não uma inversão:
   sala de exame oftalmológico trabalha com luz baixa.
+
+### Paletas
+
+Três opções no protótipo, trocáveis pelo ícone de cores na barra superior (ou pela paleta de
+comandos). A escolha fica guardada no navegador. Cada paleta muda o conjunto — fundo, superfícies
+e força das bordas — porque é isso, e não só a cor de destaque, que define o peso visual.
+
+| Paleta | Marca (claro / escuro) | Fundo claro | "Estável" |
+| --- | --- | --- | --- |
+| Cobalto | `#2F5BD8` / `#7C9CFF` | `#EEF1F7` | `#07775F` verde-azulado |
+| Azul claro | `#0F72B8` / `#4FB8EE` | `#ECF4FB` | `#0A7A45` verde |
+| Verde claro | `#0E7C55` / `#43C98C` | `#EDF5F0` | `#0B62A6` azul |
+
+Crítico, atenção e IA não mudam entre paletas — são sinais semânticos, não identidade.
+
+O "estável" troca de matiz junto com a marca de propósito: na paleta verde a marca é verde,
+então o sucesso vira azul para não virar tudo a mesma cor. Todas as combinações mantêm
+contraste ≥ 4,5:1 e separação de matiz ≥ 47° entre marca e sucesso. A severidade também é
+codificada em **forma** (losango, círculo, quadrado), não só em cor.
 
 ## Princípio de produto
 
