@@ -1,0 +1,379 @@
+<title>Marca RetinAI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#F1F4FA; --paper:#FFFFFF; --paper-2:#F7F9FD; --paper-3:#E7ECF7;
+  --line:#D6DEEC; --line-soft:#E7ECF6;
+  --ink:#0E1626; --ink-2:#37435A; --muted:#69758A;
+  --brand:#2F5BD8; --brand-soft:#E5EBFB; --brand-line:#BCCBF4;
+  --crit:#BE3247; --crit-soft:#FBE6EA; --crit-line:#F0C0C9;
+  --ok:#06735C;   --ok-soft:#DCF1EB;   --ok-line:#ABDACE;
+  --warn:#8F5A05; --warn-soft:#FAEFD8; --warn-line:#EBD1A0;
+  --sh:0 1px 2px rgba(14,22,38,.05), 0 12px 30px -20px rgba(14,22,38,.3);
+  --f-d:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-s:"IBM Plex Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+    --line:#26324F; --line-soft:#1B2540;
+    --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+    --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+    --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+    --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+    --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+    --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+  --line:#26324F; --line-soft:#1B2540;
+  --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+  --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+  --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+  --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+  --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+  --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-s);font-size:15.5px;line-height:1.72;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+.mast{padding:54px 0 32px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--f-m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
+h1{font-family:var(--f-d);font-weight:400;font-size:clamp(38px,6.6vw,62px);line-height:1;letter-spacing:-.025em;margin:18px 0 0;text-wrap:balance}
+h1 em{font-style:italic;color:var(--brand)}
+.lede{font-size:clamp(16px,2vw,19px);line-height:1.62;color:var(--ink-2);margin-top:18px;max-width:40em;text-wrap:pretty}
+
+section{padding:44px 0;border-bottom:1px solid var(--line-soft)}
+section:last-of-type{border-bottom:0}
+.sec-n{font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);letter-spacing:.1em}
+h2{font-family:var(--f-d);font-weight:400;font-size:clamp(25px,3.4vw,34px);line-height:1.12;letter-spacing:-.02em;margin:9px 0 0;text-wrap:balance}
+h3{font-size:15.5px;font-weight:600;margin:28px 0 9px}
+h4{font-size:13.5px;font-weight:600;margin:0 0 5px}
+p{margin:15px 0;max-width:66ch;text-wrap:pretty}
+strong{font-weight:600;color:var(--ink)}
+ul{margin:15px 0;padding:0;list-style:none;max-width:66ch;display:flex;flex-direction:column;gap:8px}
+li{padding-left:20px;position:relative}
+li::before{content:"";position:absolute;left:3px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.65}
+
+/* ── CONCEITO ── */
+.concept{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh);overflow:hidden;margin:20px 0}
+.concept.pick{border-color:var(--brand);border-width:2px}
+.c-top{display:grid;grid-template-columns:210px minmax(0,1fr);gap:0;align-items:stretch}
+@media (max-width:760px){.c-top{grid-template-columns:1fr}}
+.c-art{background:var(--paper-2);border-right:1px solid var(--line-soft);display:grid;place-items:center;padding:30px;color:var(--brand)}
+@media (max-width:760px){.c-art{border-right:0;border-bottom:1px solid var(--line-soft);padding:26px}}
+.c-art svg{width:104px;height:104px;display:block}
+.c-body{padding:20px 22px;min-width:0}
+.c-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.c-n{font-family:var(--f-m);font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.08em}
+.c-t{font-size:18px;font-weight:600;letter-spacing:-.015em}
+.c-body p{font-size:14px;line-height:1.62;margin:9px 0 0;max-width:none;color:var(--ink-2)}
+.pros{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px;padding-top:14px;border-top:1px solid var(--line-soft)}
+@media (max-width:560px){.pros{grid-template-columns:1fr}}
+.pros div{font-size:13px;line-height:1.55;color:var(--ink-2)}
+.pros b{display:block;font-family:var(--f-m);font-size:10px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:4px}
+.pros .up b{color:var(--ok)}
+.pros .dn b{color:var(--crit)}
+
+.c-foot{display:flex;flex-wrap:wrap;gap:26px;align-items:center;padding:15px 22px;border-top:1px solid var(--line-soft);background:var(--paper-2)}
+.lock{display:flex;align-items:center;gap:10px;color:var(--brand)}
+.lock svg{width:34px;height:34px;flex-shrink:0}
+.word{font-size:21px;font-weight:700;letter-spacing:-.035em;color:var(--ink)}
+.word i{font-style:normal;color:var(--brand)}
+.tile{width:40px;height:40px;border-radius:11px;background:var(--brand);display:grid;place-items:center;flex-shrink:0}
+/* o ladrilho usa --brand ou --ink de fundo; --bg é sempre o oposto dos dois nos dois temas */
+.tile svg{width:25px;height:25px;color:var(--bg)}
+/* amostras de paleta têm fundo fixo e escuro — o ícone é sempre claro */
+.tile.fx svg{color:#fff}
+.ladder{display:flex;align-items:flex-end;gap:14px;color:var(--ink-2)}
+.ladder span{display:grid;place-items:center;gap:5px}
+.ladder em{font-style:normal;font-family:var(--f-m);font-size:9px;color:var(--muted)}
+.foot-l{font-family:var(--f-m);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);width:100%;margin-bottom:-6px}
+
+/* ── GRADE / CONSTRUÇÃO ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:18px 20px;box-shadow:var(--sh)}
+.card p{font-size:13.5px;margin:8px 0 0;color:var(--ink-2)}
+.demo{background:var(--paper-2);border:1px solid var(--line);border-radius:13px;padding:20px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:center;margin:20px 0}
+.chip-pal{display:flex;flex-direction:column;align-items:center;gap:8px}
+.chip-pal .tile{width:52px;height:52px;border-radius:14px}
+.chip-pal .tile svg{width:32px;height:32px}
+.chip-pal em{font-style:normal;font-family:var(--f-m);font-size:10px;color:var(--muted)}
+
+/* ── BARRA LATERAL SIMULADA ── */
+.sim{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--paper);box-shadow:var(--sh);max-width:290px}
+.sim-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line-soft)}
+.sim-h .tile{width:30px;height:30px;border-radius:9px}
+.sim-h .tile svg{width:19px;height:19px}
+.sim-h .word{font-size:16px}
+.sim-b{padding:10px}
+.sim-i{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;font-size:13px;color:var(--muted)}
+.sim-i.on{background:var(--brand-soft);color:var(--brand);font-weight:600}
+.sim-i i{width:14px;height:14px;border-radius:4px;background:currentColor;opacity:.45;display:block;flex-shrink:0}
+
+.call{border:1px solid var(--brand-line);background:var(--brand-soft);border-radius:12px;padding:15px 18px;margin:22px 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 13px;align-items:start}
+.call .ic{grid-column:1;grid-row:1;font-family:var(--f-m);font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;margin-top:2px;background:var(--brand);color:var(--bg);letter-spacing:.04em}
+.call p{grid-column:2;margin:0;font-size:14px;line-height:1.62;max-width:none;color:var(--ink-2)}
+.call p+p{margin-top:9px}
+.no{border-color:var(--crit-line);background:var(--crit-soft)}
+.no .ic{background:var(--crit)}
+
+.tbtn{position:fixed;right:16px;bottom:16px;z-index:20;width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;box-shadow:var(--sh);display:grid;place-items:center}
+.tbtn:hover{border-color:var(--brand-line);color:var(--brand)}
+footer{padding:32px 0 54px;font-size:12px;color:var(--muted);line-height:1.7}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <clipPath id="cut3"><circle cx="24" cy="24" r="18"/></clipPath>
+
+  <symbol id="m1" viewBox="0 0 48 48">
+    <!-- escala e recentra para a marca ocupar a mesma caixa óptica das outras três -->
+    <g transform="translate(24 24) scale(1.14) translate(-22 -24)">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <path d="M28 18C21 10.5 14.5 8 6.5 8.5" stroke-width="4.2"/>
+        <path d="M28 30C21 37.5 14.5 40 6.5 39.5" stroke-width="4.2"/>
+        <path d="M23.5 15C19 13 14 12.8 9.5 14" stroke-width="2.4"/>
+      </g>
+      <circle cx="31" cy="24" r="8.6" fill="currentColor"/>
+    </g>
+  </symbol>
+
+  <symbol id="m2" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="4.6"/>
+    <circle cx="24" cy="22.2" r="8.4" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="m3" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="4.6"/>
+    <g clip-path="url(#cut3)">
+      <rect x="20.5" y="1" width="7" height="46" rx="3.5" fill="currentColor" transform="rotate(26 24 24)"/>
+    </g>
+  </symbol>
+
+  <symbol id="m4" viewBox="0 0 48 48">
+    <!-- 15° tira os traços longos da horizontal, senão a marca fica mais larga que alta -->
+    <g stroke="currentColor" stroke-width="3.1" stroke-linecap="round" transform="rotate(15 24 24)">
+      <path d="M34.5 24h7.5"/><path d="M33.1 29.3l3.5 2"/>
+      <path d="M29.3 33.1l3.7 6.5"/><path d="M24 34.5v4"/>
+      <path d="M18.7 33.1L15 39.6"/><path d="M14.9 29.3l-3.5 2"/>
+      <path d="M13.5 24H6"/><path d="M14.9 18.7l-3.5-2"/>
+      <path d="M18.7 14.9L15 8.4"/><path d="M24 13.5v-4"/>
+      <path d="M29.3 14.9L33 8.4"/><path d="M33.1 18.7l3.5-2"/>
+    </g>
+    <circle cx="24" cy="24" r="7.6" fill="currentColor"/>
+  </symbol>
+</defs></svg>
+
+<div class="wrap">
+<header class="mast">
+  <div class="eyebrow">Identidade visual · proposta</div>
+  <h1>Quatro marcas para o <em>RetinAI</em></h1>
+  <p class="lede">O símbolo que está no protótipo hoje é o ícone de olho padrão de biblioteca — o mesmo que aparece em campo de senha e botão de “visualizar”. Serve para navegar, não para assinar um produto. Estas quatro propostas saem do que o oftalmologista de fato vê no exame.</p>
+</header>
+
+<section>
+  <div class="sec-n">01</div>
+  <h2>De onde vieram</h2>
+  <p>A fonte não é “olho” em geral — é o que aparece do outro lado do oftalmoscópio e da lâmpada de fenda. Isso dá uma vantagem dupla: para o Dr. Miguel e os colegas dele, a marca é reconhecível na hora; para todo mundo, ainda lê como olho.</p>
+
+  <div class="call no"><span class="ic">EVITADO</span>
+    <p>Três caminhos que a categoria já esgotou: a <strong>amêndoa com círculo no meio</strong> (o ícone genérico de olho), o <strong>olho com trilhas de circuito</strong> saindo dele — o clichê universal de “IA na saúde” — e o <strong>degradê roxo-azul</strong> em cima de qualquer um dos dois.</p>
+    <p>Nenhuma das quatro propostas usa nada disso, e a ausência é deliberada.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">02</div>
+  <h2>As propostas</h2>
+
+  <div class="concept pick">
+    <div class="c-top">
+      <div class="c-art"><svg><use href="#m1"/></svg></div>
+      <div class="c-body">
+        <div class="c-head"><span class="c-n">PROPOSTA 1</span><span class="c-t">Disco óptico</span><span class="c-n" style="color:var(--brand)">· RECOMENDADA</span></div>
+        <p>O disco óptico com as arcadas vasculares emergindo dele — exatamente a imagem que aparece na retinografia, reduzida a três traços e um círculo.</p>
+        <p>A assimetria é anatômica, não estética: os vasos saem do disco e arqueiam para um lado só. É isso que faz a forma não parecer um símbolo genérico de mira ou de câmera.</p>
+        <div class="pros">
+          <div class="up"><b>A favor</b>Forma própria, que ninguém mais usa. Um oftalmologista identifica em meio segundo. Funciona em traço único, sem preenchimento.</div>
+          <div class="dn"><b>Contra</b>É a mais complexa das quatro. Abaixo de 20 px o ramo fino some — a versão reduzida precisa dispensá-lo.</div>
+        </div>
+      </div>
+    </div>
+    <div class="c-foot">
+      <span class="foot-l">Assinatura, ícone de aplicativo e comportamento em escala</span>
+      <span class="lock"><svg><use href="#m1"/></svg><span class="word">Retin<i>AI</i></span></span>
+      <span class="tile"><svg><use href="#m1"/></svg></span>
+      <span class="ladder">
+        <span><svg width="40" height="40" style="color:var(--ink-2)"><use href="#m1"/></svg><em>40</em></span>
+        <span><svg width="28" height="28" style="color:var(--ink-2)"><use href="#m1"/></svg><em>28</em></span>
+        <span><svg width="20" height="20" style="color:var(--ink-2)"><use href="#m1"/></svg><em>20</em></span>
+        <span><svg width="16" height="16" style="color:var(--ink-2)"><use href="#m1"/></svg><em>16</em></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="concept">
+    <div class="c-top">
+      <div class="c-art"><svg><use href="#m2"/></svg></div>
+      <div class="c-body">
+        <div class="c-head"><span class="c-n">PROPOSTA 2</span><span class="c-t">Escavação</span></div>
+        <p>O anel externo é a borda do disco; o círculo interno é a escavação. A relação entre os dois é a <strong>relação escavação/disco</strong> — a medida que define glaucoma e que o sistema acompanha ao longo dos anos.</p>
+        <p>O círculo interno está deslocado para cima de propósito, deixando a rima mais espessa embaixo. É um detalhe que só quem é da área percebe, e é justamente onde o afilamento aparece primeiro.</p>
+        <div class="pros">
+          <div class="up"><b>A favor</b>Imbatível em tamanho pequeno — é a única que continua legível a 16 px sem simplificação. E o significado é exclusivo deste produto.</div>
+          <div class="dn"><b>Contra</b>A forma é comum: anel com ponto no meio existe em centenas de marcas. O sentido é único, o desenho não.</div>
+        </div>
+      </div>
+    </div>
+    <div class="c-foot">
+      <span class="foot-l">Assinatura, ícone de aplicativo e comportamento em escala</span>
+      <span class="lock"><svg><use href="#m2"/></svg><span class="word">Retin<i>AI</i></span></span>
+      <span class="tile"><svg><use href="#m2"/></svg></span>
+      <span class="ladder">
+        <span><svg width="40" height="40" style="color:var(--ink-2)"><use href="#m2"/></svg><em>40</em></span>
+        <span><svg width="28" height="28" style="color:var(--ink-2)"><use href="#m2"/></svg><em>28</em></span>
+        <span><svg width="20" height="20" style="color:var(--ink-2)"><use href="#m2"/></svg><em>20</em></span>
+        <span><svg width="16" height="16" style="color:var(--ink-2)"><use href="#m2"/></svg><em>16</em></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="concept">
+    <div class="c-top">
+      <div class="c-art"><svg><use href="#m3"/></svg></div>
+      <div class="c-body">
+        <div class="c-head"><span class="c-n">PROPOSTA 3</span><span class="c-t">Fenda</span></div>
+        <p>O feixe da lâmpada de fenda cortando a córnea em diagonal — a imagem mais icônica do consultório oftalmológico, e a única das quatro que representa o <em>ato de examinar</em> em vez do órgão examinado.</p>
+        <p>A diagonal também lê como linha de varredura, o que aponta para a análise automática sem precisar de circuito nenhum.</p>
+        <div class="pros">
+          <div class="up"><b>A favor</b>A mais elegante e a que melhor sugere movimento. Fala de exame ativo, não de anatomia parada.</div>
+          <div class="dn"><b>Contra</b>Sem o contexto, pode ser lida como símbolo de “proibido” ou de obturador de câmera. Depende do nome ao lado para desambiguar.</div>
+        </div>
+      </div>
+    </div>
+    <div class="c-foot">
+      <span class="foot-l">Assinatura, ícone de aplicativo e comportamento em escala</span>
+      <span class="lock"><svg><use href="#m3"/></svg><span class="word">Retin<i>AI</i></span></span>
+      <span class="tile"><svg><use href="#m3"/></svg></span>
+      <span class="ladder">
+        <span><svg width="40" height="40" style="color:var(--ink-2)"><use href="#m3"/></svg><em>40</em></span>
+        <span><svg width="28" height="28" style="color:var(--ink-2)"><use href="#m3"/></svg><em>28</em></span>
+        <span><svg width="20" height="20" style="color:var(--ink-2)"><use href="#m3"/></svg><em>20</em></span>
+        <span><svg width="16" height="16" style="color:var(--ink-2)"><use href="#m3"/></svg><em>16</em></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="concept">
+    <div class="c-top">
+      <div class="c-art"><svg><use href="#m4"/></svg></div>
+      <div class="c-body">
+        <div class="c-head"><span class="c-n">PROPOSTA 4</span><span class="c-t">Íris</span></div>
+        <p>As estrias radiais da íris em volta da pupila. Os traços alternam de comprimento, o que dá à forma um pulso — e lê também como medidas distribuídas em torno de um centro, que é literalmente como o escore de risco é montado.</p>
+        <p>É a mais decorativa das quatro e a que melhor funciona em formato grande: capa de apresentação, camiseta, parede.</p>
+        <div class="pros">
+          <div class="up"><b>A favor</b>A mais bonita em tamanho grande, e a única com alguma textura. Boa para material de marketing.</div>
+          <div class="dn"><b>Contra</b>Some em tamanho pequeno — a 16 px os doze traços viram um borrão cinza. Precisaria de uma versão reduzida completamente diferente, o que é o começo de um problema.</div>
+        </div>
+      </div>
+    </div>
+    <div class="c-foot">
+      <span class="foot-l">Assinatura, ícone de aplicativo e comportamento em escala</span>
+      <span class="lock"><svg><use href="#m4"/></svg><span class="word">Retin<i>AI</i></span></span>
+      <span class="tile"><svg><use href="#m4"/></svg></span>
+      <span class="ladder">
+        <span><svg width="40" height="40" style="color:var(--ink-2)"><use href="#m4"/></svg><em>40</em></span>
+        <span><svg width="28" height="28" style="color:var(--ink-2)"><use href="#m4"/></svg><em>28</em></span>
+        <span><svg width="20" height="20" style="color:var(--ink-2)"><use href="#m4"/></svg><em>20</em></span>
+        <span><svg width="16" height="16" style="color:var(--ink-2)"><use href="#m4"/></svg><em>16</em></span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">03</div>
+  <h2>Minha recomendação</h2>
+
+  <div class="call"><span class="ic">ESCOLHA</span>
+    <p><strong>Proposta 1 — Disco óptico.</strong> É a única cuja <em>forma</em> é própria, e não só o significado. As outras três são bonitas, mas 2 e 3 partem de círculos que qualquer marca pode usar, e a 4 não sobrevive ao tamanho pequeno.</p>
+    <p>O contra dela é administrável: abaixo de 20 px o ramo fino sai, e sobram o disco e as duas arcadas — que é o mesmo desenho, mais limpo. Marca que tem versão reduzida derivada da principal é normal; marca que precisa de um desenho <em>diferente</em> em tamanho pequeno é a que dá problema, e esse é o caso da 4.</p>
+  </div>
+
+  <p>Se a decisão for por segurança em vez de personalidade, a <strong>2 — Escavação</strong> é a escolha certa: nunca vai falhar em nenhum tamanho, em nenhum fundo, e o significado clínico é exclusivo de vocês. É a opção conservadora bem-feita.</p>
+
+  <h3>Como fica na barra lateral</h3>
+  <div class="demo" style="justify-content:flex-start">
+    <div class="sim">
+      <div class="sim-h"><span class="tile"><svg><use href="#m1"/></svg></span><span class="word">Retin<i>AI</i></span></div>
+      <div class="sim-b">
+        <div class="sim-i on"><i></i>Painel</div>
+        <div class="sim-i"><i></i>Pacientes</div>
+        <div class="sim-i"><i></i>Atendimento</div>
+      </div>
+    </div>
+    <div class="sim">
+      <div class="sim-h"><span class="tile"><svg><use href="#m2"/></svg></span><span class="word">Retin<i>AI</i></span></div>
+      <div class="sim-b">
+        <div class="sim-i on"><i></i>Painel</div>
+        <div class="sim-i"><i></i>Pacientes</div>
+        <div class="sim-i"><i></i>Atendimento</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Nas três paletas em discussão</h3>
+  <div class="demo">
+    <div class="chip-pal"><span class="tile fx" style="background:#2F5BD8"><svg><use href="#m1"/></svg></span><em>cobalto</em></div>
+    <div class="chip-pal"><span class="tile fx" style="background:#0F72B8"><svg><use href="#m1"/></svg></span><em>azul claro</em></div>
+    <div class="chip-pal"><span class="tile fx" style="background:#0E7C55"><svg><use href="#m1"/></svg></span><em>verde claro</em></div>
+    <div class="chip-pal"><span class="tile" style="background:var(--ink)"><svg><use href="#m1"/></svg></span><em>monocromática</em></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">04</div>
+  <h2>Regras de uso</h2>
+  <div class="grid2">
+    <div class="card"><h4>Tamanho mínimo</h4><p>20 px para a marca completa. Abaixo disso, usar a versão sem o ramo fino. Na assinatura com o nome ao lado, o mínimo é 24 px de altura.</p></div>
+    <div class="card"><h4>Espaço livre</h4><p>Margem em volta equivalente ao raio do disco. Nada de texto, borda ou outro elemento dentro dessa faixa.</p></div>
+    <div class="card"><h4>Monocromática</h4><p>Precisa funcionar em preto sobre branco e branco sobre preto sem nenhum ajuste — é o teste que documento impresso, fax de convênio e carimbo vão aplicar.</p></div>
+    <div class="card"><h4>O nome</h4><p><strong>Retin</strong> em tom de texto, <strong>AI</strong> na cor de marca. Sem espaço, sem hífen, sem ponto. O corte de cor no meio é o que faz o trocadilho funcionar sem precisar explicá-lo.</p></div>
+  </div>
+  <p>Ainda faltam, quando a escolha estiver feita: versão horizontal e vertical da assinatura, arquivo vetorial fechado, ícone de aplicativo em todas as resoluções, e a decisão sobre marca-d'água em laudo assinado — que é documento médico e tem regra própria.</p>
+</section>
+
+<footer>
+  <p style="max-width:66ch;margin:0">Proposta de identidade visual, agosto de 2026. Todos os símbolos foram desenhados em vetor para este documento e escalam sem perda. Escolhido o conceito, aplico no protótipo, na proposta e na apresentação de uma vez só.</p>
+</footer>
+</div>
+
+<button class="tbtn" id="tbtn" title="Alternar tema" aria-label="Alternar tema claro e escuro">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" id="tico"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+</button>
+
+<script>
+document.documentElement.lang = "pt-BR";
+var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+var SUN  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+var mq = window.matchMedia("(prefers-color-scheme: dark)");
+function isDark(){ var d = document.documentElement.dataset.theme; return d ? d === "dark" : mq.matches; }
+function paint(){ document.getElementById("tico").innerHTML = isDark() ? SUN : MOON; }
+document.getElementById("tbtn").addEventListener("click", function(){
+  document.documentElement.dataset.theme = isDark() ? "light" : "dark";
+  paint();
+});
+mq.addEventListener("change", paint);
+paint();
+</script>
