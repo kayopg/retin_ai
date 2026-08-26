@@ -32,6 +32,25 @@ A regra de vocabulário da apresentação: **termo clínico fica preciso** (face
 escavação, adesão), **termo de tecnologia vira português comum** — o médico é o especialista
 de um lado e leigo do outro.
 
+## Protótipo — responsividade
+
+Testado de 320 px a 1920 px, nas 9 telas, sem estouro horizontal. Quatro pontos de quebra:
+
+| Largura | O que muda |
+| --- | --- |
+| ≤ 1500 px | Colunas laterais dos workspaces encolhem |
+| ≤ 1300 px | Coluna de contexto sobe para o topo; grades de 4 viram 2 |
+| ≤ 1100 px | Barra lateral vira faixa de ícones de 64 px; workspaces viram coluna única |
+| ≤ 720 px | Grades viram coluna única; subtítulo do cabeçalho some |
+| ≤ 560 px | Cabeçalho vira só ícones; seletor de cor sai da barra (segue no `Ctrl K`) |
+
+Altura usa `100dvh` com `100vh` de reserva, para o navegador de celular não cortar a barra
+inferior quando a barra de endereço recolhe.
+
+**Limite conhecido:** abaixo de 1100 px a barra lateral é uma faixa fixa de ícones — não há
+menu retrátil. Em 375 px ela consome 17% da largura. Aceitável em protótipo; num produto de
+verdade viraria gaveta.
+
 ## Protótipo — telas
 
 Painel · Pacientes · Atendimento · Paciente · Central de risco · Conversas · Exames e imagem ·

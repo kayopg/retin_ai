@@ -105,7 +105,7 @@ html{-webkit-text-size-adjust:100%}
 body{
   font-family:var(--f-ui); background:var(--bg); color:var(--ink);
   font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
-  height:100vh; overflow:hidden;
+  height:100vh; height:100dvh; overflow:hidden;
 }
 button,input,textarea,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
@@ -115,7 +115,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ═══════════════ SHELL ═══════════════ */
-.app{display:grid;grid-template-columns:var(--rail) 1fr;height:100vh}
+.app{display:grid;grid-template-columns:var(--rail) 1fr;height:100vh;height:100dvh}
 .app.collapsed{--rail:64px}
 
 .rail{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;overflow:hidden}
@@ -157,7 +157,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .main{display:flex;flex-direction:column;min-width:0;overflow:hidden}
 .top{height:var(--top);flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 20px;position:relative;z-index:20}
 .top-h{min-width:0;flex:1}
-.top-h h1{font-size:16px;font-weight:700;letter-spacing:-.025em;line-height:1.25}
+.top-h h1{font-size:16px;font-weight:700;letter-spacing:-.025em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top-h p{font-size:12px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top-r{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .iconbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:var(--ink-2);position:relative;transition:background .15s,border-color .15s;flex-shrink:0}
@@ -578,6 +578,19 @@ kbd{font-family:var(--f-mono);font-size:10px;border:1px solid var(--line);border
   .hero-k{grid-template-columns:repeat(2,1fr)}
   .msg{max-width:90%}
 }
+/* abaixo disto a barra superior não cabe com rótulos — vira só ícones */
+@media (max-width:560px){
+  .top{gap:6px}
+  .top-r{gap:6px}
+  .kbd-btn span,.kbd-btn kbd{display:none}
+  .kbd-btn{width:34px;padding:0;justify-content:center}
+  .top-r .btn-p{width:34px;padding:0;justify-content:center}
+  .top-r .btn-p .btn-txt{display:none}
+  .swatch-wrap{display:none} /* segue acessível pelo Ctrl K */
+  .sw-menu{right:-40px}
+  .hero-k{grid-template-columns:repeat(2,1fr)}
+  .tabs{padding:0 8px}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -657,17 +670,17 @@ kbd{font-family:var(--f-mono);font-size:10px;border:1px solid var(--line);border
   </div>
   <nav class="nav" aria-label="Navegação principal">
     <div class="nav-lbl first">Principal</div>
-    <button class="nav-i" data-go="painel" aria-current="page"><svg viewBox="0 0 24 24"><use href="#i-grid"/></svg><span class="nav-txt">Painel</span></button>
-    <button class="nav-i" data-go="pacientes"><svg viewBox="0 0 24 24"><use href="#i-users"/></svg><span class="nav-txt">Pacientes</span></button>
-    <button class="nav-i" data-go="atendimento"><svg viewBox="0 0 24 24"><use href="#i-note"/></svg><span class="nav-txt">Atendimento</span></button>
+    <button class="nav-i" title="Painel" data-go="painel" aria-current="page"><svg viewBox="0 0 24 24"><use href="#i-grid"/></svg><span class="nav-txt">Painel</span></button>
+    <button class="nav-i" title="Pacientes" data-go="pacientes"><svg viewBox="0 0 24 24"><use href="#i-users"/></svg><span class="nav-txt">Pacientes</span></button>
+    <button class="nav-i" title="Atendimento" data-go="atendimento"><svg viewBox="0 0 24 24"><use href="#i-note"/></svg><span class="nav-txt">Atendimento</span></button>
     <div class="nav-lbl">Monitoramento</div>
-    <button class="nav-i" data-go="risco"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><span class="nav-txt">Central de risco</span><span class="pip">3</span></button>
-    <button class="nav-i" data-go="conversas"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg><span class="nav-txt">Conversas</span><span class="pip w">7</span></button>
+    <button class="nav-i" title="Central de risco" data-go="risco"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><span class="nav-txt">Central de risco</span><span class="pip">3</span></button>
+    <button class="nav-i" title="Conversas" data-go="conversas"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg><span class="nav-txt">Conversas</span><span class="pip w">7</span></button>
     <div class="nav-lbl">Inteligência</div>
-    <button class="nav-i" data-go="exames"><svg viewBox="0 0 24 24"><use href="#i-scan"/></svg><span class="nav-txt">Exames e imagem</span><span class="pip a">8</span></button>
-    <button class="nav-i" data-go="base"><svg viewBox="0 0 24 24"><use href="#i-book"/></svg><span class="nav-txt">Base de conhecimento</span></button>
+    <button class="nav-i" title="Exames e imagem" data-go="exames"><svg viewBox="0 0 24 24"><use href="#i-scan"/></svg><span class="nav-txt">Exames e imagem</span><span class="pip a">8</span></button>
+    <button class="nav-i" title="Base de conhecimento" data-go="base"><svg viewBox="0 0 24 24"><use href="#i-book"/></svg><span class="nav-txt">Base de conhecimento</span></button>
     <div class="nav-lbl">Governança</div>
-    <button class="nav-i" data-go="privacidade"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg><span class="nav-txt">Privacidade e LGPD</span></button>
+    <button class="nav-i" title="Privacidade e LGPD" data-go="privacidade"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg><span class="nav-txt">Privacidade e LGPD</span></button>
   </nav>
   <div class="rail-foot">
     <div class="demo">Protótipo navegável<br>dados fictícios</div>
@@ -711,7 +724,7 @@ kbd{font-family:var(--f-mono);font-size:10px;border:1px solid var(--line);border
       </div>
       <button class="iconbtn" id="theme" title="Alternar tema"><svg viewBox="0 0 24 24" id="theme-ico"><use href="#i-moon"/></svg></button>
       <button class="iconbtn" data-toast="3 alertas críticos e 7 conversas aguardam resposta." title="Notificações"><svg viewBox="0 0 24 24"><use href="#i-bell"/></svg><span class="dot"></span></button>
-      <button class="btn btn-p" data-go="atendimento"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>Novo atendimento</button>
+      <button class="btn btn-p" data-go="atendimento"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg><span class="btn-txt">Novo atendimento</span></button>
     </div>
   </header>
 
