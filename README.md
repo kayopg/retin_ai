@@ -12,6 +12,7 @@ e base de conhecimento anonimizada.
 | `docs/apresentacao.html` | Apresentação em 24 slides da mesma proposta, em linguagem simples, para apresentar ao médico |
 | `docs/logo.html` | Quatro propostas de logomarca, com prós, contras e comportamento em escala |
 | `docs/custos.html` | Calculadora do custo operacional do piloto, com premissas ajustáveis |
+| `docs/esforco.html` | Estimativa de horas até o piloto, pacote por pacote, com projeção de calendário |
 | `prototipo/index.html` | Protótipo navegável de 9 telas, arquivo único, sem dependências além do Google Fonts |
 
 Todos são HTML autocontidos: basta abrir no navegador.
@@ -22,6 +23,7 @@ Todos são HTML autocontidos: basta abrir no navegador.
 - Apresentação — <https://claude.ai/code/artifact/ef1191c4-9ffa-4d93-b56e-d3940ecb94bd>
 - Marca — <https://claude.ai/code/artifact/299cac32-7ecd-43fb-8e55-d102aefabfbd>
 - Custos — <https://claude.ai/code/artifact/66545bef-0a89-4e3a-a6b9-c6bfc0865685>
+- Esforço — <https://claude.ai/code/artifact/c9a4f255-7e5e-4b92-bc9b-6579ee8e625d>
 - Protótipo — <https://claude.ai/code/artifact/ff86657a-da29-4bd1-9e90-6e0635ecfe36>
 
 ## Apresentação — atalhos

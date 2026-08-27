@@ -1,0 +1,469 @@
+<title>Horas até o piloto</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#F1F4FA; --paper:#FFFFFF; --paper-2:#F7F9FD; --paper-3:#E7ECF7;
+  --line:#D6DEEC; --line-soft:#E7ECF6;
+  --ink:#0E1626; --ink-2:#37435A; --muted:#69758A;
+  --brand:#2F5BD8; --brand-soft:#E5EBFB; --brand-line:#BCCBF4;
+  --crit:#BE3247; --crit-soft:#FBE6EA; --crit-line:#F0C0C9;
+  --warn:#8F5A05; --warn-soft:#FAEFD8; --warn-line:#EBD1A0;
+  --ok:#06735C;   --ok-soft:#DCF1EB;   --ok-line:#ABDACE;
+  --ai:#5C3CBE;   --ai-soft:#EAE5FB;   --ai-line:#CBBCF2;
+  --sh:0 1px 2px rgba(14,22,38,.05), 0 12px 30px -20px rgba(14,22,38,.3);
+  --f-d:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-s:"IBM Plex Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+    --line:#26324F; --line-soft:#1B2540;
+    --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+    --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+    --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+    --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+    --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+    --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+    --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+  --line:#26324F; --line-soft:#1B2540;
+  --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+  --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+  --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+  --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+  --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+  --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+  --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-s);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+.mast{padding:50px 0 28px;border-bottom:1px solid var(--line)}
+.brandline{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+.brandline svg{width:32px;height:32px;color:var(--brand);flex-shrink:0}
+.brandline b{font-size:19px;font-weight:700;letter-spacing:-.035em}
+.brandline b i{font-style:normal;color:var(--brand)}
+.eyebrow{font-family:var(--f-m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
+h1{font-family:var(--f-d);font-weight:400;font-size:clamp(34px,5.6vw,54px);line-height:1.02;letter-spacing:-.025em;margin:16px 0 0;text-wrap:balance}
+h1 em{font-style:italic;color:var(--brand)}
+.lede{font-size:clamp(15px,1.9vw,18px);line-height:1.6;color:var(--ink-2);margin-top:16px;max-width:44em;text-wrap:pretty}
+
+section{padding:38px 0;border-bottom:1px solid var(--line-soft)}
+section:last-of-type{border-bottom:0}
+.sec-n{font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);letter-spacing:.1em}
+h2{font-family:var(--f-d);font-weight:400;font-size:clamp(23px,3.2vw,32px);line-height:1.12;letter-spacing:-.02em;margin:8px 0 0;text-wrap:balance}
+h3{font-size:14.5px;font-weight:600;margin:26px 0 8px;letter-spacing:-.01em}
+p{margin:14px 0;max-width:68ch;text-wrap:pretty}
+strong{font-weight:600;color:var(--ink)}
+ul{margin:14px 0;padding:0;list-style:none;max-width:68ch;display:flex;flex-direction:column;gap:7px}
+li{padding-left:19px;position:relative}
+li::before{content:"";position:absolute;left:3px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.6}
+.num{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+a{color:var(--brand);text-underline-offset:2px}
+
+/* ── RESULTADO ── */
+.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0 0}
+@media (max-width:820px){.totals{grid-template-columns:1fr}}
+.tot{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:19px 21px;box-shadow:var(--sh)}
+.tot.a{border-left:3px solid var(--brand)}
+.tot.b{border-left:3px solid var(--ai)}
+.tot.c{border-left:3px solid var(--ok)}
+.tot-l{font-family:var(--f-m);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tot-v{font-family:var(--f-m);font-size:clamp(28px,4.2vw,40px);font-weight:600;letter-spacing:-.045em;line-height:1.05;margin-top:7px;font-variant-numeric:tabular-nums}
+.tot.a .tot-v{color:var(--brand)}
+.tot.b .tot-v{color:var(--ai)}
+.tot.c .tot-v{color:var(--ok)}
+.tot-s{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.45}
+
+/* ── PAINEL ── */
+.panel{display:grid;grid-template-columns:290px minmax(0,1fr);gap:26px;align-items:start;margin-top:24px}
+@media (max-width:900px){.panel{grid-template-columns:minmax(0,1fr)}}
+.panel > *{min-width:0}
+.ctrl{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:16px;min-width:0}
+@media (min-width:901px){.ctrl{position:sticky;top:20px}}
+.ctrl-t{font-family:var(--f-m);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-bottom:11px;border-bottom:1px solid var(--line-soft)}
+.fld{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fld label{font-size:12.5px;font-weight:500;color:var(--ink-2);display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0}
+.fld label b{font-family:var(--f-m);font-size:13px;font-weight:600;color:var(--brand);font-variant-numeric:tabular-nums}
+.fld .hint{font-size:11px;color:var(--muted);line-height:1.4}
+input[type=range]{width:100%;accent-color:var(--brand);height:20px;cursor:pointer}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{flex:1;background:var(--paper-2);border:0;padding:8px 6px;font-family:var(--f-s);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand)}
+.seg button+button{border-left:1px solid var(--line)}
+
+/* ── TABELA ── */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:var(--paper);box-shadow:var(--sh)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+th{text-align:left;font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:10px 14px;background:var(--paper-2);border-bottom:1px solid var(--line);white-space:nowrap}
+th.r,td.r{text-align:right}
+td{padding:9px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.5;color:var(--ink-2)}
+tr:last-child td{border-bottom:0}
+td b{color:var(--ink);font-weight:600}
+td small{display:block;font-size:11.5px;color:var(--muted);line-height:1.4;margin-top:2px}
+tr.grp td{background:var(--paper-2);font-family:var(--f-m);font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--brand);padding:8px 14px}
+tr.out td{opacity:.42}
+tfoot td{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:0;font-weight:600;color:var(--ink)}
+.bar{display:block;height:5px;border-radius:3px;background:var(--brand);opacity:.7;min-width:2px;margin-top:4px}
+.tag{display:inline-flex;align-items:center;font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--paper-3);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.tag.b{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
+.tag.o{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-line)}
+.tag.w{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+.tag.c{background:var(--crit-soft);color:var(--crit);border-color:var(--crit-line)}
+.tag.a{background:var(--ai-soft);color:var(--ai);border-color:var(--ai-line)}
+
+.call{border:1px solid var(--brand-line);background:var(--brand-soft);border-radius:12px;padding:15px 17px;margin:20px 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 12px;align-items:start}
+.call .ic{font-family:var(--f-m);font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px;margin-top:2px;background:var(--brand);color:var(--bg);letter-spacing:.04em;white-space:nowrap}
+.call p{grid-column:2;margin:0;font-size:13.5px;line-height:1.6;max-width:none;color:var(--ink-2)}
+.call p+p{margin-top:8px}
+.call.w{border-color:var(--warn-line);background:var(--warn-soft)}
+.call.w .ic{background:var(--warn)}
+.call.o{border-color:var(--ok-line);background:var(--ok-soft)}
+.call.o .ic{background:var(--ok)}
+.call.c{border-color:var(--crit-line);background:var(--crit-soft)}
+.call.c .ic{background:var(--crit)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:20px 0}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:16px 18px;box-shadow:var(--sh)}
+.card h4{font-size:13.5px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.card p{font-size:13px;margin:6px 0 0;color:var(--ink-2);max-width:none}
+.card .big{font-family:var(--f-m);font-size:26px;font-weight:600;letter-spacing:-.04em;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+
+.tbtn{position:fixed;right:14px;bottom:14px;z-index:20;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;box-shadow:var(--sh);display:grid;place-items:center}
+.tbtn:hover{border-color:var(--brand-line);color:var(--brand)}
+footer{padding:30px 0 50px;font-size:12px;color:var(--muted);line-height:1.7}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="logo" viewBox="0 0 48 48">
+    <g transform="translate(24 24) scale(1.14) translate(-22 -24)">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <path d="M28 18C21 10.5 14.5 8 6.5 8.5" stroke-width="4.2"/>
+        <path d="M28 30C21 37.5 14.5 40 6.5 39.5" stroke-width="4.2"/>
+        <path d="M23.5 15C19 13 14 12.8 9.5 14" stroke-width="2.4"/>
+      </g>
+      <circle cx="31" cy="24" r="8.6" fill="currentColor"/>
+    </g>
+  </symbol>
+</defs></svg>
+
+<div class="wrap">
+<header class="mast">
+  <div class="brandline"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#logo"/></svg><b>Retin<i>AI</i></b></div>
+  <div class="eyebrow">Estimativa de esforço · até o primeiro paciente</div>
+  <h1>Quantas horas até <em>pilotar na clínica</em></h1>
+  <p class="lede">O roadmap da proposta fala em semanas, que é estimativa de calendário e só serve se alguém trabalhar em tempo integral. Isto aqui é a conta em horas, pacote por pacote — porque a pergunta real é se cabe na sua semana, e por quanto tempo.</p>
+</header>
+
+<section>
+  <div class="sec-n">01</div>
+  <h2>A conta</h2>
+
+  <div class="totals">
+    <div class="tot a">
+      <div class="tot-l">Engenharia — Ari</div>
+      <div class="tot-v" id="t-eng">—</div>
+      <div class="tot-s" id="t-eng-s">—</div>
+    </div>
+    <div class="tot b">
+      <div class="tot-l">Clínico — Dr. Miguel</div>
+      <div class="tot-v" id="t-med">—</div>
+      <div class="tot-s" id="t-med-s">—</div>
+    </div>
+    <div class="tot c">
+      <div class="tot-l">Até o primeiro paciente</div>
+      <div class="tot-v" id="t-cal">—</div>
+      <div class="tot-s" id="t-cal-s">—</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ctrl">
+      <div class="ctrl-t">Escopo do piloto</div>
+      <div class="seg" role="group" aria-label="Escopo">
+        <button id="e-enxuto" aria-pressed="true">Enxuto</button>
+        <button id="e-completo" aria-pressed="false">Completo</button>
+      </div>
+      <span class="hint" id="escopo-hint">Só o necessário para monitorar. O prontuário estruturado fica para depois do piloto.</span>
+
+      <div class="ctrl-t" style="padding-top:4px">Sua disponibilidade</div>
+      <div class="fld">
+        <label for="hs">Horas por semana <b id="v-hs">15 h</b></label>
+        <input type="range" id="hs" min="4" max="45" step="1" value="15">
+        <span class="hint">Horas de trabalho focado, não horas sentado.</span>
+      </div>
+
+      <div class="fld">
+        <label for="med-hs">Horas do médico por semana <b id="v-med-hs">3 h</b></label>
+        <input type="range" id="med-hs" min="1" max="12" step="1" value="3">
+      </div>
+
+      <div class="ctrl-t" style="padding-top:4px">Realismo</div>
+      <div class="fld">
+        <label for="fator">Margem sobre a estimativa <b id="v-fator">30%</b></label>
+        <input type="range" id="fator" min="0" max="100" step="5" value="30">
+        <span class="hint">Estimativa de software erra para baixo por padrão. 30% é conservador; 0% assume que nada dá errado.</span>
+      </div>
+
+      <div class="fld">
+        <label for="ferias">Semanas perdidas no período <b id="v-ferias">2</b></label>
+        <input type="range" id="ferias" min="0" max="8" step="1" value="2">
+        <span class="hint">Feriado, plantão, viagem, cansaço.</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="tw"><table>
+        <thead><tr><th>Pacote de trabalho</th><th class="r">Ari</th><th class="r">Médico</th></tr></thead>
+        <tbody id="pacotes"></tbody>
+        <tfoot><tr><td>Total com margem</td><td class="r num" id="f-eng">—</td><td class="r num" id="f-med">—</td></tr></tfoot>
+      </table></div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:10px">As linhas apagadas ficam fora do escopo enxuto. Os números já incluem a margem escolhida ao lado.</p>
+      <div class="call" id="gargalo"><span class="ic" id="gargalo-ic">GARGALO</span><p id="gargalo-p">—</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">02</div>
+  <h2>Dois caminhos até o primeiro paciente</h2>
+  <p>O roadmap da proposta coloca o módulo de atendimento antes do monitoramento, e há boa razão para isso: ele entrega valor sozinho e constrói a base de dados. Mas <strong>ele não é pré-requisito técnico para monitorar.</strong> Para acompanhar um pós-operatório você precisa saber quem é o paciente, que procedimento fez e em que dia — não precisa do prontuário estruturado inteiro.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h4><span class="tag o">Enxuto</span> Monitoramento primeiro</h4>
+      <div class="big" id="c-enxuto">—</div>
+      <p>Cadastro mínimo, protocolo, WhatsApp, triagem, fila de risco. O médico anota como sempre anotou; o prontuário estruturado entra depois que o piloto provar o valor.</p>
+      <p><strong>A favor:</strong> chega ao primeiro paciente muito antes, e é o piloto que responde a pergunta que importa. <strong>Contra:</strong> a triagem trabalha sem histórico rico, e parte do trabalho de cadastro será refeita depois.</p>
+    </div>
+    <div class="card">
+      <h4><span class="tag b">Completo</span> Como está na proposta</h4>
+      <div class="big" id="c-completo">—</div>
+      <p>Fases 0, 1 e 2 inteiras. A clínica ganha prontuário funcionando antes de o monitoramento começar.</p>
+      <p><strong>A favor:</strong> nada é refeito, e a triagem já nasce com histórico. <strong>Contra:</strong> adia em meses a única pergunta que o piloto existe para responder — se o tempo até o médico saber realmente cai.</p>
+    </div>
+  </div>
+
+  <div class="call"><span class="ic">MINHA LEITURA</span>
+    <p><strong>Enxuto.</strong> O risco maior do projeto não é técnico, é de premissa: não sabemos se o paciente responde, se o protocolo pega os sinais certos, e se o médico confia na fila. Nenhuma dessas respostas depende do prontuário estruturado — e todas ficam mais baratas de descobrir cedo.</p>
+    <p>O retrabalho existe e é real, mas é pequeno perto de construir três meses de módulo antes de saber se a ideia funciona.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">03</div>
+  <h2>O que não se resolve com horas</h2>
+  <p>Alguns itens travam o calendário mesmo com o código pronto. Eles rodam em paralelo, mas precisam começar cedo — e nenhum acelera se você trabalhar mais.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Espera externa</th><th>Quanto costuma levar</th><th>Começar quando</th></tr></thead>
+    <tbody>
+      <tr><td><b>Verificação de negócio na Meta</b><small>Exige CNPJ; sem ela o WhatsApp não sai do modo de teste</small></td><td class="num">dias a semanas</td><td><span class="tag c">Antes de tudo</span></td></tr>
+      <tr><td><b>Aprovação dos modelos de mensagem</b><small>Cada modelo é revisado individualmente pela Meta</small></td><td class="num">horas a dias, por modelo</td><td><span class="tag w">Junto com a Fase 0</span></td></tr>
+      <tr><td><b>Parecer regulatório</b><small>Não bloqueia o piloto, mas bloqueia a Etapa 2</small></td><td class="num">semanas</td><td><span class="tag w">Fase 0</span></td></tr>
+      <tr><td><b>Certificado ICP-Brasil</b><small>Só necessário no escopo completo, para assinar prontuário</small></td><td class="num">dias</td><td><span class="tag">Quando precisar</span></td></tr>
+      <tr><td><b>Os vídeos do Dr. Miguel</b><small>Depende de agenda dele, não de código</small></td><td class="num">semanas de calendário</td><td><span class="tag c">Fase 0</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call c"><span class="ic">O RISCO</span>
+    <p>A verificação de negócio na Meta é a que mais derruba cronograma, porque parece burocracia trivial e exige CNPJ ativo — que por sua vez depende da decisão de sociedade (D5). <strong>Se a sociedade não estiver formalizada, o WhatsApp não sai do modo de teste, e sem WhatsApp não existe piloto.</strong></p>
+    <p>Na prática isso torna a D5 uma dependência de cronograma, não só um assunto jurídico. É o item que eu começaria esta semana.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">04</div>
+  <h2>Como a estimativa foi feita</h2>
+  <p>De baixo para cima: cada pacote foi estimado isolado, somado, e depois multiplicado pela margem. Não é o contrário — não parti de um prazo desejado e distribuí horas para caber.</p>
+  <ul>
+    <li><strong>Horas são de trabalho focado.</strong> Não incluem reunião, troca de contexto, nem o tempo de voltar ao problema depois de dois dias longe. É por isso que a margem existe e é por isso que 15 horas concentradas rendem mais que 15 horas picadas.</li>
+    <li><strong>Assume uma pessoa só programando.</strong> Somar gente não divide o prazo proporcionalmente, e neste tamanho de projeto a coordenação provavelmente custaria mais do que economizaria.</li>
+    <li><strong>As quatro semanas de piloto estão dentro da conta</strong>, com horas reservadas para ajuste durante a execução — porque é ali que aparece o que nenhuma especificação previu.</li>
+    <li><strong>Não inclui a curadoria dos 200 a 300 casos</strong> do acervo. Aquilo é Fase 3 e não bloqueia o piloto.</li>
+  </ul>
+
+  <div class="call w"><span class="ic">HONESTIDADE</span>
+    <p>Estimativa de software erra para baixo de forma sistemática, e quem estima o próprio trabalho erra mais. Trate os números como <strong>ordem de grandeza</strong>: a diferença entre 300 e 500 horas é informação útil; a diferença entre 320 e 340 não é.</p>
+    <p>O jeito de melhorar isso não é estimar com mais cuidado — é medir. Anotar as horas reais dos primeiros três pacotes recalibra tudo o que vem depois melhor do que qualquer refinamento feito agora.</p>
+  </div>
+</section>
+
+<footer>
+  <p style="max-width:68ch;margin:0">Estimativa de esforço até o piloto · agosto de 2026 · Ari Gomes. Complementa a <a href="https://claude.ai/code/artifact/e4c0ba7f-7134-445e-84a7-ddb296f2f386" target="_blank" rel="noopener">proposta</a> e a <a href="https://claude.ai/code/artifact/66545bef-0a89-4e3a-a6b9-c6bfc0865685" target="_blank" rel="noopener">calculadora de custo</a>.</p>
+</footer>
+</div>
+
+<button class="tbtn" id="tbtn" title="Alternar tema" aria-label="Alternar tema claro e escuro">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" id="tico"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+</button>
+
+<script>
+document.documentElement.lang = "pt-BR";
+
+/* enxuto: entra no escopo mínimo · eng/med: horas de trabalho focado */
+var PACOTES = [
+  { g:"Fase 0 — descoberta, sem código" },
+  { rot:"Escrever os protocolos clínicos",       nota:"Cinco sessões com o médico: o que enviar, em que dia, o que fazer com cada resposta", eng:10, med:10, enxuto:true },
+  { rot:"Sinais de alarme e árvore de decisão",  nota:"O que dispara encaixe no mesmo dia, teleconsulta ou observação",                       eng:8,  med:4,  enxuto:true },
+  { rot:"Termos de consentimento",               nota:"Redação com o advogado; separados por finalidade",                                     eng:6,  med:1,  enxuto:true },
+  { rot:"Briefing do parecer regulatório",       nota:"Preparar material e conduzir a consultoria",                                           eng:6,  med:2,  enxuto:true },
+  { rot:"Especificação e modelo de dados",       nota:"Entidades, estados do paciente, isolamento por clínica",                               eng:16, med:0,  enxuto:true },
+  { rot:"Métricas e linha de base",              nota:"Medir o antes, senão o depois não prova nada",                                         eng:6,  med:2,  enxuto:true },
+
+  { g:"Fundação técnica" },
+  { rot:"Projeto, ambientes, publicação",        nota:"Repositório, integração contínua, ambiente de teste e de produção",                    eng:16, med:0,  enxuto:true },
+  { rot:"Autenticação e papéis",                 nota:"Entrada com senha e segundo fator, perfis de acesso",                                  eng:14, med:0,  enxuto:true },
+  { rot:"Banco e isolamento por clínica",        nota:"Filtro obrigatório no nível da linha, desde a primeira consulta",                      eng:20, med:0,  enxuto:true },
+  { rot:"Trilha de auditoria",                   nota:"Registro de quem abriu o quê, que ninguém apaga",                                      eng:12, med:0,  enxuto:true },
+
+  { g:"Atendimento e prontuário" },
+  { rot:"Cadastro de paciente",                  nota:"No enxuto: identificação, contato, procedimento, data e consentimento",                eng:12, med:0,  enxuto:true },
+  { rot:"Cadastro completo e busca",             nota:"Ficha inteira, histórico de procedimentos, busca por vários campos",                   eng:14, med:1,  enxuto:false },
+  { rot:"Tela de atendimento",                   nota:"Anotação livre e campos estruturados de exame",                                        eng:28, med:4,  enxuto:false },
+  { rot:"Prontuário estruturado por IA",         nota:"Transformar a anotação em blocos, com hipóteses e CID",                                eng:24, med:6,  enxuto:false },
+  { rot:"Histórico longitudinal",                nota:"Linha do tempo do paciente entre consultas",                                           eng:20, med:2,  enxuto:false },
+  { rot:"Conferência com o histórico",           nota:"Levantar divergências antes de fechar a consulta",                                     eng:14, med:2,  enxuto:false },
+  { rot:"Assinatura digital do prontuário",      nota:"ICP-Brasil, com validade legal",                                                       eng:16, med:1,  enxuto:false },
+
+  { g:"Monitoramento — o núcleo do piloto" },
+  { rot:"Integração com o WhatsApp",             nota:"Conexão oficial, verificação de negócio, recebimento de mensagens",                    eng:24, med:0,  enxuto:true },
+  { rot:"Modelos de mensagem",                   nota:"Redação e submissão para aprovação da Meta",                                           eng:12, med:4,  enxuto:true },
+  { rot:"Motor de protocolo",                    nota:"Agendamento, disparo, estado de cada paciente na linha do tempo",                      eng:32, med:2,  enxuto:true },
+  { rot:"Triagem da resposta por IA",            nota:"Interpretar o relato, detectar sinal de alarme, decidir se chama o médico",            eng:24, med:6,  enxuto:true },
+  { rot:"Motor de risco e fila",                 nota:"Nota de risco com os pesos do médico, ordenação por urgência",                         eng:20, med:4,  enxuto:true },
+  { rot:"Tela da central de risco",              nota:"A tela da manhã: quem precisa de você nas próximas 24 horas",                          eng:20, med:3,  enxuto:true },
+  { rot:"Consentimento e cancelamento",          nota:"Aceite registrado, saída a qualquer momento sem afetar o cuidado",                     eng:10, med:1,  enxuto:true },
+  { rot:"Vídeos: gravação e entrega",            nota:"De 8 a 12 vídeos curtos, hospedagem e disparo no dia certo",                           eng:12, med:10, enxuto:true },
+
+  { g:"Piloto propriamente dito" },
+  { rot:"Painel do piloto e instrumentação",     nota:"Métricas do piloto e medição de custo por paciente monitorado",                        eng:16, med:1,  enxuto:true },
+  { rot:"Ensaio com pacientes simulados",        nota:"Rodar o protocolo inteiro antes de tocar em paciente de verdade",                      eng:20, med:6,  enxuto:true },
+  { rot:"Ajuste durante as quatro semanas",      nota:"Corrigir o que só aparece com paciente real respondendo",                              eng:36, med:12, enxuto:true }
+];
+
+var $ = function(s){ return document.querySelector(s); };
+var n0 = function(v){ return Math.round(v).toLocaleString("pt-BR"); };
+var enxuto = true;
+
+function ler(){
+  return { hs:+$("#hs").value, medHs:+$("#med-hs").value, fator:1 + (+$("#fator").value)/100, ferias:+$("#ferias").value };
+}
+
+function somar(soEnxuto){
+  var e = 0, m = 0;
+  PACOTES.forEach(function(p){
+    if(p.g) return;
+    if(soEnxuto && !p.enxuto) return;
+    e += p.eng; m += p.med;
+  });
+  return { eng:e, med:m };
+}
+
+function semanas(horas, porSemana, ferias){
+  if(porSemana <= 0) return Infinity;
+  return horas / porSemana + ferias;
+}
+
+function render(){
+  var c = ler();
+  var s = somar(enxuto);
+  var eng = s.eng * c.fator, med = s.med * c.fator;
+
+  $("#v-hs").textContent = c.hs + " h";
+  $("#v-med-hs").textContent = c.medHs + " h";
+  $("#v-fator").textContent = Math.round((c.fator - 1) * 100) + "%";
+  $("#v-ferias").textContent = c.ferias;
+
+  var semEng = semanas(eng, c.hs, c.ferias);
+  var semMed = semanas(med, c.medHs, 0);
+  var sem = Math.max(semEng, semMed);
+  var meses = sem / 4.35;
+
+  $("#t-eng").textContent = n0(eng) + " h";
+  $("#t-eng-s").textContent = n0(semEng) + " semanas a " + c.hs + " h por semana";
+  $("#t-med").textContent = n0(med) + " h";
+  $("#t-med-s").textContent = "cerca de " + (med / Math.max(1, semEng)).toFixed(1).replace(".", ",") + " h por semana no período";
+  $("#t-cal").textContent = meses.toFixed(1).replace(".", ",") + " meses";
+  $("#t-cal-s").textContent = n0(sem) + " semanas · escopo " + (enxuto ? "enxuto" : "completo") +
+    (semMed > semEng ? " · limitado pela agenda do médico" : "");
+
+  var maxEng = Math.max.apply(null, PACOTES.filter(function(p){ return !p.g; }).map(function(p){ return p.eng; }));
+  $("#pacotes").innerHTML = PACOTES.map(function(p){
+    if(p.g) return '<tr class="grp"><td colspan="3">' + p.g + '</td></tr>';
+    var fora = enxuto && !p.enxuto;
+    var pct = Math.max(2, p.eng / maxEng * 100);
+    return '<tr class="' + (fora ? "out" : "") + '"><td><b>' + p.rot + '</b>' +
+      (fora ? ' <span class="tag">fora do enxuto</span>' : '') +
+      '<small>' + p.nota + '</small>' +
+      '<span class="bar" style="width:' + pct + '%"></span></td>' +
+      '<td class="r num">' + n0(p.eng * c.fator) + ' h</td>' +
+      '<td class="r num">' + (p.med ? n0(p.med * c.fator) + " h" : "—") + '</td></tr>';
+  }).join("");
+  $("#f-eng").textContent = n0(eng) + " h";
+  $("#f-med").textContent = n0(med) + " h";
+
+  /* quem trava o cronograma */
+  var g = $("#gargalo"), gp = $("#gargalo-p"), gi = $("#gargalo-ic");
+  if(semMed > semEng){
+    g.className = "call w"; gi.textContent = "GARGALO";
+    gp.innerHTML = "<strong>Quem trava o cronograma é a agenda do médico, não a sua.</strong> " +
+      "São " + n0(med) + " h dele a " + c.medHs + " h por semana, o que dá " + n0(semMed) + " semanas — contra " + n0(semEng) + " semanas suas. " +
+      "Programar mais horas por semana não adianta nada a partir daqui: o projeto anda no ritmo dele.";
+  } else {
+    var folga = c.medHs > 0 ? (med / semEng) : 0;
+    g.className = "call o"; gi.textContent = "RITMO";
+    gp.innerHTML = "<strong>O cronograma está no seu ritmo</strong> — " + n0(semEng) + " semanas de engenharia contra " + n0(semMed) + " do médico. " +
+      "Ele precisa sustentar cerca de " + folga.toFixed(1).replace(".", ",") + " h por semana; acima disso a folga é dele. " +
+      "Se você subir para " + Math.min(45, c.hs + 10) + " h por semana, confira se ele acompanha — é o ponto onde o gargalo troca de lado.";
+  }
+
+  var a = somar(true), b = somar(false);
+  $("#c-enxuto").textContent = n0(a.eng * c.fator) + " h · " + (semanas(a.eng * c.fator, c.hs, c.ferias) / 4.35).toFixed(1).replace(".", ",") + " meses";
+  $("#c-completo").textContent = n0(b.eng * c.fator) + " h · " + (semanas(b.eng * c.fator, c.hs, c.ferias) / 4.35).toFixed(1).replace(".", ",") + " meses";
+}
+
+$("#e-enxuto").addEventListener("click", function(){
+  enxuto = true;
+  $("#e-enxuto").setAttribute("aria-pressed", "true");
+  $("#e-completo").setAttribute("aria-pressed", "false");
+  $("#escopo-hint").textContent = "Só o necessário para monitorar. O prontuário estruturado fica para depois do piloto.";
+  render();
+});
+$("#e-completo").addEventListener("click", function(){
+  enxuto = false;
+  $("#e-enxuto").setAttribute("aria-pressed", "false");
+  $("#e-completo").setAttribute("aria-pressed", "true");
+  $("#escopo-hint").textContent = "Fases 0, 1 e 2 da proposta, na ordem original — prontuário antes do monitoramento.";
+  render();
+});
+["hs","med-hs","fator","ferias"].forEach(function(id){
+  document.getElementById(id).addEventListener("input", render);
+});
+
+var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+var SUN  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+var mq = window.matchMedia("(prefers-color-scheme: dark)");
+function isDark(){ var d = document.documentElement.dataset.theme; return d ? d === "dark" : mq.matches; }
+function paint(){ $("#tico").innerHTML = isDark() ? SUN : MOON; }
+$("#tbtn").addEventListener("click", function(){
+  document.documentElement.dataset.theme = isDark() ? "light" : "dark";
+  paint();
+});
+mq.addEventListener("change", paint);
+paint();
+render();
+</script>
