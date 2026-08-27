@@ -201,9 +201,9 @@ footer{padding:30px 0 50px;font-size:12px;color:var(--muted);line-height:1.7}
 
       <div class="ctrl-t" style="padding-top:4px">Sua disponibilidade</div>
       <div class="fld">
-        <label for="hs">Horas por semana <b id="v-hs">15 h</b></label>
-        <input type="range" id="hs" min="4" max="45" step="1" value="15">
-        <span class="hint">Horas de trabalho focado, não horas sentado.</span>
+        <label for="hs">Horas por semana <b id="v-hs">16 h</b></label>
+        <input type="range" id="hs" min="4" max="45" step="1" value="16">
+        <span class="hint">A realidade hoje é 2 a 3 h por dia útil mais 4 h no fim de semana — entre 14 e 19 h. Horas de trabalho focado, não horas sentado.</span>
       </div>
 
       <div class="fld">
@@ -213,9 +213,9 @@ footer{padding:30px 0 50px;font-size:12px;color:var(--muted);line-height:1.7}
 
       <div class="ctrl-t" style="padding-top:4px">Realismo</div>
       <div class="fld">
-        <label for="fator">Margem sobre a estimativa <b id="v-fator">30%</b></label>
-        <input type="range" id="fator" min="0" max="100" step="5" value="30">
-        <span class="hint">Estimativa de software erra para baixo por padrão. 30% é conservador; 0% assume que nada dá errado.</span>
+        <label for="fator">Margem sobre a estimativa <b id="v-fator">40%</b></label>
+        <input type="range" id="fator" min="0" max="100" step="5" value="40">
+        <span class="hint">30% cobre erro de estimativa. Os 40% incluem o custo de retomar o problema em blocos de duas horas, à noite, depois de um dia inteiro de trabalho.</span>
       </div>
 
       <div class="fld">
@@ -294,6 +294,15 @@ footer{padding:30px 0 50px;font-size:12px;color:var(--muted);line-height:1.7}
     <li><strong>Assume uma pessoa só programando.</strong> Somar gente não divide o prazo proporcionalmente, e neste tamanho de projeto a coordenação provavelmente custaria mais do que economizaria.</li>
     <li><strong>As quatro semanas de piloto estão dentro da conta</strong>, com horas reservadas para ajuste durante a execução — porque é ali que aparece o que nenhuma especificação previu.</li>
     <li><strong>Não inclui a curadoria dos 200 a 300 casos</strong> do acervo. Aquilo é Fase 3 e não bloqueia o piloto.</li>
+  </ul>
+
+  <h3>Este projeto é feito fora do horário comercial</h3>
+  <p>A engenharia acontece em <strong>2 a 3 horas por dia útil, à noite, mais cerca de 4 horas no fim de semana</strong> — entre 14 e 19 horas por semana, ao lado de um emprego integral. Isso não é detalhe de agenda: muda o que dá para prometer e como o trabalho deve ser organizado.</p>
+  <ul>
+    <li><strong>Hora fragmentada rende menos que hora contínua.</strong> Toda sessão de duas horas começa com dez a vinte minutos recarregando o contexto do problema. É por isso que a margem padrão aqui é 40% e não 30% — a diferença é justamente esse atrito.</li>
+    <li><strong>O bloco do fim de semana é o mais valioso.</strong> Quatro horas seguidas resolvem o que quinze minutos por noite não resolvem: arquitetura, depuração difícil, decisão estrutural. Tarefa pequena e bem definida é que rende à noite.</li>
+    <li><strong>Sete meses de noites e fins de semana é maratona, não arranque.</strong> As semanas perdidas no controle ao lado existem para isso, e três ou quatro é mais realista que duas num período desse tamanho.</li>
+    <li><strong>Quem contratar precisa saber disso antes de assinar.</strong> Prazo aqui é consequência de horas disponíveis, não promessa de data. Contrato com data fixa e multa por atraso não cabe neste arranjo.</li>
   </ul>
 
   <div class="call w"><span class="ic">HONESTIDADE</span>
