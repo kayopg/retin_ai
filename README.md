@@ -11,6 +11,7 @@ e base de conhecimento anonimizada.
 | `docs/proposta.html` | Proposta de software — problema, módulos, LGPD, regulatório, arquitetura, roadmap, riscos e decisões abertas |
 | `docs/apresentacao.html` | Apresentação em 24 slides da mesma proposta, em linguagem simples, para apresentar ao médico |
 | `docs/logo.html` | Quatro propostas de logomarca, com prós, contras e comportamento em escala |
+| `docs/custos.html` | Calculadora do custo operacional do piloto, com premissas ajustáveis |
 | `prototipo/index.html` | Protótipo navegável de 9 telas, arquivo único, sem dependências além do Google Fonts |
 
 Todos são HTML autocontidos: basta abrir no navegador.
@@ -20,6 +21,7 @@ Todos são HTML autocontidos: basta abrir no navegador.
 - Proposta — <https://claude.ai/code/artifact/e4c0ba7f-7134-445e-84a7-ddb296f2f386>
 - Apresentação — <https://claude.ai/code/artifact/ef1191c4-9ffa-4d93-b56e-d3940ecb94bd>
 - Marca — <https://claude.ai/code/artifact/299cac32-7ecd-43fb-8e55-d102aefabfbd>
+- Custos — <https://claude.ai/code/artifact/66545bef-0a89-4e3a-a6b9-c6bfc0865685>
 - Protótipo — <https://claude.ai/code/artifact/ff86657a-da29-4bd1-9e90-6e0635ecfe36>
 
 ## Apresentação — atalhos

@@ -1,0 +1,620 @@
+<title>Custo operacional do piloto</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#F1F4FA; --paper:#FFFFFF; --paper-2:#F7F9FD; --paper-3:#E7ECF7;
+  --line:#D6DEEC; --line-soft:#E7ECF6;
+  --ink:#0E1626; --ink-2:#37435A; --muted:#69758A;
+  --brand:#2F5BD8; --brand-soft:#E5EBFB; --brand-line:#BCCBF4;
+  --crit:#BE3247; --crit-soft:#FBE6EA; --crit-line:#F0C0C9;
+  --warn:#8F5A05; --warn-soft:#FAEFD8; --warn-line:#EBD1A0;
+  --ok:#06735C;   --ok-soft:#DCF1EB;   --ok-line:#ABDACE;
+  --ai:#5C3CBE;   --ai-soft:#EAE5FB;   --ai-line:#CBBCF2;
+  --sh:0 1px 2px rgba(14,22,38,.05), 0 12px 30px -20px rgba(14,22,38,.3);
+  --f-d:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-s:"IBM Plex Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+    --line:#26324F; --line-soft:#1B2540;
+    --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+    --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+    --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+    --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+    --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+    --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+    --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+  --line:#26324F; --line-soft:#1B2540;
+  --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+  --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+  --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+  --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+  --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+  --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+  --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-s);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+.mast{padding:50px 0 28px;border-bottom:1px solid var(--line)}
+.brandline{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+.brandline svg{width:32px;height:32px;color:var(--brand);flex-shrink:0}
+.brandline b{font-size:19px;font-weight:700;letter-spacing:-.035em}
+.brandline b i{font-style:normal;color:var(--brand)}
+.eyebrow{font-family:var(--f-m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
+h1{font-family:var(--f-d);font-weight:400;font-size:clamp(34px,5.6vw,54px);line-height:1.02;letter-spacing:-.025em;margin:16px 0 0;text-wrap:balance}
+h1 em{font-style:italic;color:var(--brand)}
+.lede{font-size:clamp(15px,1.9vw,18px);line-height:1.6;color:var(--ink-2);margin-top:16px;max-width:44em;text-wrap:pretty}
+
+section{padding:38px 0;border-bottom:1px solid var(--line-soft)}
+section:last-of-type{border-bottom:0}
+.sec-n{font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);letter-spacing:.1em}
+h2{font-family:var(--f-d);font-weight:400;font-size:clamp(23px,3.2vw,32px);line-height:1.12;letter-spacing:-.02em;margin:8px 0 0;text-wrap:balance}
+h3{font-size:14.5px;font-weight:600;margin:26px 0 8px;letter-spacing:-.01em}
+p{margin:14px 0;max-width:68ch;text-wrap:pretty}
+strong{font-weight:600;color:var(--ink)}
+ul{margin:14px 0;padding:0;list-style:none;max-width:68ch;display:flex;flex-direction:column;gap:7px}
+li{padding-left:19px;position:relative}
+li::before{content:"";position:absolute;left:3px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.6}
+.num{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+
+/* ── RESULTADO ── */
+.totals{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0 0}
+@media (max-width:720px){.totals{grid-template-columns:1fr}}
+.tot{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--sh)}
+.tot.hero{border-left:3px solid var(--brand)}
+.tot.once{border-left:3px solid var(--crit)}
+.tot-l{font-family:var(--f-m);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tot-v{font-family:var(--f-m);font-size:clamp(30px,4.6vw,44px);font-weight:600;letter-spacing:-.045em;line-height:1.05;margin-top:7px;font-variant-numeric:tabular-nums}
+.tot.hero .tot-v{color:var(--brand)}
+.tot.once .tot-v{color:var(--crit)}
+.tot-s{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.45}
+
+/* ── PAINEL ── */
+.panel{display:grid;grid-template-columns:300px minmax(0,1fr);gap:26px;align-items:start;margin-top:24px}
+@media (max-width:900px){.panel{grid-template-columns:minmax(0,1fr)}}
+.panel > *{min-width:0}
+.ctrl{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:16px;min-width:0}
+@media (min-width:901px){.ctrl{position:sticky;top:20px}}
+.ctrl-t{font-family:var(--f-m);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:1px solid var(--line-soft)}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld label{font-size:12.5px;font-weight:500;color:var(--ink-2);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.fld label b{font-family:var(--f-m);font-size:13px;font-weight:600;color:var(--brand);font-variant-numeric:tabular-nums}
+.fld .hint{font-size:11px;color:var(--muted);line-height:1.4}
+input[type=range]{width:100%;accent-color:var(--brand);height:20px;cursor:pointer}
+select,input[type=number]{width:100%;max-width:100%;min-width:0;background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-family:var(--f-m);font-size:12.5px;color:var(--ink);cursor:pointer}
+.fld,.fld label{min-width:0}
+.fld label{flex-wrap:wrap}
+select:hover,input[type=number]:hover{border-color:var(--brand-line)}
+.sw{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-2);cursor:pointer;user-select:none}
+.sw input{accent-color:var(--brand);width:15px;height:15px;cursor:pointer}
+.reset{font-family:var(--f-m);font-size:11px;color:var(--muted);background:none;border:1px solid var(--line);border-radius:7px;padding:6px;cursor:pointer;width:100%}
+.reset:hover{border-color:var(--brand-line);color:var(--brand)}
+
+/* ── TABELA ── */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:var(--paper);box-shadow:var(--sh)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:540px}
+th{text-align:left;font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:10px 14px;background:var(--paper-2);border-bottom:1px solid var(--line);white-space:nowrap}
+th.r,td.r{text-align:right}
+td{padding:10px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.5;color:var(--ink-2)}
+tr:last-child td{border-bottom:0}
+td b{color:var(--ink);font-weight:600}
+td small{display:block;font-size:11.5px;color:var(--muted);line-height:1.4;margin-top:2px}
+tfoot td{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:0;font-weight:600;color:var(--ink)}
+.share{display:block;height:5px;border-radius:3px;background:var(--brand);opacity:.75;min-width:2px;margin-top:5px}
+.share.ai{background:var(--ai)}
+.share.ok{background:var(--ok)}
+.share.warn{background:var(--warn)}
+.share.crit{background:var(--crit)}
+.tag{display:inline-flex;align-items:center;font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--paper-3);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.tag.b{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
+.tag.o{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-line)}
+.tag.w{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+.tag.c{background:var(--crit-soft);color:var(--crit);border-color:var(--crit-line)}
+.tag.a{background:var(--ai-soft);color:var(--ai);border-color:var(--ai-line)}
+
+.call{border:1px solid var(--brand-line);background:var(--brand-soft);border-radius:12px;padding:15px 17px;margin:20px 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 12px;align-items:start}
+.call .ic{font-family:var(--f-m);font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px;margin-top:2px;background:var(--brand);color:var(--bg);letter-spacing:.04em;white-space:nowrap}
+.call p{grid-column:2;margin:0;font-size:13.5px;line-height:1.6;max-width:none;color:var(--ink-2)}
+.call p+p{margin-top:8px}
+.call.w{border-color:var(--warn-line);background:var(--warn-soft)}
+.call.w .ic{background:var(--warn)}
+.call.o{border-color:var(--ok-line);background:var(--ok-soft)}
+.call.o .ic{background:var(--ok)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:20px 0}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:16px 18px;box-shadow:var(--sh)}
+.card h4{font-size:13.5px;font-weight:600;margin-bottom:6px}
+.card p{font-size:13px;margin:6px 0 0;color:var(--ink-2);max-width:none}
+
+.tbtn{position:fixed;right:14px;bottom:14px;z-index:20;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;box-shadow:var(--sh);display:grid;place-items:center}
+.tbtn:hover{border-color:var(--brand-line);color:var(--brand)}
+footer{padding:30px 0 50px;font-size:12px;color:var(--muted);line-height:1.7}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="logo" viewBox="0 0 48 48">
+    <g transform="translate(24 24) scale(1.14) translate(-22 -24)">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <path d="M28 18C21 10.5 14.5 8 6.5 8.5" stroke-width="4.2"/>
+        <path d="M28 30C21 37.5 14.5 40 6.5 39.5" stroke-width="4.2"/>
+        <path d="M23.5 15C19 13 14 12.8 9.5 14" stroke-width="2.4"/>
+      </g>
+      <circle cx="31" cy="24" r="8.6" fill="currentColor"/>
+    </g>
+  </symbol>
+</defs></svg>
+
+<div class="wrap">
+<header class="mast">
+  <div class="brandline"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#logo"/></svg><b>Retin<i>AI</i></b></div>
+  <div class="eyebrow">Etapa 1 · piloto sem comercialização</div>
+  <h1>Quanto custa <em>manter isso no ar</em></h1>
+  <p class="lede">Os volumes são estimativa — quantidade de mensagem e de token depende de como o paciente responde. Então os números abaixo são calculados, não fixos: mexa nas premissas à esquerda e a conta refaz. O que não muda é a forma da conta, e é ela que responde a pergunta.</p>
+</header>
+
+<section>
+  <div class="sec-n">01</div>
+  <h2>A conta do mês</h2>
+
+  <div class="totals">
+    <div class="tot hero">
+      <div class="tot-l">Recorrente por mês</div>
+      <div class="tot-v" id="t-mes">—</div>
+      <div class="tot-s" id="t-mes-s">—</div>
+    </div>
+    <div class="tot once">
+      <div class="tot-l">Uma vez, antes de começar</div>
+      <div class="tot-v" id="t-once">—</div>
+      <div class="tot-s">Parecer regulatório e jurídico — a seção 04 detalha</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ctrl">
+      <div class="ctrl-t">Premissas</div>
+
+      <div class="fld">
+        <label for="pac">Pacientes em acompanhamento <b id="v-pac">25</b></label>
+        <input type="range" id="pac" min="5" max="80" step="1" value="25">
+      </div>
+
+      <div class="fld">
+        <label for="dias">Uma interação a cada <b id="v-dias">2 dias</b></label>
+        <input type="range" id="dias" min="1" max="7" step="1" value="2">
+      </div>
+
+      <div class="fld">
+        <label for="resp">Taxa de resposta do paciente <b id="v-resp">80%</b></label>
+        <input type="range" id="resp" min="20" max="100" step="5" value="80">
+        <span class="hint">Só a resposta que chega gera triagem de IA.</span>
+      </div>
+
+      <div class="fld">
+        <label for="cons">Consultas por paciente/mês <b id="v-cons">1,2</b></label>
+        <input type="range" id="cons" min="2" max="30" step="1" value="12">
+        <span class="hint">Cada consulta gera prontuário e conferência de histórico.</span>
+      </div>
+
+      <div class="fld">
+        <label for="acervo">Consultas ao acervo por mês <b id="v-acervo">20</b></label>
+        <input type="range" id="acervo" min="0" max="120" step="5" value="20">
+      </div>
+
+      <div class="ctrl-t" style="padding-top:4px">Modelo por tarefa</div>
+      <div class="fld">
+        <label for="m-triagem">Triagem da resposta</label>
+        <select id="m-triagem"><option value="haiku" selected>Haiku 4.5 — US$1 / US$5</option><option value="sonnet">Sonnet 5 — US$2 / US$10</option><option value="opus">Opus 5 — US$5 / US$25</option></select>
+      </div>
+      <div class="fld">
+        <label for="m-prontuario">Prontuário e histórico</label>
+        <select id="m-prontuario"><option value="haiku">Haiku 4.5 — US$1 / US$5</option><option value="sonnet" selected>Sonnet 5 — US$2 / US$10</option><option value="opus">Opus 5 — US$5 / US$25</option></select>
+      </div>
+      <div class="fld">
+        <label for="m-acervo">Consulta ao acervo</label>
+        <select id="m-acervo"><option value="haiku">Haiku 4.5 — US$1 / US$5</option><option value="sonnet">Sonnet 5 — US$2 / US$10</option><option value="opus" selected>Opus 5 — US$5 / US$25</option></select>
+      </div>
+
+      <label class="sw"><input type="checkbox" id="cache" checked> Cache de prompt ligado</label>
+      <label class="sw"><input type="checkbox" id="batch"> Batch API no que não é urgente</label>
+
+      <div class="ctrl-t" style="padding-top:4px">Preços que mudam</div>
+      <div class="fld">
+        <label for="cambio">Real por dólar</label>
+        <input type="number" id="cambio" min="1" max="15" step="0.05" value="5.40">
+      </div>
+      <div class="fld">
+        <label for="wpp">US$ por mensagem de utilidade</label>
+        <input type="number" id="wpp" min="0" max="0.2" step="0.0001" value="0.0068">
+        <span class="hint">Brasil. A Meta reajusta por país e tem faixas por volume — confirme na tabela vigente.</span>
+      </div>
+
+      <button class="reset" id="reset">Voltar às premissas iniciais</button>
+    </div>
+
+    <div>
+      <div class="tw"><table>
+        <thead><tr><th>Item</th><th>Volume no mês</th><th class="r">US$</th><th class="r">R$</th></tr></thead>
+        <tbody id="linhas"></tbody>
+        <tfoot><tr><td colspan="2">Total recorrente</td><td class="r num" id="f-usd">—</td><td class="r num" id="f-brl">—</td></tr></tfoot>
+      </table></div>
+
+      <div class="call o" id="porpac"><span class="ic">O NÚMERO</span>
+        <p>Custo por paciente monitorado, por mês: <strong class="num" id="ppp">—</strong>. É este o número que faltava para fechar o preço na seção 12 da proposta — o Cenário B cobra por faixa de pacientes, e uma faixa só faz sentido depois de saber quanto custa servir um.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">02</div>
+  <h2>Onde os tokens são gastos</h2>
+  <p>Quatro tipos de chamada, cada uma com um perfil de tamanho diferente. A triagem é a mais frequente e a mais barata; a consulta ao acervo é rara e cara, porque carrega os casos recuperados junto com a pergunta.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Chamada</th><th class="r">Vezes/mês</th><th class="r">Entrada</th><th class="r">Saída</th><th>Modelo</th><th class="r">US$/mês</th></tr></thead>
+    <tbody id="ia-linhas"></tbody>
+    <tfoot><tr><td colspan="5">Total de IA</td><td class="r num" id="ia-total">—</td></tr></tfoot>
+  </table></div>
+
+  <div class="call"><span class="ic">CACHE</span>
+    <p>O protocolo, as regras de alarme e as instruções do sistema são idênticos em toda triagem. Marcados como cache, custam <strong>0,1× do preço de entrada</strong> na leitura em vez de 1×, com uma gravação a 1,25× de tempos em tempos.</p>
+    <p>Com os volumes atuais isso corta a entrada da triagem em cerca de <strong class="num" id="eco-cache">—</strong> por mês. Parece pouco agora — em 500 pacientes vira a diferença entre trivial e visível, e a decisão de arquitetura é a mesma.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">03</div>
+  <h2>As mensagens do WhatsApp</h2>
+  <p>Surgiu a informação de que mensagem de saúde custaria menos. Fui conferir na documentação da Meta: <strong>não existe desconto por área de atuação.</strong> O preço varia por categoria da mensagem, país do destinatário e volume mensal — e só por isso.</p>
+  <p>Mas a informação tem fundo verdadeiro, por dois outros caminhos. E um deles eu estava calculando errado até agora.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Categoria</th><th>Quando é cobrada</th><th>No nosso caso</th></tr></thead>
+    <tbody>
+      <tr><td><b>Marketing</b></td><td>Sempre, em toda entrega</td><td><span class="tag">Não usamos</span> ~US$ 0,0625 no Brasil</td></tr>
+      <tr><td><b>Utilidade</b></td><td>Só quando enviada <em>fora</em> da janela de atendimento</td><td><span class="tag b">É o nosso caso</span> ~US$ 0,0068 no Brasil</td></tr>
+      <tr><td><b>Autenticação</b></td><td>Só fora da janela de atendimento</td><td><span class="tag">Não usamos</span></td></tr>
+      <tr><td><b>Resposta do paciente e qualquer mensagem dentro da janela</b></td><td><b>Nunca</b></td><td><span class="tag o">Grátis</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call o"><span class="ic">É VERDADE</span>
+    <p><strong>1. A categoria, não a indústria.</strong> Orientação de pós-operatório é <em>utilidade</em>, e utilidade custa cerca de <strong>nove vezes menos que marketing</strong> no Brasil. Quem comparou os dois viu “saúde paga menos” — e o que estava vendo era a categoria, que qualquer setor consegue se a mensagem for de fato utilitária.</p>
+    <p><strong>2. A janela de 24 horas.</strong> Quando o paciente responde, abre uma janela de atendimento; dentro dela <strong>tudo que enviamos é de graça</strong>, inclusive modelo de utilidade. Nosso protocolo é feito de perguntas que pedem resposta — então boa parte da conversa cai justamente aí.</p>
+  </div>
+
+  <div class="call w"><span class="ic">EU ERREI</span>
+    <p>Na primeira versão desta página eu cobrava <em>toda</em> mensagem a US$ 0,008 e ignorava a janela gratuita. Agora o cálculo usa <strong>US$ 0,0068</strong> e separa o que é cobrado do que é grátis — a linha de WhatsApp na seção 01 mostra os dois.</p>
+    <p>Some-se a isso as <strong>faixas por volume</strong>: utilidade e autenticação ficam progressivamente mais baratas conforme o volume do mês, por país e categoria, com contador que zera todo mês. No piloto ficamos na faixa mais cara de todas — ao escalar, o preço unitário cai sozinho.</p>
+  </div>
+
+  <p>A conclusão prática não muda: mesmo na faixa mais cara e sem nenhum desconto, o WhatsApp é a menor linha da conta. O que muda é a confiança no número — e o fato de que, ao escalar, esta linha cresce mais devagar do que o número de pacientes sugere.</p>
+</section>
+
+<section>
+  <div class="sec-n">04</div>
+  <h2>Conta na Anthropic</h2>
+  <p>Isso costuma gerar confusão, então vale separar antes de mais nada: <strong>a assinatura do Claude e o acesso à API são produtos diferentes e cobrados à parte.</strong> Uma não dá crédito na outra.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h4><span class="tag b">Precisamos</span> Conta de API</h4>
+      <p>Abrir é grátis e não tem mensalidade — paga-se só o que se consome, com crédito pré-pago. A compra mínima costuma ser de US$5 e o saldo não expira.</p>
+      <p>Os limites de requisição por minuto sobem por faixa, conforme o gasto acumulado. No volume do piloto a primeira faixa sobra.</p>
+    </div>
+    <div class="card">
+      <h4><span class="tag">Opcional</span> Assinatura Claude</h4>
+      <p>Claude Pro ou Max é para uso pessoal no claude.ai e no Claude Code. <strong>Não gera crédito de API</strong> e não substitui a conta acima.</p>
+      <p>Faz sentido como ferramenta de desenvolvimento minha, não como custo do produto — e por isso está fora da conta da seção 01.</p>
+    </div>
+  </div>
+
+  <h3>Dois botões que mudam a conta</h3>
+  <ul>
+    <li><strong>Batch API — metade do preço.</strong> Vale para tudo que não precisa de resposta imediata: carga inicial do acervo, reprocessamento noturno, re-cálculo de risco em lote. Não serve para triagem de sinal de alarme, que é o oposto de assíncrono.</li>
+    <li><strong>Cache de prompt — 0,1× na leitura.</strong> Já está ligado no cálculo. Exige que o prefixo seja byte-a-byte idêntico entre chamadas, o que é uma restrição de engenharia, não uma configuração.</li>
+  </ul>
+
+  <div class="call w"><span class="ic">VERIFICAR</span>
+    <p>Antes de mandar qualquer dado de paciente: conferir a política de retenção de dados da conta e avaliar pedir <strong>retenção zero</strong>. Isso não é linha de custo, é pré-requisito da seção 06 da proposta — e some da conversa se ninguém levantar agora.</p>
+    <p>Vale o mesmo para a Meta: a integração do WhatsApp exige CNPJ e verificação de negócio antes de sair do sandbox. Grátis, mas leva alguns dias.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">05</div>
+  <h2>O que realmente custa</h2>
+  <p>Aqui está a conclusão desconfortável do exercício: a infraestrutura toda do piloto custa menos que uma consulta particular. O dinheiro do projeto não está no servidor.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Custo único, antes da Fase 1</th><th>Por quê</th><th class="r">R$</th></tr></thead>
+    <tbody>
+      <tr><td><b>Parecer regulatório</b> <span class="tag c">Crítico</span><small>Enquadramento do módulo de imagem na ANVISA</small></td><td>É o maior risco do projeto e o único que invalida trabalho já feito. Contratar na Fase 0, não depois</td><td class="r num">8.000 a 25.000</td></tr>
+      <tr><td><b>Assessoria jurídica LGPD</b> <span class="tag c">Crítico</span><small>Termos de consentimento, contrato de operador</small></td><td>Define se o acervo pode ser comum entre clínicas — a decisão D4</td><td class="r num">5.000 a 15.000</td></tr>
+      <tr><td><b>Certificado ICP-Brasil</b><small>e-CNPJ A1, renovação anual</small></td><td>Assinatura do prontuário com validade legal</td><td class="r num">250 / ano</td></tr>
+      <tr><td><b>Registro de domínio</b><small>.com.br no Registro.br</small></td><td>Endereço próprio. DNS e certificado TLS saem de graça</td><td class="r num">40 / ano</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call"><span class="ic">A PROPORÇÃO</span>
+    <p>Com as premissas iniciais, o piloto roda por <strong class="num" id="prop-a">—</strong> por mês. Só o parecer regulatório, no piso da faixa, equivale a <strong class="num" id="prop-b">—</strong> de operação.</p>
+    <p>Isso tem uma consequência prática de planejamento: <strong>não vale gastar tempo otimizando infraestrutura nesta etapa.</strong> Escolher o banco mais barato economiza dezenas de reais por mês num projeto cuja próxima decisão custa cinco dígitos. O tempo rende mais no piloto e no parecer.</p>
+  </div>
+
+  <h3>Fora da conta, mas na sua mesa</h3>
+  <p>Se abrirem CNPJ para o projeto, entram contabilidade (algo entre R$ 300 e R$ 600 por mês) e os impostos do regime escolhido. Não incluí porque depende da estrutura societária — que é a decisão D5 — mas é o item que, hoje, provavelmente supera todo o resto somado.</p>
+</section>
+
+<section>
+  <div class="sec-n">06</div>
+  <h2>O que muda quando escalar</h2>
+  <p>O piloto não responde sozinho a pergunta do preço, porque quase tudo nele é custo fixo diluído em pouca gente. Estes são os mesmos cálculos em outras escalas, mantendo as demais premissas.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Pacientes</th><th class="r">Infra R$</th><th class="r">IA + WhatsApp R$</th><th class="r">Total R$</th><th class="r">Por paciente</th></tr></thead>
+    <tbody id="escala"></tbody>
+  </table></div>
+
+  <p>A leitura importante é a última coluna. O custo por paciente <strong>despenca no começo e vai achatando</strong> — os saltos entre as faixas encolhem a cada degrau, porque o fixo se dilui até o variável dominar. Note que ele ainda está caindo em 2.000: não há platô nesta faixa, só uma curva que perde inclinação.</p>
+  <p>Isso tem uma implicação direta para o preço: <strong>o número do piloto é o pior número possível para ancorar a faixa do Cenário B.</strong> Ele carrega o fixo inteiro sobre 25 pessoas. Precificar por ele significa cobrar caro demais para entrar e barato demais para escalar.</p>
+
+  <div class="call w"><span class="ic">CUIDADO</span>
+    <p>Esta projeção assume infraestrutura crescendo em degraus modestos, o que é honesto até uns 500 pacientes e otimista depois. Acima disso entram réplica de banco, fila dedicada, e principalmente <strong>armazenamento de imagem com guarda de 20 anos</strong> — que só acumula e nunca diminui.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">07</div>
+  <h2>Premissas e o que conferir</h2>
+  <p>Nada aqui é cotação. São valores de tabela pública que eu conheço, e todos precisam ser confirmados antes de virar orçamento.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Premissa</th><th>Valor usado</th><th>Confiança</th></tr></thead>
+    <tbody>
+      <tr><td>Preço por token dos modelos Claude</td><td class="num">US$1/5, US$2/10, US$5/25 por milhão</td><td><span class="tag o">Alta</span></td></tr>
+      <tr><td>Desconto de cache e de lote</td><td class="num">0,1× leitura · 1,25× gravação · 50% lote</td><td><span class="tag o">Alta</span></td></tr>
+      <tr><td>Mensagem de utilidade no WhatsApp, Brasil</td><td class="num">US$ 0,0068</td><td><span class="tag o">Alta</span> — conferido na Meta; faixas por volume derrubam mais</td></tr>
+      <tr><td>Tamanho médio de cada chamada de IA</td><td>Estimado por tipo de tarefa</td><td><span class="tag w">Média</span> — medir no piloto</td></tr>
+      <tr><td>Banco gerenciado com backup</td><td class="num">US$ 25</td><td><span class="tag w">Média</span> — varia por provedor</td></tr>
+      <tr><td>Parecer regulatório e jurídico</td><td class="num">R$ 13.000 a 40.000</td><td><span class="tag c">Baixa</span> — pedir três propostas</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call o"><span class="ic">DO PILOTO</span>
+    <p>A linha de menor confiança que dá para resolver sozinho é o tamanho das chamadas de IA. Instrumentar o consumo de token desde a primeira semana da Fase 2 troca a estimativa por medição — e é o que transforma esta página de estimativa em orçamento.</p>
+  </div>
+</section>
+
+<footer>
+  <p style="max-width:68ch;margin:0">Estimativa de custo operacional do piloto · agosto de 2026 · Ari Gomes. Preços de tabela pública consultados nesta data; câmbio e cotações precisam de confirmação antes de virar compromisso.</p>
+</footer>
+</div>
+
+<button class="tbtn" id="tbtn" title="Alternar tema" aria-label="Alternar tema claro e escuro">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" id="tico"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+</button>
+
+<script>
+document.documentElement.lang = "pt-BR";
+
+/* ── preços de tabela (US$ por milhão de tokens) ── */
+var MODELOS = {
+  haiku:  { nome: "Haiku 4.5", ent: 1.00, sai: 5.00 },
+  sonnet: { nome: "Sonnet 5",  ent: 2.00, sai: 10.00 },
+  opus:   { nome: "Opus 5",    ent: 5.00, sai: 25.00 }
+};
+var CACHE_LEITURA = 0.10, CACHE_GRAVACAO = 1.25, TAXA_GRAVACAO = 0.05, DESC_LOTE = 0.50;
+
+/* ── perfil de tokens por tipo de chamada ── */
+var CHAMADAS = [
+  { id:"triagem",     rot:"Triagem da resposta do paciente", nota:"Classifica o relato, checa sinais de alarme, recalcula a nota de risco", pre:2000, ent:400,  sai:250,  modelo:"m-triagem",    lote:false },
+  { id:"prontuario",  rot:"Prontuário estruturado",          nota:"Organiza a anotação da consulta em blocos e levanta hipóteses",         pre:1500, ent:3500, sai:1400, modelo:"m-prontuario", lote:false },
+  { id:"divergencia", rot:"Conferência com o histórico",     nota:"Compara os achados de hoje com os registros anteriores",                pre:1200, ent:3000, sai:400,  modelo:"m-prontuario", lote:true  },
+  { id:"acervo",      rot:"Consulta ao acervo",              nota:"Recupera casos parecidos e responde citando quais usou",                pre:1000, ent:9000, sai:900,  modelo:"m-acervo",     lote:false }
+];
+
+var INFRA = [
+  { rot:"Banco de dados gerenciado", nota:"PostgreSQL com busca vetorial, backup diário e retenção de ponto no tempo", usd:25, esc:function(p){ return p<=60?25:(p<=200?60:(p<=800?190:520)); } },
+  { rot:"Hospedagem da aplicação",   nota:"Servidor da API e dos processos de agendamento das mensagens",              usd:15, esc:function(p){ return p<=60?15:(p<=200?45:(p<=800?150:480)); } },
+  { rot:"Armazenamento de imagem",   nota:"Retinografias e OCT, sem custo de saída de dados",                          usd:1,  esc:function(p){ return Math.max(1, p*0.04); } },
+  { rot:"Vídeo de teleconsulta",     nota:"Dentro da faixa gratuita no volume do piloto",                              usd:0,  esc:function(p){ return p<=60?0:(p<=200?15:(p<=800?70:260)); } },
+  { rot:"E-mail, monitoramento e backup externo", nota:"Faixa gratuita nos três no volume do piloto",                  usd:1,  esc:function(p){ return p<=60?1:(p<=200?10:(p<=800?35:90)); } }
+];
+
+var DOMINIO_ANO = 40, CERT_ANO = 250;
+var PADRAO = { pac:25, dias:2, resp:80, cons:12, acervo:20, cambio:5.40, wpp:0.0068, cache:true, batch:false,
+               "m-triagem":"haiku", "m-prontuario":"sonnet", "m-acervo":"opus" };
+
+var $ = function(s){ return document.querySelector(s); };
+var brl = function(v){ return "R$ " + v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2}); };
+var usd = function(v){ return "US$ " + v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2}); };
+var n0  = function(v){ return Math.round(v).toLocaleString("pt-BR"); };
+
+function lerControles(){
+  return {
+    pac: +$("#pac").value,
+    dias: +$("#dias").value,
+    resp: +$("#resp").value / 100,
+    cons: +$("#cons").value / 10,
+    acervo: +$("#acervo").value,
+    cambio: +$("#cambio").value || 5.40,
+    wpp: +$("#wpp").value || 0,
+    cache: $("#cache").checked,
+    batch: $("#batch").checked,
+    modelos: { "m-triagem": $("#m-triagem").value, "m-prontuario": $("#m-prontuario").value, "m-acervo": $("#m-acervo").value }
+  };
+}
+
+/* custo de uma chamada, em US$ */
+function custoChamada(c, chave, cfg){
+  var m = MODELOS[chave];
+  var entrada;
+  if(cfg.cache){
+    entrada = (c.pre * CACHE_LEITURA + c.pre * CACHE_GRAVACAO * TAXA_GRAVACAO + c.ent) * m.ent / 1e6;
+  } else {
+    entrada = (c.pre + c.ent) * m.ent / 1e6;
+  }
+  var saida = c.sai * m.sai / 1e6;
+  var total = entrada + saida;
+  if(cfg.batch && c.lote) total *= DESC_LOTE;
+  return total;
+}
+
+function volumes(cfg){
+  var checkins = cfg.pac * (30 / cfg.dias);
+  return {
+    checkins: checkins,
+    triagem: checkins * cfg.resp,
+    prontuario: cfg.pac * cfg.cons,
+    divergencia: cfg.pac * cfg.cons,
+    acervo: cfg.acervo
+  };
+}
+
+function custoIA(cfg){
+  var v = volumes(cfg), total = 0, linhas = [];
+  CHAMADAS.forEach(function(c){
+    var chave = cfg.modelos[c.modelo];
+    var unit = custoChamada(c, chave, cfg);
+    var qtd = v[c.id];
+    var sub = unit * qtd;
+    total += sub;
+    linhas.push({ c:c, chave:chave, qtd:qtd, sub:sub });
+  });
+  return { total: total, linhas: linhas, v: v };
+}
+
+function custoInfra(pac){
+  return INFRA.reduce(function(s, i){ return s + i.esc(pac); }, 0);
+}
+
+function calcular(cfg){
+  var ia = custoIA(cfg);
+  var v = ia.v;
+  var whats = v.checkins * cfg.wpp;
+  var infra = custoInfra(cfg.pac);
+  var dominio = (DOMINIO_ANO + CERT_ANO) / 12 / cfg.cambio;
+  var gratis = v.triagem * 2;
+  return { ia:ia, whats:whats, gratis:gratis, infra:infra, dominio:dominio, v:v,
+           totalUsd: ia.total + whats + infra + dominio };
+}
+
+function render(){
+  var cfg = lerControles();
+  var r = calcular(cfg);
+
+  $("#v-pac").textContent = cfg.pac;
+  $("#v-dias").textContent = cfg.dias + (cfg.dias === 1 ? " dia" : " dias");
+  $("#v-resp").textContent = Math.round(cfg.resp * 100) + "%";
+  $("#v-cons").textContent = cfg.cons.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+  $("#v-acervo").textContent = cfg.acervo;
+
+  var totalBrl = r.totalUsd * cfg.cambio;
+  $("#t-mes").textContent = brl(totalBrl);
+  $("#t-mes-s").textContent = usd(r.totalUsd) + " · " + n0(cfg.pac) + " pacientes · " + n0(r.v.checkins) + " mensagens cobradas, " + n0(r.gratis) + " grátis";
+  $("#t-once").textContent = "R$ 13 a 40 mil";
+
+  /* linhas principais */
+  var itens = [
+    { rot:"Infraestrutura", nota:"Banco, hospedagem, armazenamento, vídeo e monitoramento", vol:"fixo na faixa", usd:r.infra, cls:"" },
+    { rot:"Tokens de IA", nota:"Triagem, prontuário, conferência de histórico e acervo", vol:n0(r.v.triagem + r.v.prontuario + r.v.divergencia + r.v.acervo) + " chamadas", usd:r.ia.total, cls:"ai" },
+    { rot:"Mensagens de WhatsApp", nota:"Só o que a clínica inicia é cobrado — " + n0(r.gratis) + " mensagens dentro da janela de atendimento saem de graça", vol:n0(r.v.checkins) + " cobradas", usd:r.whats, cls:"ok" },
+    { rot:"Domínio e certificado digital", nota:"Anuidades diluídas por mês", vol:"anual", usd:r.dominio, cls:"warn" }
+  ];
+  var max = Math.max.apply(null, itens.map(function(i){ return i.usd; }));
+  $("#linhas").innerHTML = itens.map(function(i){
+    var pct = max > 0 ? Math.max(2, i.usd / max * 100) : 2;
+    return '<tr><td><b>' + i.rot + '</b><small>' + i.nota + '</small>' +
+           '<span class="share ' + i.cls + '" style="width:' + pct + '%"></span></td>' +
+           '<td class="num">' + i.vol + '</td>' +
+           '<td class="r num">' + i.usd.toFixed(2) + '</td>' +
+           '<td class="r num">' + (i.usd * cfg.cambio).toFixed(2) + '</td></tr>';
+  }).join("");
+  $("#f-usd").textContent = usd(r.totalUsd);
+  $("#f-brl").textContent = brl(totalBrl);
+
+  $("#ppp").textContent = brl(totalBrl / Math.max(1, cfg.pac)) + " por paciente/mês";
+
+  /* detalhamento de IA */
+  $("#ia-linhas").innerHTML = r.ia.linhas.map(function(l){
+    var tagCls = l.chave === "opus" ? "a" : (l.chave === "sonnet" ? "b" : "o");
+    var lote = (cfg.batch && l.c.lote) ? ' <span class="tag o">lote 50%</span>' : "";
+    return '<tr><td><b>' + l.c.rot + '</b><small>' + l.c.nota + '</small></td>' +
+           '<td class="r num">' + n0(l.qtd) + '</td>' +
+           '<td class="r num">' + n0((l.c.pre + l.c.ent) * l.qtd / 1000) + 'k</td>' +
+           '<td class="r num">' + n0(l.c.sai * l.qtd / 1000) + 'k</td>' +
+           '<td><span class="tag ' + tagCls + '">' + MODELOS[l.chave].nome + '</span>' + lote + '</td>' +
+           '<td class="r num">' + l.sub.toFixed(2) + '</td></tr>';
+  }).join("");
+  $("#ia-total").textContent = usd(r.ia.total);
+
+  /* economia do cache */
+  var semCache = calcular(Object.assign({}, cfg, { cache:false }));
+  var eco = (semCache.ia.total - r.ia.total) * cfg.cambio;
+  $("#eco-cache").textContent = cfg.cache ? brl(Math.max(0, eco)) : "R$ 0,00 (desligado)";
+
+  /* proporção */
+  $("#prop-a").textContent = brl(totalBrl);
+  $("#prop-b").textContent = n0(8000 / Math.max(1, totalBrl)) + " meses";
+
+  /* escala */
+  $("#escala").innerHTML = [25, 100, 500, 2000].map(function(p){
+    var c2 = Object.assign({}, cfg, { pac:p });
+    var r2 = calcular(c2);
+    var infraBrl = (r2.infra + r2.dominio) * cfg.cambio;
+    var varBrl = (r2.ia.total + r2.whats) * cfg.cambio;
+    var totBrl = r2.totalUsd * cfg.cambio;
+    var atual = p === 25 ? ' <span class="tag b">piloto</span>' : "";
+    return '<tr><td><b>' + n0(p) + '</b>' + atual + '</td>' +
+           '<td class="r num">' + n0(infraBrl) + '</td>' +
+           '<td class="r num">' + n0(varBrl) + '</td>' +
+           '<td class="r num">' + n0(totBrl) + '</td>' +
+           '<td class="r num"><b>' + brl(totBrl / p) + '</b></td></tr>';
+  }).join("");
+}
+
+/* ── eventos ── */
+["pac","dias","resp","cons","acervo","cambio","wpp","cache","batch","m-triagem","m-prontuario","m-acervo"].forEach(function(id){
+  var el = document.getElementById(id);
+  el.addEventListener("input", render);
+  el.addEventListener("change", render);
+});
+$("#reset").addEventListener("click", function(){
+  Object.keys(PADRAO).forEach(function(k){
+    var el = document.getElementById(k);
+    if(!el) return;
+    if(el.type === "checkbox") el.checked = PADRAO[k]; else el.value = PADRAO[k];
+  });
+  render();
+});
+
+/* ── tema ── */
+var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+var SUN  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+var mq = window.matchMedia("(prefers-color-scheme: dark)");
+function isDark(){ var d = document.documentElement.dataset.theme; return d ? d === "dark" : mq.matches; }
+function paint(){ $("#tico").innerHTML = isDark() ? SUN : MOON; }
+$("#tbtn").addEventListener("click", function(){
+  document.documentElement.dataset.theme = isDark() ? "light" : "dark";
+  paint();
+});
+mq.addEventListener("change", paint);
+paint();
+render();
+</script>
