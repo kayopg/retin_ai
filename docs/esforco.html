@@ -429,15 +429,15 @@ function render(){
   var g = $("#gargalo"), gp = $("#gargalo-p"), gi = $("#gargalo-ic");
   if(semMed > semEng){
     g.className = "call w"; gi.textContent = "GARGALO";
-    gp.innerHTML = "<strong>Quem trava o cronograma é a agenda do médico, não a sua.</strong> " +
-      "São " + n0(med) + " h dele a " + c.medHs + " h por semana, o que dá " + n0(semMed) + " semanas — contra " + n0(semEng) + " semanas suas. " +
-      "Programar mais horas por semana não adianta nada a partir daqui: o projeto anda no ritmo dele.";
+    gp.innerHTML = "<strong>Neste ritmo, quem determina a data são as horas clínicas.</strong> " +
+      "São " + n0(med) + " h a " + c.medHs + " h por semana, o que dá " + n0(semMed) + " semanas — contra " + n0(semEng) + " semanas de engenharia. " +
+      "A partir daqui, aumentar as horas de programação não antecipa a entrega; concentrar as horas clínicas no início, sim.";
   } else {
     var folga = c.medHs > 0 ? (med / semEng) : 0;
     g.className = "call o"; gi.textContent = "RITMO";
-    gp.innerHTML = "<strong>O cronograma está no seu ritmo</strong> — " + n0(semEng) + " semanas de engenharia contra " + n0(semMed) + " do médico. " +
-      "Ele precisa sustentar cerca de " + folga.toFixed(1).replace(".", ",") + " h por semana; acima disso a folga é dele. " +
-      "Se você subir para " + Math.min(45, c.hs + 10) + " h por semana, confira se ele acompanha — é o ponto onde o gargalo troca de lado.";
+    gp.innerHTML = "<strong>Neste ritmo, quem determina a data é a engenharia</strong> — " + n0(semEng) + " semanas, contra " + n0(semMed) + " das horas clínicas. " +
+      "O acompanhamento clínico precisa sustentar cerca de " + folga.toFixed(1).replace(".", ",") + " h por semana para não virar o fator limitante. " +
+      "Acima de " + Math.min(45, c.hs + 10) + " h por semana de programação, esse ponto se inverte.";
   }
 
   var a = somar(true), b = somar(false);
