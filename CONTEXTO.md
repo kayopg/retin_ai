@@ -141,7 +141,7 @@ a Fase 0 e não depende de nenhuma outra decisão estar fechada.
 
 ## Em aberto
 
-- **Modelo comercial entre os envolvidos.** Se o projeto será uma sociedade ou uma contratação não está definido. Três estruturas foram mapeadas e existe material de apoio fora deste repositório, deliberadamente. Nenhuma foi escolhida.
+- **Modelo comercial entre os envolvidos.** Se o projeto será uma sociedade ou uma contratação não está definido. Três estruturas foram mapeadas em `docs/_negociacao.html` e `docs/_proposta-parceria.html`, ambos versionados neste repositório por decisão do usuário em 2026-08-28. Nenhuma estrutura foi escolhida.
 - **Paleta de cores definitiva.** Três opções implementadas no protótipo — cobalto, azul claro e verde claro. Nenhuma adotada.
 - **Escopo do piloto.** Existem duas versões estimadas: enxuto, só o monitoramento, 493 horas; e completo, incluindo prontuário estruturado, 655 horas. Não decidido.
 - **Enquadramento regulatório do módulo de análise de imagem.** Depende de parecer não contratado.

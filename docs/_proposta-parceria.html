@@ -1,0 +1,475 @@
+<title>Proposta de parceria RetinAI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#F1F4FA; --paper:#FFFFFF; --paper-2:#F7F9FD; --paper-3:#E7ECF7;
+  --line:#D6DEEC; --line-soft:#E7ECF6;
+  --ink:#0E1626; --ink-2:#37435A; --muted:#69758A;
+  --brand:#2F5BD8; --brand-soft:#E5EBFB; --brand-line:#BCCBF4;
+  --crit:#BE3247; --crit-soft:#FBE6EA; --crit-line:#F0C0C9;
+  --warn:#8F5A05; --warn-soft:#FAEFD8; --warn-line:#EBD1A0;
+  --ok:#06735C;   --ok-soft:#DCF1EB;   --ok-line:#ABDACE;
+  --sh:0 1px 2px rgba(14,22,38,.05), 0 12px 30px -20px rgba(14,22,38,.3);
+  --f-d:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-s:"IBM Plex Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+    --line:#26324F; --line-soft:#1B2540;
+    --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+    --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+    --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+    --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+    --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+    --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+  --line:#26324F; --line-soft:#1B2540;
+  --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+  --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+  --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+  --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+  --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+  --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-s);font-size:15.5px;line-height:1.72;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:5px}
+.wrap{max-width:940px;margin:0 auto;padding:0 24px}
+
+.mast{padding:56px 0 34px;border-bottom:1px solid var(--line)}
+.brandline{display:flex;align-items:center;gap:11px;margin-bottom:32px}
+.brandline svg{width:36px;height:36px;color:var(--brand);flex-shrink:0}
+.brandline b{font-size:21px;font-weight:700;letter-spacing:-.035em}
+.brandline b i{font-style:normal;color:var(--brand)}
+.eyebrow{font-family:var(--f-m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:130px}
+h1{font-family:var(--f-d);font-weight:400;font-size:clamp(34px,5.8vw,54px);line-height:1.03;letter-spacing:-.025em;margin:18px 0 0;text-wrap:balance}
+h1 em{font-style:italic;color:var(--brand)}
+.lede{font-size:clamp(16px,2.1vw,19px);line-height:1.62;color:var(--ink-2);margin-top:20px;max-width:42em;text-wrap:pretty}
+.meta{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:28px;font-family:var(--f-m);font-size:11.5px;color:var(--muted)}
+.meta b{color:var(--ink-2);font-weight:500}
+
+section{padding:44px 0;border-bottom:1px solid var(--line-soft)}
+section:last-of-type{border-bottom:0}
+.sec-n{font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);letter-spacing:.1em}
+h2{font-family:var(--f-d);font-weight:400;font-size:clamp(25px,3.5vw,35px);line-height:1.1;letter-spacing:-.02em;margin:9px 0 0;text-wrap:balance}
+h3{font-size:15.5px;font-weight:600;margin:32px 0 10px;letter-spacing:-.01em}
+h4{font-size:13.5px;font-weight:600;margin:0 0 6px}
+p{margin:16px 0;max-width:66ch;text-wrap:pretty}
+strong{font-weight:600;color:var(--ink)}
+a{color:var(--brand);text-decoration-thickness:1px;text-underline-offset:2px}
+ul,ol{margin:16px 0;padding:0;list-style:none;max-width:66ch;display:flex;flex-direction:column;gap:9px}
+li{padding-left:21px;position:relative}
+ul li::before{content:"";position:absolute;left:3px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.62}
+ol{counter-reset:o}
+ol li{counter-increment:o}
+ol li::before{content:counter(o);position:absolute;left:0;top:0;font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);line-height:1.95}
+.num{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+
+.thesis{border-left:3px solid var(--brand);padding:4px 0 4px 24px;margin:30px 0}
+.thesis p{font-family:var(--f-d);font-size:clamp(20px,2.8vw,26px);line-height:1.34;color:var(--ink);margin:0;letter-spacing:-.012em}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:var(--paper);box-shadow:var(--sh);margin:22px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:540px}
+th{text-align:left;font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:11px 15px;background:var(--paper-2);border-bottom:1px solid var(--line);white-space:nowrap}
+th.r,td.r{text-align:right}
+td{padding:11px 15px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.55;color:var(--ink-2)}
+tr:last-child td{border-bottom:0}
+td b{color:var(--ink);font-weight:600}
+td small{display:block;font-size:11.5px;color:var(--muted);line-height:1.45;margin-top:3px}
+tfoot td{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:0;font-weight:600;color:var(--ink)}
+.tag{display:inline-flex;align-items:center;font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--paper-3);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.tag.b{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
+.tag.o{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-line)}
+.tag.w{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+
+.opt{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:24px 26px;box-shadow:var(--sh);margin:20px 0}
+.opt.pick{border-color:var(--brand);border-width:2px;padding:23px 25px}
+.opt-h{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin-bottom:6px}
+.opt-n{font-family:var(--f-m);font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.09em}
+.opt-t{font-size:19px;font-weight:600;letter-spacing:-.018em}
+.opt p{font-size:14.5px;margin:12px 0 0}
+.opt ul{margin-top:14px}
+.opt ul li{font-size:14px}
+.big{font-family:var(--f-m);font-size:clamp(26px,3.6vw,34px);font-weight:600;letter-spacing:-.045em;font-variant-numeric:tabular-nums;color:var(--brand);margin:14px 0 2px;line-height:1.1}
+.sub{font-size:12.5px;color:var(--muted)}
+
+.call{border:1px solid var(--brand-line);background:var(--brand-soft);border-radius:12px;padding:16px 19px;margin:24px 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 13px;align-items:start}
+.call .ic{font-family:var(--f-m);font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;margin-top:2px;background:var(--brand);color:var(--bg);letter-spacing:.04em;white-space:nowrap}
+.call p{grid-column:2;margin:0;font-size:14px;line-height:1.62;max-width:none;color:var(--ink-2)}
+.call p+p{margin-top:9px}
+.call.w{border-color:var(--warn-line);background:var(--warn-soft)}
+.call.w .ic{background:var(--warn)}
+.call.o{border-color:var(--ok-line);background:var(--ok-soft)}
+.call.o .ic{background:var(--ok)}
+
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
+@media (max-width:640px){.sign{grid-template-columns:1fr}}
+.sign div{font-size:13px;color:var(--muted);line-height:1.6}
+.sign b{display:block;color:var(--ink);font-size:14.5px;font-weight:600;margin-bottom:2px}
+.rule{height:1px;background:var(--line);margin:38px 0 8px}
+
+.tbtn{position:fixed;right:16px;bottom:16px;z-index:20;width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;box-shadow:var(--sh);display:grid;place-items:center}
+.tbtn:hover{border-color:var(--brand-line);color:var(--brand)}
+footer{padding:34px 0 56px;font-size:12px;color:var(--muted);line-height:1.7}
+
+/* ── IMPRESSÃO E PDF ── */
+@media print{
+  /* força a paleta clara qualquer que seja o tema do leitor — os dois seletores
+     cobrem todos os casos e vêm por último, então vencem por ordem de origem */
+  :root:not([data-theme="light"]), :root[data-theme="light"]{
+    --bg:#FFFFFF; --paper:#FFFFFF; --paper-2:#F7F9FD; --paper-3:#EDF1F8;
+    --line:#C6D2E6; --line-soft:#E2E9F4;
+    --ink:#0E1626; --ink-2:#333F56; --muted:#5A6680;
+    --brand:#2450C8; --brand-soft:#EEF2FD; --brand-line:#BCCBF4;
+    --crit:#A82A3D; --crit-soft:#FCEFF1; --crit-line:#EFC3CB;
+    --warn:#7A4D04; --warn-soft:#FBF3E0; --warn-line:#E8D2A8;
+    --ok:#065C4A;   --ok-soft:#E6F4EF;   --ok-line:#AEDCD1;
+    --sh:none;
+  }
+  @page{ size:A4; margin:15mm 14mm; }
+  html,body{background:#fff;font-size:10.5pt;line-height:1.55}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:none;padding:0}
+  .tbtn{display:none !important}
+
+  .mast{padding:0 0 22px}
+  h1{font-size:30pt}
+  .lede{font-size:12pt}
+  h2{font-size:19pt}
+  h3{font-size:11.5pt;margin:20px 0 7px}
+  p,li{font-size:10.5pt}
+  section{padding:22px 0}
+
+  /* nada de elemento partido no meio da página */
+  .tw,.opt,.call,.sign,.thesis{break-inside:avoid;page-break-inside:avoid}
+  tr,li{break-inside:avoid;page-break-inside:avoid}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
+  table{min-width:0}
+  th,td{padding:7px 10px;font-size:9.5pt}
+  .opt{padding:16px 18px}
+  .call{padding:12px 15px}
+  .big{font-size:20pt}
+
+  /* o leitor do PDF não vê o destino do link, então mostra o endereço */
+  .lede a::after, section p a::after, li a::after{
+    content:" (" attr(href) ")";
+    font-family:var(--f-m);font-size:8pt;color:var(--muted);word-break:break-all;
+  }
+  a{color:var(--brand);text-decoration:none}
+  footer{padding:22px 0 0;border-top:1px solid var(--line);margin-top:26px}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="logo" viewBox="0 0 48 48">
+    <g transform="translate(24 24) scale(1.14) translate(-22 -24)">
+      <g fill="none" stroke="currentColor" stroke-linecap="round">
+        <path d="M28 18C21 10.5 14.5 8 6.5 8.5" stroke-width="4.2"/>
+        <path d="M28 30C21 37.5 14.5 40 6.5 39.5" stroke-width="4.2"/>
+        <path d="M23.5 15C19 13 14 12.8 9.5 14" stroke-width="2.4"/>
+      </g>
+      <circle cx="31" cy="24" r="8.6" fill="currentColor"/>
+    </g>
+  </symbol>
+</defs></svg>
+
+<div class="wrap">
+<header class="mast">
+  <div class="brandline"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#logo"/></svg><b>Retin<i>AI</i></b></div>
+  <div class="eyebrow">Proposta de parceria</div>
+  <h1>Três formas de <em>tirar isto do papel</em></h1>
+  <p class="lede">Você me perguntou se faz mais sentido sermos sócios ou você me contratar. Este documento responde as duas coisas, com números, e acrescenta uma terceira possibilidade que acho melhor que as duas.</p>
+  <div class="meta">
+    <span>Para <b>Dr. Miguel</b></span>
+    <span>De <b>Ari Gomes</b></span>
+    <span>Agosto de 2026</span>
+  </div>
+</header>
+
+<section>
+  <div class="sec-n">01</div>
+  <h2>Antes dos números</h2>
+  <p>Vale registrar de onde isto veio, porque muda como eu enxergo a divisão. <strong>O problema foi visto por você.</strong> Saber que o paciente some depois da cirurgia, que a adesão despenca no glaucoma e que ninguém percebe até a consulta seguinte — isso é observação de quem está na sala, não uma ideia que aparece numa conversa qualquer.</p>
+  <p>E foi você quem puxou a conversa. Sem isso, este projeto não existiria.</p>
+
+  <div class="thesis">
+    <p>Num software para uma especialidade médica, o profissional com domínio clínico e acesso ao mercado costuma ser a metade mais difícil de substituir — não o desenvolvedor.</p>
+  </div>
+
+  <p>Digo isso porque é verdade e porque explica os números que vêm depois. Existem muitos programadores capazes de construir este sistema. Existem bem menos oftalmologistas que entendem o problema, conseguem escrever os protocolos e podem apresentá-lo a outros médicos como colega.</p>
+</section>
+
+<section>
+  <div class="sec-n">02</div>
+  <h2>Onde já chegamos</h2>
+  <p>O trabalho de definição já está feito e documentado. Nada aqui é hipótese solta: cada número desta proposta sai de um desses documentos.</p>
+  <ul>
+    <li><a href="https://claude.ai/code/artifact/e4c0ba7f-7134-445e-84a7-ddb296f2f386" target="_blank" rel="noopener"><strong>Proposta de software</strong></a> — os quatro módulos, LGPD e sigilo médico, caminho regulatório, arquitetura, roadmap em cinco fases, riscos e decisões abertas.</li>
+    <li><a href="https://claude.ai/code/artifact/ff86657a-da29-4bd1-9e90-6e0635ecfe36" target="_blank" rel="noopener"><strong>Protótipo navegável</strong></a> — nove telas clicáveis, com dados fictícios.</li>
+    <li><a href="https://claude.ai/code/artifact/66545bef-0a89-4e3a-a6b9-c6bfc0865685" target="_blank" rel="noopener"><strong>Custo operacional</strong></a> — cerca de <span class="num">R$ 280 por mês</span> para rodar o piloto com 25 pacientes.</li>
+    <li><a href="https://claude.ai/code/artifact/c9a4f255-7e5e-4b92-bc9b-6579ee8e625d" target="_blank" rel="noopener"><strong>Estimativa de esforço</strong></a> — o trabalho de engenharia, pacote por pacote.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-n">03</div>
+  <h2>O tamanho do trabalho</h2>
+  <p>Para chegar ao piloto rodando na sua clínica, com pacientes reais sendo acompanhados, são <strong class="num">493 horas</strong> de engenharia, distribuídas em cinco marcos.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Marco</th><th>O que fica pronto</th><th class="r">Horas</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Descoberta</b></td><td>Protocolos escritos, sinais de alarme definidos, termos de consentimento, especificação e modelo de dados</td><td class="r num">68</td></tr>
+      <tr><td><b>2 · Fundação</b></td><td>Ambientes, publicação, acesso com senha, banco de dados, registro de auditoria, cadastro de paciente</td><td class="r num">96</td></tr>
+      <tr><td><b>3 · Canal</b></td><td>WhatsApp integrado e aprovado pela Meta, modelos de mensagem, motor de protocolo, entrega dos vídeos</td><td class="r num">104</td></tr>
+      <tr><td><b>4 · Inteligência</b></td><td>Triagem das respostas por IA, cálculo de risco, central de risco, consentimento e cancelamento</td><td class="r num">96</td></tr>
+      <tr><td><b>5 · Piloto</b></td><td>Ensaio simulado e quatro semanas acompanhando pacientes reais, com ajustes</td><td class="r num">94</td></tr>
+    </tbody>
+    <tfoot><tr><td colspan="2">Total até o piloto</td><td class="r num">493</td></tr></tfoot>
+  </table></div>
+
+  <p>Esse escopo deixa de fora, por ora, o prontuário estruturado e o histórico longitudinal — que somam mais <span class="num">162 horas</span>. A recomendação é adiá-los: eles não são pré-requisito técnico do monitoramento, e o piloto responde antes a pergunta que importa. Se preferir incluí-los desde o início, o total vai a <span class="num">655 horas</span>.</p>
+
+  <h3>Sua parte</h3>
+  <p>São cerca de <strong class="num">88 horas</strong> suas, e elas não são acessórias — <strong>sem elas o cronograma para</strong>, por mais que eu trabalhe:</p>
+  <ul>
+    <li>Cinco ou seis protocolos escritos — o que enviar, em que dia, e o que fazer com cada resposta.</li>
+    <li>A lista de sinais de alarme por procedimento, e o que cada um dispara.</li>
+    <li>De 8 a 12 vídeos de um a dois minutos, gravados por você. Pode ser no celular.</li>
+    <li>Cerca de duas horas por semana durante a construção, conferindo o que sai.</li>
+  </ul>
+
+  <div class="call w"><span class="ic">PRECISO SER CLARO</span>
+    <p>Eu trabalho em horário comercial em outra empresa. Este projeto seria feito em <strong>2 a 3 horas por dia útil e cerca de 4 horas no fim de semana</strong> — entre 14 e 19 horas por semana.</p>
+    <p>Nesse ritmo, o piloto fica pronto em <strong>7 a 9 meses</strong>. Prefiro dizer isso agora, com todas as letras, do que assumir um prazo que eu não conseguiria cumprir. Qualquer acordo entre nós deve tratar prazo como estimativa, e não como data com multa.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">04</div>
+  <h2>Caminho 1 — Prestação de serviço</h2>
+  <p>Você me contrata para construir e depois manter o sistema. Relação de cliente e fornecedor, com preço fechado.</p>
+
+  <div class="opt">
+    <div class="opt-h"><span class="opt-n">CAMINHO 1</span><span class="opt-t">Você contrata, eu entrego</span></div>
+    <div class="big">R$ 73.950</div>
+    <div class="sub">493 horas a R$ 150, pagas nos cinco marcos acima — cerca de R$ 14.800 por marco</div>
+    <ul>
+      <li><strong>Manutenção e evolução após a entrega:</strong> uma base fixa pequena mais horas sob demanda — detalhado logo abaixo.</li>
+      <li><strong>Custo de operação:</strong> cerca de R$ 280/mês hoje, sempre sem margem. Quem paga depende de quem mantém o sistema no ar — detalhado logo abaixo.</li>
+      <li><strong>Escopo completo:</strong> R$ 98.250, se quiser incluir prontuário estruturado e histórico desde o início.</li>
+    </ul>
+  </div>
+
+  <h3>Depois da entrega: o que é fixo e o que é sob demanda</h3>
+  <p>Você não deveria pagar todo mês por melhorias que não pediu. Mas há uma parte que não depende de pedido nenhum, e prefiro separar as duas com clareza.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>O quê</th><th>Por que é assim</th><th class="r">Quanto</th></tr></thead>
+    <tbody>
+      <tr><td><b>Manutenção</b> <span class="tag b">Fixo</span><small>Monitoramento, correção de falha, atualização de dependências, resposta a incidente</small></td><td>O sistema fica de pé o tempo todo, com pacientes reais dependendo dos alertas. Servidor cai, a Meta rejeita um modelo de mensagem, uma integração muda — isso acontece pedindo ou não pedindo</td><td class="r num"><b>1.400</b><small>por mês, inclui 8 h</small></td></tr>
+      <tr><td><b>Evolução</b> <span class="tag o">Sob demanda</span><small>Novos protocolos, novas telas, mudanças de fluxo</small></td><td>Só existe se você pedir. Em mês sem pedido, não há cobrança nenhuma</td><td class="r num"><b>150</b><small>por hora</small></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>Para a evolução, sugiro <strong>banco de horas</strong> em vez de cobrança avulsa — você compra um bloco, usa quando precisar, com validade de seis meses:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Bloco</th><th class="r">Valor</th><th class="r">Hora efetiva</th></tr></thead>
+    <tbody>
+      <tr><td><b>10 horas</b></td><td class="r num">1.500</td><td class="r num">150</td></tr>
+      <tr><td><b>20 horas</b></td><td class="r num">2.800</td><td class="r num">140</td></tr>
+      <tr><td><b>40 horas</b></td><td class="r num">5.200</td><td class="r num">130</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call w"><span class="ic">POR QUE EXISTE UMA BASE FIXA</span>
+    <p>Sendo transparente: eu tenho entre 14 e 19 horas por semana no total. <strong>A base fixa é o que reserva capacidade para você</strong> — sem ela, um chamado seu entra numa fila junto com tudo o mais, e eu não teria como prometer prazo de resposta.</p>
+    <p>Num sistema em que um alerta perdido pode significar um paciente não atendido a tempo, acho que essa previsibilidade vale os R$ 1.400. Se você preferir o modelo totalmente sob demanda, é possível — mas então a resposta passa a ser por ordem de chegada, e isso precisa estar claro para os dois.</p>
+  </div>
+
+  <h3>A propriedade do sistema</h3>
+  <p>Este é o ponto que mais muda o valor, e prefiro deixá-lo explícito em vez de deixar cada um presumir. <strong>Os três valores abaixo são alternativas ao preço da tabela acima</strong> — quanto mais direitos, maior o preço.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Variante</th><th>O que significa</th><th class="r">Você paga</th></tr></thead>
+    <tbody>
+      <tr><td><b>Cessão total</b><small>O sistema passa a ser seu</small></td><td>Você se torna o dono. Eu não posso reaproveitar nada em outro lugar, nem oferecer a ninguém</td><td class="r num"><b>73.950</b><small>100%</small></td></tr>
+      <tr><td><b>Licença exclusiva em oftalmologia</b><small>Seu na sua especialidade</small></td><td>Você usa e pode revender a outras clínicas de oftalmologia; eu mantenho o código e posso aplicá-lo em outra área da medicina</td><td class="r num"><b>51.765</b><small>70%</small></td></tr>
+      <tr><td><b>Licença de uso</b><small>Seu para usar, meu para evoluir</small></td><td>Você usa na sua clínica em definitivo, sem prazo; eu posso oferecer o sistema a outras clínicas de oftalmologia</td><td class="r num"><b>36.975</b><small>50%</small></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>As proporções são propostas, não padrão de mercado — dá para conversar sobre elas. O que não dá é deixar o assunto em aberto: é a fonte mais comum de desentendimento em contrato de software.</p>
+
+  <div class="call"><span class="ic">SE FOR LICENÇA DE USO</span>
+    <p>Nessa variante surge uma pergunta justa da sua parte: se você paga metade e eu depois ofereço o mesmo sistema a outras clínicas, o que sobra para você? Três formas de resolver, e qualquer uma me serve:</p>
+    <p><strong>Janela de exclusividade</strong> — você é o único a usar por 12 ou 18 meses antes de eu poder oferecer a terceiros. <strong>Participação nas vendas</strong> — um percentual do que eu faturar com outras clínicas volta para você, até certo limite. <strong>Condição vitalícia</strong> — você nunca paga mensalidade acima do valor inicial, mesmo com o produto crescendo.</p>
+  </div>
+
+  <p style="font-size:14px;color:var(--muted)">Uma observação a seu favor: nas variantes de licença, a manutenção passa a ser diluída entre vários clientes. Isso significa que o valor mensal tende a <strong>cair</strong> com o tempo, em vez de subir — o oposto do que acontece na cessão total, em que você banca sozinho toda a evolução.</p>
+
+  <h3>Quem opera e quem paga a operação</h3>
+  <p>Os cerca de <strong class="num">R$ 280 por mês</strong> de servidores, mensagens e IA são coisa distinta do desenvolvimento e da manutenção. Quem paga não depende de quem é dono do código — <strong>depende de quem mantém o sistema no ar.</strong></p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Variante</th><th>Quem mantém no ar</th><th>Quem paga a operação</th></tr></thead>
+    <tbody>
+      <tr><td><b>Cessão total</b></td><td>Você, na sua própria conta com os provedores</td><td><b>Você</b>, direto ao provedor. Se preferir que eu opere, isso vira um serviço à parte, cobrado por fora</td></tr>
+      <tr><td><b>Licença exclusiva em oftalmologia</b></td><td>A combinar — pode ser você, para os seus clientes, ou eu</td><td>Quem operar. Se for eu, entra embutido no que cada clínica paga</td></tr>
+      <tr><td><b>Licença de uso</b></td><td><b>Eu</b>, num sistema único atendendo várias clínicas</td><td><b>Eu</b>, embutido na mensalidade de cada clínica</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call o"><span class="ic">MINHA PROPOSTA</span>
+    <p>Nas duas variantes de licença, em que eu opero o sistema: <strong>a operação da sua clínica sai pelo custo, sem margem, em definitivo.</strong> Você nunca paga mais do que o sistema efetivamente consome para atender os seus pacientes.</p>
+    <p>Isso fica mais barato com o tempo, e não mais caro. Hoje, com 25 pacientes acompanhados, dá cerca de <span class="num">R$ 11 por paciente por mês</span>; com algumas centenas de pacientes no sistema, a parte fixa se dilui e cai para a faixa de <span class="num">R$ 6</span>. Você seria o primeiro a se beneficiar disso.</p>
+  </div>
+
+  <div class="call w"><span class="ic">ATENÇÃO AO NÚMERO</span>
+    <p>Os R$ 280 são <strong>a conta de 25 pacientes em acompanhamento</strong>, não um valor fixo. Ela cresce com o número de pacientes monitorados — principalmente mensagens e uso de IA — e a maior parte dela hoje é infraestrutura, que sobe em degraus e não linearmente.</p>
+    <p>O detalhamento está na <a href="https://claude.ai/code/artifact/66545bef-0a89-4e3a-a6b9-c6bfc0865685" target="_blank" rel="noopener">calculadora de custo operacional</a>, onde dá para mexer no número de pacientes e ver a conta mudar.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">05</div>
+  <h2>Caminho 2 — Sociedade</h2>
+  <p>Abrimos uma empresa juntos. Você não me paga pelo desenvolvimento: <strong>a participação é a remuneração.</strong> Eu entrego as 493 horas sem receber, e o que levo no lugar do dinheiro é metade da empresa.</p>
+
+  <div class="opt">
+    <div class="opt-h"><span class="opt-n">CAMINHO 2</span><span class="opt-t">Somos sócios</span></div>
+    <div class="big">50% / 50%</div>
+    <div class="sub">Sem pagamento pelo desenvolvimento; o retorno de ambos vem do resultado da empresa</div>
+    <ul>
+      <li><strong>Você banca os custos</strong> — cerca de R$ 280/mês de operação, mais R$ 1.500 a 4.300 de custos únicos até o piloto.</li>
+      <li><strong>Esse dinheiro entra como empréstimo à empresa</strong>, não como participação adicional: a empresa devolve com correção a partir da primeira receita, antes de qualquer divisão de lucro.</li>
+      <li><strong>Participação conquistada ao longo de 4 anos</strong>, com carência de 1 ano, para os dois lados. Quem sair antes não leva o todo.</li>
+      <li><strong>Pró-labore de R$ 1.800/mês para mim</strong>, começando depois da entrega do piloto e só enquanto não houver receita — a mesma regra do Caminho 3. Também entra como empréstimo seu à empresa, e também é recuperável.</li>
+    </ul>
+  </div>
+
+  <div class="call"><span class="ic">POR QUE METADE</span>
+    <p>Se a conta fosse só de horas, ela penderia para o meu lado — são 493 contra 88. <strong>Mas hora vezes valor é um péssimo medidor do que você traz.</strong> A percepção do problema, os protocolos, o primeiro campo de prova e o acesso a outros oftalmologistas não cabem nessa conta, e sem eles não há produto nem mercado.</p>
+    <p>Cinquenta por cento não é concessão. É o número que reflete o que cada um coloca.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">06</div>
+  <h2>Caminho 3 — Modelo misto</h2>
+  <p>É o meio do caminho entre os dois anteriores, e é o que eu recomendo. A ideia é simples: <strong>você paga uma parte do desenvolvimento em dinheiro, e o restante do meu trabalho se converte em participação.</strong></p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Caminho</th><th class="r">Você paga pelo desenvolvimento</th><th>O restante do trabalho</th><th class="r">Sua participação</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Prestação</b></td><td class="r num">73.950</td><td>Não se aplica — está tudo pago</td><td class="r">100% do sistema</td></tr>
+      <tr><td><b>3 · Misto</b> <span class="tag b">Recomendado</span></td><td class="r num">30.000</td><td>R$ 43.950 se convertem em participação</td><td class="r num">55%</td></tr>
+      <tr><td><b>2 · Sociedade</b></td><td class="r num">0</td><td>Os R$ 73.950 inteiros se convertem</td><td class="r num">50%</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="opt pick">
+    <div class="opt-h"><span class="opt-n">CAMINHO 3</span><span class="opt-t">Pagamento parcial e sociedade</span></div>
+    <div class="big">R$ 30.000 + 55% para você</div>
+    <div class="sub">Cerca de 40% do desenvolvimento em dinheiro; o restante converte em participação</div>
+    <ul>
+      <li><strong>R$ 30.000 pelo desenvolvimento</strong>, distribuídos nos cinco marcos — cerca de R$ 6.000 por marco.</li>
+      <li><strong>Participação de 55% sua e 45% minha</strong>, com a mesma regra de conquista ao longo de 4 anos e carência de 1.</li>
+      <li><strong>Pró-labore de R$ 1.800/mês para mim</strong>, começando depois da entrega do piloto e só enquanto não houver receita. Durante a construção não há pró-labore — os marcos já cobrem o período.</li>
+      <li><strong>Custos de operação como empréstimo seu à empresa</strong>, recuperáveis antes da divisão de lucro, igual ao Caminho 2.</li>
+    </ul>
+  </div>
+
+  <div class="call o"><span class="ic">POR QUE ESTE</span>
+    <p><strong>Para você:</strong> custa bem menos da metade da prestação de serviço, e você fica com a maior parte da empresa. Mais importante que isso: num produto que precisa evoluir por anos, ter um sócio com interesse de longo prazo funciona diferente de ter um fornecedor com contrato mensal.</p>
+    <p><strong>Para mim:</strong> torna sustentável atravessar sete a nove meses de noites e fins de semana. Trabalhar sem nenhuma contrapartida por esse tempo é o principal motivo pelo qual projetos assim são abandonados no meio — e eu prefiro tratar esse risco agora do que descobri-lo depois.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">07</div>
+  <h2>Comparativo</h2>
+  <p>O que cada caminho custa a você em três anos, e o que você tem ao fim deles. Os valores assumem cerca de doze meses entre a entrega do piloto e a primeira receita.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th></th><th class="r">Prestação</th><th class="r">Sociedade</th><th class="r">Misto</th></tr></thead>
+    <tbody>
+      <tr><td><b>Desenvolvimento do piloto</b></td><td class="r num">73.950</td><td class="r num">0</td><td class="r num">30.000</td></tr>
+      <tr><td><b>Mensal após a entrega</b></td><td class="r num">1.400 <small>fixo, mais evolução sob demanda</small></td><td class="r num">1.800 <small>até haver receita</small></td><td class="r num">1.800 <small>até haver receita</small></td></tr>
+      <tr><td><b>Melhorias e novas funções</b></td><td class="r num">150/h <small>você pede, você paga</small></td><td class="r">incluídas <small>sou sócio, não fornecedor</small></td><td class="r">incluídas <small>sou sócio, não fornecedor</small></td></tr>
+      <tr><td><b>Custos de operação</b><small>Servidores, mensagens, IA</small></td><td class="r num">~280/mês</td><td class="r num">~280/mês</td><td class="r num">~280/mês</td></tr>
+      <tr><td><b>Desembolso em 3 anos</b></td><td class="r num">~135.000 <small>mais o que pedir de evolução</small></td><td class="r num">~36.000</td><td class="r num">~66.000</td></tr>
+      <tr><td><b>Quanto disso volta para você</b><small>Devolução do empréstimo, a partir da primeira receita</small></td><td class="r">nada</td><td class="r num">~36.000 <small>tudo</small></td><td class="r num">~36.000 <small>tudo, menos os R$ 30.000 do desenvolvimento</small></td></tr>
+      <tr><td><b>Você fica com</b></td><td class="r">100% do sistema</td><td class="r num">50% da empresa</td><td class="r num">55% da empresa</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call w"><span class="ic">UMA PERGUNTA PARA OS DOIS</span>
+    <p>Se formos por sociedade, há uma questão que precisa de resposta antes da assinatura: <strong>a partir de quantas clínicas pagantes a empresa consegue bancar uma dedicação integral minha?</strong></p>
+    <p>Uma empresa cuja engenharia é permanentemente 16 horas por semana tem um teto de crescimento. Não precisamos responder isso hoje, mas precisamos concordar que é uma pergunta legítima — e que, se a resposta for “nunca”, a prestação de serviço passa a ser o desenho mais honesto para os dois.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">08</div>
+  <h2>O que precisa estar escrito, em qualquer caminho</h2>
+  <p>Independente do que escolhermos, sugiro que estes pontos fiquem no papel antes de começar. Escrevê-los agora, enquanto está tudo bem, custa uma reunião.</p>
+  <ol>
+    <li><strong>Propriedade do sistema e da base de dados</strong>, incluindo o que acontece com o acervo anonimizado de casos, que tende a se tornar o ativo mais valioso.</li>
+    <li><strong>Compromisso de horas clínicas.</strong> Protocolos, sinais de alarme e vídeos, com prazo — e o que fazer se atrasarem, já que travam todo o restante.</li>
+    <li><strong>Regras de saída.</strong> Se um de nós quiser sair: quem compra a parte de quem, por qual critério, em quanto tempo.</li>
+    <li><strong>Responsabilidade técnica e clínica.</strong> A responsabilidade clínica é sua por lei; a técnica precisa ser definida entre nós.</li>
+    <li><strong>Exclusividade.</strong> Eu posso atender outra clínica de oftalmologia? Você pode contratar outro desenvolvedor? Melhor decidir do que presumir.</li>
+    <li><strong>Uso do nome RetinAI</strong> e de quem fica o registro.</li>
+  </ol>
+
+  <div class="call"><span class="ic">RECOMENDAÇÃO</span>
+    <p>Seja qual for o caminho, sugiro que <strong>cada um de nós converse com o próprio advogado</strong> antes de assinar — de preferência alguém acostumado a acordo de sócios em tecnologia. Acordo em que só um lado teve orientação é o que mais gera desentendimento depois, e eu não tenho interesse nenhum nisso.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">09</div>
+  <h2>Próximo passo</h2>
+  <p>Independente do modelo, o primeiro trabalho concreto é o mesmo: <strong>duas horas juntos para escrever o protocolo de pós-facectomia.</strong> É o insumo que destrava todo o resto, e serve para os dois avaliarem como é trabalhar junto antes de qualquer compromisso maior.</p>
+  <p>Não há pressa nenhuma para decidir o modelo. Leia com calma, converse com quem achar necessário, e retomamos quando você quiser — a escolha entre os três caminhos não bloqueia essa primeira conversa sobre o protocolo.</p>
+
+  <div class="rule"></div>
+  <div class="sign">
+    <div><b>Ari Gomes</b>Produto e engenharia<br>arimanoel.gomes@betha.com.br</div>
+    <div><b>Dr. Miguel</b>Direção clínica</div>
+  </div>
+</section>
+
+<footer>
+  <p style="max-width:66ch;margin:0">Proposta de parceria, agosto de 2026. Valores de hora, custos de operação e projeções são estimativas fundamentadas nos documentos citados na seção 02, e não substituem orçamento formal. As estruturas societárias e contratuais aqui descritas precisam de revisão jurídica antes de virarem acordo.</p>
+</footer>
+</div>
+
+<button class="tbtn" id="tbtn" title="Alternar tema" aria-label="Alternar tema claro e escuro">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" id="tico"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+</button>
+
+<script>
+document.documentElement.lang = "pt-BR";
+var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+var SUN  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+var mq = window.matchMedia("(prefers-color-scheme: dark)");
+function isDark(){ var d = document.documentElement.dataset.theme; return d ? d === "dark" : mq.matches; }
+function paint(){ document.getElementById("tico").innerHTML = isDark() ? SUN : MOON; }
+document.getElementById("tbtn").addEventListener("click", function(){
+  document.documentElement.dataset.theme = isDark() ? "light" : "dark";
+  paint();
+});
+mq.addEventListener("change", paint);
+paint();
+</script>

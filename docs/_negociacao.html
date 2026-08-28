@@ -1,0 +1,458 @@
+<title>Sociedade ou contratação</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#F1F4FA; --paper:#FFFFFF; --paper-2:#F7F9FD; --paper-3:#E7ECF7;
+  --line:#D6DEEC; --line-soft:#E7ECF6;
+  --ink:#0E1626; --ink-2:#37435A; --muted:#69758A;
+  --brand:#2F5BD8; --brand-soft:#E5EBFB; --brand-line:#BCCBF4;
+  --crit:#BE3247; --crit-soft:#FBE6EA; --crit-line:#F0C0C9;
+  --warn:#8F5A05; --warn-soft:#FAEFD8; --warn-line:#EBD1A0;
+  --ok:#06735C;   --ok-soft:#DCF1EB;   --ok-line:#ABDACE;
+  --ai:#5C3CBE;   --ai-soft:#EAE5FB;   --ai-line:#CBBCF2;
+  --sh:0 1px 2px rgba(14,22,38,.05), 0 12px 30px -20px rgba(14,22,38,.3);
+  --f-d:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-s:"IBM Plex Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+    --line:#26324F; --line-soft:#1B2540;
+    --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+    --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+    --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+    --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+    --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+    --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+    --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070C18; --paper:#0F1729; --paper-2:#141E36; --paper-3:#1C2745;
+  --line:#26324F; --line-soft:#1B2540;
+  --ink:#E8EDF7; --ink-2:#B7C2D8; --muted:#8492AD;
+  --brand:#7C9CFF; --brand-soft:#182448; --brand-line:#2C3D70;
+  --crit:#FF8497; --crit-soft:#331420; --crit-line:#5A2436;
+  --warn:#F2B65F; --warn-soft:#2F2312; --warn-line:#553D18;
+  --ok:#4CD5B0;   --ok-soft:#0C2B26;   --ok-line:#1B4A41;
+  --ai:#B9A2FF;   --ai-soft:#211B40;   --ai-line:#3B2F66;
+  --sh:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.85);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-s);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:5px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+
+.mast{padding:48px 0 26px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--f-m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--crit);display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
+h1{font-family:var(--f-d);font-weight:400;font-size:clamp(32px,5.4vw,50px);line-height:1.04;letter-spacing:-.025em;margin:15px 0 0;text-wrap:balance}
+h1 em{font-style:italic;color:var(--brand)}
+.lede{font-size:clamp(15px,1.9vw,18px);line-height:1.6;color:var(--ink-2);margin-top:15px;max-width:44em;text-wrap:pretty}
+
+section{padding:36px 0;border-bottom:1px solid var(--line-soft)}
+section:last-of-type{border-bottom:0}
+.sec-n{font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);letter-spacing:.1em}
+h2{font-family:var(--f-d);font-weight:400;font-size:clamp(23px,3.2vw,32px);line-height:1.12;letter-spacing:-.02em;margin:8px 0 0;text-wrap:balance}
+h3{font-size:14.5px;font-weight:600;margin:26px 0 8px}
+h4{font-size:13.5px;font-weight:600;margin:0 0 6px}
+p{margin:14px 0;max-width:68ch;text-wrap:pretty}
+strong{font-weight:600;color:var(--ink)}
+ul,ol{margin:14px 0;padding:0;list-style:none;max-width:68ch;display:flex;flex-direction:column;gap:7px}
+li{padding-left:20px;position:relative}
+ul li::before{content:"";position:absolute;left:3px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--brand);opacity:.6}
+ol{counter-reset:o}
+ol li{counter-increment:o}
+ol li::before{content:counter(o);position:absolute;left:0;top:0;font-family:var(--f-m);font-size:11.5px;font-weight:600;color:var(--brand);line-height:1.9}
+.num{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:var(--paper);box-shadow:var(--sh);margin:18px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:540px}
+th{text-align:left;font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:10px 14px;background:var(--paper-2);border-bottom:1px solid var(--line);white-space:nowrap}
+th.r,td.r{text-align:right}
+td{padding:10px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.5;color:var(--ink-2)}
+tr:last-child td{border-bottom:0}
+td b{color:var(--ink);font-weight:600}
+td small{display:block;font-size:11.5px;color:var(--muted);line-height:1.4;margin-top:2px}
+tfoot td{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:0;font-weight:600;color:var(--ink)}
+.tag{display:inline-flex;align-items:center;font-family:var(--f-m);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--paper-3);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.tag.b{background:var(--brand-soft);color:var(--brand);border-color:var(--brand-line)}
+.tag.o{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-line)}
+.tag.w{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+.tag.c{background:var(--crit-soft);color:var(--crit);border-color:var(--crit-line)}
+
+.call{border:1px solid var(--brand-line);background:var(--brand-soft);border-radius:12px;padding:15px 17px;margin:20px 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 12px;align-items:start}
+.call .ic{font-family:var(--f-m);font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px;margin-top:2px;background:var(--brand);color:var(--bg);letter-spacing:.04em;white-space:nowrap}
+.call p{grid-column:2;margin:0;font-size:13.5px;line-height:1.6;max-width:none;color:var(--ink-2)}
+.call p+p{margin-top:8px}
+.call.w{border-color:var(--warn-line);background:var(--warn-soft)}
+.call.w .ic{background:var(--warn)}
+.call.o{border-color:var(--ok-line);background:var(--ok-soft)}
+.call.o .ic{background:var(--ok)}
+.call.c{border-color:var(--crit-line);background:var(--crit-soft)}
+.call.c .ic{background:var(--crit)}
+
+.opt{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--sh);margin:18px 0}
+.opt.pick{border-color:var(--brand);border-width:2px}
+.opt-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.opt-t{font-size:18px;font-weight:600;letter-spacing:-.015em}
+.big{font-family:var(--f-m);font-size:30px;font-weight:600;letter-spacing:-.045em;font-variant-numeric:tabular-nums;color:var(--brand);margin:10px 0 2px}
+.sub{font-size:12.5px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:18px 0}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+.card p{font-size:13px;margin:6px 0 0;color:var(--ink-2);max-width:none}
+footer{padding:28px 0 48px;font-size:12px;color:var(--muted);line-height:1.7}
+</style>
+
+<div class="wrap">
+<header class="mast">
+  <div class="eyebrow">Rascunho interno · não compartilhar ainda</div>
+  <h1>Sociedade ou <em>contratação</em></h1>
+  <p class="lede">Duas propostas para levar ao Dr. Miguel, mais uma terceira que nenhum dos dois pediu e que provavelmente é a melhor. Os números saem da estimativa de esforço; as estruturas precisam passar por advogado antes de virar acordo.</p>
+</header>
+
+<section>
+  <div class="sec-n">01</div>
+  <h2>O que está sendo decidido de verdade</h2>
+  <p>“Sociedade ou contratação” parece uma escolha sobre formato jurídico. Não é. É uma escolha sobre <strong>quem fica com o valor se isso der certo</strong> — e sobre quem carrega o risco enquanto não se sabe.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th></th><th>Sociedade</th><th>Contratação</th></tr></thead>
+    <tbody>
+      <tr><td><b>Quem arrisca</b></td><td>Você arrisca tempo. Ele arrisca dinheiro</td><td>Ele arrisca dinheiro. Você não arrisca nada</td></tr>
+      <tr><td><b>Você recebe</b></td><td>Nada por ~2 anos, depois uma fração de tudo</td><td>Previsível desde o primeiro marco</td></tr>
+      <tr><td><b>Se não vender</b></td><td>Você trabalhou de graça</td><td>Você foi pago igual</td></tr>
+      <tr><td><b>Se escalar</b></td><td>Você ganha muito</td><td>Você ganha o retainer. E só</td></tr>
+      <tr><td><b>Dono do código</b></td><td>A empresa dos dois</td><td>Depende do que negociarem — é o ponto mais importante</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call c"><span class="ic">O DESCONFORTO</span>
+    <p>Você me disse que não tem dinheiro para investir. Isso não é um detalhe — <strong>é a informação mais relevante da mesa.</strong> Quem não tem reserva é exatamente quem menos pode fazer uma aposta de dois anos sem retorno.</p>
+    <p>Isso não elimina a sociedade. Mas significa que uma sociedade em que você trabalha de graça e ele paga só as contas de infraestrutura — que são <strong>R$ 280 por mês</strong> — não é uma divisão equilibrada de risco. É você financiando a empresa com trabalho enquanto ele financia com quase nada.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">02</div>
+  <h2>Proposta A — Sociedade</h2>
+
+  <div class="call c"><span class="ic">O ESSENCIAL</span>
+    <p><strong>Na sociedade ele não te paga nada pelo desenvolvimento.</strong> A participação <em>é</em> o pagamento: você entrega as 493 horas sem receber, e o que leva no lugar do dinheiro é metade da empresa.</p>
+    <p>Se der certo, sua metade vale muito mais que os R$ 73.950 que você teria cobrado. Se não vender, você trabalhou de graça. É essa a aposta — e é por isso que quem não tem reserva precisa pensar duas vezes.</p>
+  </div>
+
+  <h3>O que cada um coloca até o piloto</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Aporte</th><th>Você</th><th>Dr. Miguel</th></tr></thead>
+    <tbody>
+      <tr><td><b>Trabalho</b></td><td class="num">493 h de engenharia</td><td class="num">88 h clínicas</td></tr>
+      <tr><td><b>Valor de mercado desse trabalho</b><small>A R$ 150/h seu e R$ 300/h dele</small></td><td class="num">R$ 73.950</td><td class="num">R$ 26.400</td></tr>
+      <tr><td><b>Dinheiro</b><small>Custos únicos e operação até o piloto</small></td><td class="num">R$ 0</td><td class="num">R$ 4.000 a 6.500</td></tr>
+      <tr><td><b>O que não tem preço</b></td><td>A construção inteira, e o risco de dois anos sem receita</td><td>O conhecimento clínico, o primeiro cliente, e a credibilidade médica para vender a outros médicos</td></tr>
+    </tbody>
+    <tfoot><tr><td>Aporte mensurável</td><td class="num">R$ 73.950</td><td class="num">R$ 30.400 a 32.900</td></tr></tfoot>
+  </table></div>
+
+  <p>A leitura crua dá algo perto de <strong>71/29</strong> a seu favor. <strong>Essa leitura está errada</strong> — e vale entender por quê antes de levar qualquer número para a mesa, porque hora vezes valor é um péssimo medidor do que ele traz.</p>
+
+  <div class="call"><span class="ic">O QUE NÃO CABE NA PLANILHA</span>
+    <p><strong>A percepção do problema é dele.</strong> Ele sabe que paciente some depois da cirurgia porque vive isso na sala. Isso não é “uma ideia” — é observação clínica de quem está lá dentro, e é o que define o produto inteiro.</p>
+    <p><strong>A iniciativa é dele.</strong> Sem ele puxar a conversa, este projeto não existiria. Isso é real e não aparece em nenhuma linha de hora.</p>
+    <p><strong>A credibilidade e a rede são dele.</strong> Médico vendendo para médico é uma conversa completamente diferente de desenvolvedor vendendo para médico — e o acesso a outros oftalmologistas é o canal de distribuição inteiro da Etapa 2.</p>
+  </div>
+
+  <p>Há uma inversão aqui que costuma passar despercebida: num software vertical, para um mercado profissional e regulado, <strong>o especialista com rede geralmente é a metade mais difícil de substituir — não o desenvolvedor.</strong> Existem muitos programadores capazes de construir isto. Existem bem menos oftalmologistas que entendem o problema, têm os protocolos e conseguem vender para os pares.</p>
+
+  <div class="call o"><span class="ic">A CONCLUSÃO</span>
+    <p><strong>50/50 não é você sendo generoso com ele. É simplesmente o número certo.</strong> A ideia, o domínio clínico e a rede são justamente o que faz 50/50 estar correto em vez de 65/35.</p>
+  </div>
+
+  <h3>Divisão sugerida</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Divisão</th><th>Quando faz sentido</th></tr></thead>
+    <tbody>
+      <tr><td><b>50 / 50</b> <span class="tag b">Padrão</span></td><td>Duas contribuições essenciais e insubstituíveis. É o mais simples de defender daqui a três anos e o que menos gera ressentimento. Se estiverem em dúvida, é este</td></tr>
+      <tr><td><b>60 / 40</b> a seu favor</td><td>Se ficar combinado que a execução contínua é quase toda sua e a dele se concentra no começo (protocolos e vídeos). Defensável, mas exige a conversa explícita</td></tr>
+      <tr><td><b>40 / 60</b> a favor dele</td><td>Só se ele bancar custos relevantes de verdade — parecer, jurídico, marketing, um segundo desenvolvedor. Não é o caso hoje</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call"><span class="ic">CRÍTICO</span>
+    <p><strong>O dinheiro que ele colocar deve ser registrado como empréstimo à empresa, não como participação.</strong> Se cada real que ele paga comprar mais sociedade, sua parte encolhe indefinidamente por um trabalho que você já entregou.</p>
+    <p>O formato usual é mútuo: a empresa devolve o aporte dele com correção, a partir da primeira receita, antes de qualquer distribuição de lucro. Ele recupera o dinheiro e a participação continua limpa.</p>
+  </div>
+
+  <div class="call"><span class="ic">CRÍTICO</span>
+    <p><strong>Vesting nos dois lados: 4 anos, com carência de 1 ano.</strong> A participação vai sendo conquistada mês a mês; quem sair antes de completar um ano não leva nada, e quem sair no meio leva a parte proporcional.</p>
+    <p>Isso protege você mais do que a ele. Sem vesting, se ele perder o interesse no mês oito, sai com metade de uma empresa que você vai continuar construindo sozinho.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">03</div>
+  <h2>Proposta B — Contratação</h2>
+
+  <h3>Construção do piloto</h3>
+  <p>Preço fechado por marcos, não por hora trabalhada — protege os dois: ele sabe quanto vai custar, você não precisa justificar cada hora.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Marco</th><th>O que fica pronto</th><th class="r">Horas</th><th class="r">R$</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Descoberta</b></td><td>Protocolos escritos, sinais de alarme, termos de consentimento, especificação e modelo de dados</td><td class="r num">68</td><td class="r num">10.200</td></tr>
+      <tr><td><b>2 · Fundação</b></td><td>Ambientes, publicação, autenticação, banco com isolamento, trilha de auditoria, cadastro de paciente</td><td class="r num">96</td><td class="r num">14.400</td></tr>
+      <tr><td><b>3 · Canal</b></td><td>WhatsApp integrado e aprovado, modelos de mensagem, motor de protocolo, entrega dos vídeos</td><td class="r num">104</td><td class="r num">15.600</td></tr>
+      <tr><td><b>4 · Inteligência</b></td><td>Triagem por IA, motor de risco, central de risco, consentimento e cancelamento</td><td class="r num">96</td><td class="r num">14.400</td></tr>
+      <tr><td><b>5 · Piloto</b></td><td>Instrumentação, ensaio simulado e quatro semanas acompanhando pacientes reais</td><td class="r num">94</td><td class="r num">14.100</td></tr>
+    </tbody>
+    <tfoot><tr><td colspan="2">Escopo enxuto — piloto rodando</td><td class="r num">493</td><td class="r num">73.950</td></tr></tfoot>
+  </table></div>
+
+  <p>Com o escopo completo — incluindo prontuário estruturado, histórico longitudinal e assinatura digital — são <strong class="num">655 horas</strong> e <strong class="num">R$ 98.250</strong>. A referência de <strong>R$ 150/h</strong> é o meio de uma faixa de R$ 130 a 180 para trabalho sênior com esta especialização; calibre com o que você cobraria de outro cliente.</p>
+
+  <h3>Manutenção e evolução, por mês</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Plano</th><th>O que inclui</th><th class="r">Horas/mês</th><th class="r">R$/mês</th></tr></thead>
+    <tbody>
+      <tr><td><b>Sustentação</b></td><td>Monitorar, corrigir falha, atualizar dependências, backup, suporte ao médico</td><td class="r num">10</td><td class="r num">1.500</td></tr>
+      <tr><td><b>Evolução</b> <span class="tag b">Recomendado</span></td><td>Tudo acima mais melhorias contínuas: novos protocolos, ajustes de fluxo, novas telas</td><td class="r num">24</td><td class="r num">3.600</td></tr>
+      <tr><td><b>Intensivo</b></td><td>Ritmo de desenvolvimento contínuo — faz sentido se ele decidir ir para a Etapa 2</td><td class="r num">40</td><td class="r num">6.000</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>O custo de infraestrutura — hoje cerca de <strong class="num">R$ 280/mês</strong> — fica por conta dele, repassado sem margem. Não deve entrar no retainer: se entrar, você acaba pagando do seu bolso quando a base crescer.</p>
+
+  <div class="call c"><span class="ic">O PONTO</span>
+    <p><strong>Quem fica dono do código é a pergunta mais cara desta proposta</strong>, e é onde a maioria das negociações desse tipo se decide sem que ninguém perceba. Três variantes:</p>
+    <p><strong>Cessão total</strong> — ele vira dono de tudo, você não pode reaproveitar nada. Preço cheio, e você entrega o ativo e sai sem nada recorrente além do retainer.<br>
+    <strong>Licença perpétua exclusiva em oftalmologia</strong> — ele usa e pode revender no setor dele; você mantém o código e pode aplicar em outra especialidade. Preço em torno de 70%.<br>
+    <strong>Licença perpétua não exclusiva</strong> — ele usa na clínica dele, você pode vender a outras. Preço em torno de 50%, e é a variante mais próxima de uma sociedade sem ser uma.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">04</div>
+  <h2>Proposta C — Híbrido</h2>
+
+  <div class="call c"><span class="ic">ANTES DE TUDO</span>
+    <p>Um mal-entendido comum, que vale matar aqui: <strong>na sociedade 50/50 ele não te paga nada.</strong> Os 50% <em>são</em> o pagamento. Você trabalha as 493 horas de graça e, no lugar do dinheiro, leva metade da empresa.</p>
+    <p>Entendido isso, o híbrido fica óbvio — ele é só o meio do caminho entre as duas.</p>
+  </div>
+
+  <h3>É um botão com três posições</h3>
+  <p>Seu trabalho no piloto vale <strong class="num">R$ 73.950</strong> — 493 horas a R$ 150. A única pergunta é <strong>como você recebe por ele</strong>. E o que compra participação é justamente o trabalho que você <em>não</em> cobrou.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Desenho</th><th class="r">Ele paga em dinheiro</th><th>O que sobra</th><th class="r">Você fica com</th></tr></thead>
+    <tbody>
+      <tr><td><b>Contratação</b><small>Proposta B</small></td><td class="r num">73.950</td><td>Nada — você já recebeu tudo</td><td class="r num">0%</td></tr>
+      <tr><td><b>Híbrido</b> <span class="tag b">Sugestão</span><small>Proposta C</small></td><td class="r num">30.000</td><td>R$ 43.950 de trabalho não cobrado viram participação</td><td class="r num">~45%</td></tr>
+      <tr><td><b>Sociedade</b><small>Proposta A</small></td><td class="r num">0</td><td>Os R$ 73.950 inteiros viram participação</td><td class="r num">50%</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>Quanto mais dinheiro você pega agora, menos participação sobra. <strong>Por que 45% e não 50% no híbrido?</strong> Porque você já tirou R$ 30.000 — investiu menos trabalho não pago na empresa, então fica com um pouco menos dela. O número exato é negociável, e <strong>40% é o piso</strong>: abaixo disso a conta deixa de fechar para quem carrega o trabalho contínuo.</p>
+
+  <h3>E do lado dele</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Desenho</th><th class="r">Ele desembolsa em 3 anos</th><th class="r">Ele fica com</th></tr></thead>
+    <tbody>
+      <tr><td><b>Contratação</b></td><td class="r num">203.550</td><td class="r">100% do produto</td></tr>
+      <tr><td><b>Híbrido</b></td><td class="r num">~95.000</td><td class="r">55% da empresa</td></tr>
+      <tr><td><b>Sociedade</b></td><td class="r num">~30.000 <small>e como empréstimo, recuperável</small></td><td class="r">50% da empresa</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>É por isso que o híbrido tem chance de ser aceito: <strong>custa a ele menos da metade da contratação e ainda lhe dá a maior fatia.</strong> Não é você pedindo mais — é você pedindo diferente.</p>
+
+  <div class="opt pick">
+    <div class="opt-h"><span class="tag b">Sugestão</span><span class="opt-t">O desenho completo</span></div>
+    <div class="big">R$ 30.000 + 45%</div>
+    <div class="sub">Cerca de 40% do valor de mercado do build em dinheiro, o resto em participação</div>
+    <ul style="margin-top:14px">
+      <li><strong>Ele paga R$ 30.000</strong> pela construção do piloto, distribuídos nos cinco marcos da Proposta B.</li>
+      <li><strong>Você abre mão de R$ 43.950</strong> em relação ao preço cheio — é esse trabalho não cobrado que compra sua participação.</li>
+      <li><strong>Pró-labore de R$ 1.800/mês depois da entrega</strong>, enquanto não houver receita — detalhado logo abaixo.</li>
+      <li><strong>Os custos de operação entram como empréstimo dele à empresa</strong>, devolvidos com correção a partir da primeira receita, antes de qualquer divisão de lucro. Isso mantém a participação limpa.</li>
+      <li><strong>Vesting de 4 anos com carência de 1</strong>, nos dois lados.</li>
+    </ul>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h4>Por que é melhor para você</h4>
+      <p>Você deixa de trabalhar dois anos de graça e mantém a parte de cima. R$ 30.000 não é o preço do trabalho, mas cobre o custo de oportunidade de noites e fins de semana — e muda completamente a conversa se o projeto não decolar.</p>
+    </div>
+    <div class="card">
+      <h4>Por que é melhor para ele</h4>
+      <p>Custa menos da metade da contratação cheia, e ele passa a ter um sócio com incentivo de longo prazo em vez de um fornecedor com contrato mensal. Num produto que precisa evoluir por anos, essa diferença aparece.</p>
+    </div>
+  </div>
+
+  <h3>Por que as horas dele não abatem o dinheiro</h3>
+  <p>A pergunta é natural: se ele também investe 88 horas, por que não descontar do que ele paga e ficar só na diferença? Parece justo, mas <strong>credita a contribuição dele duas vezes.</strong></p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Estrutura</th><th>O que são as 88 h dele</th><th>Onde já estão contadas</th></tr></thead>
+    <tbody>
+      <tr><td><b>Contratação</b></td><td>Insumo do produto que ele está comprando</td><td>Em lugar nenhum — e não deveriam estar. Todo projeto de software exige tempo do cliente; ninguém cobra menos porque o cliente participou das reuniões</td></tr>
+      <tr><td><b>Sociedade e híbrido</b></td><td>Contribuição de sócio</td><td><b>Na participação.</b> É exatamente por isso que ele fica com 55% e não com 30%</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>Se as horas dele abatem o pagamento <em>e</em> justificam a participação, ele recebe crédito duas vezes pela mesma coisa. O instinto de ser justo está certo — <strong>o lugar de expressá-lo é a participação, não o cheque.</strong></p>
+
+  <div class="call"><span class="ic">EM VEZ DE ABATER</span>
+    <p>As horas dele entram no acordo como <strong>compromisso, não como crédito</strong>: “o Dr. Miguel entrega os protocolos, os sinais de alarme e os vídeos em até X semanas”, com o que acontece se não entregar.</p>
+    <p>Isso vale mais que qualquer desconto, porque a estimativa mostrou que <strong>acima de 19 h por semana suas, o gargalo do cronograma passa a ser a agenda dele.</strong> As 88 horas são bloqueantes — tratá-las como obrigação protege os dois.</p>
+  </div>
+
+  <h3>O mensal: retainer é uma coisa, pró-labore é outra</h3>
+  <p>Vale separar os dois termos, porque misturá-los é o que mais confunde nessa conversa.</p>
+  <ul>
+    <li><strong>Retainer</strong> é vocabulário de fornecedor. Existe só na Proposta B: ele é cliente, você presta serviço, e o dinheiro sai do bolso dele.</li>
+    <li><strong>Pró-labore</strong> é a remuneração do sócio que trabalha na empresa. É o que existe nas Propostas A e C — e sai do caixa da empresa, que no começo é justamente o dinheiro que ele emprestou.</li>
+  </ul>
+
+  <div class="tw"><table>
+    <thead><tr><th>Quando</th><th>Você recebe</th><th>Sai de onde</th></tr></thead>
+    <tbody>
+      <tr><td><b>Construção</b><small>Meses 1 a 8</small></td><td class="num">R$ 30.000 nos cinco marcos</td><td>Bolso dele — é pagamento pelo desenvolvimento, não pró-labore</td></tr>
+      <tr><td><b>Entregue, sem receita</b><small>Do fim do piloto até a primeira venda</small></td><td class="num">R$ 1.800/mês de pró-labore</td><td>Empréstimo dele à empresa</td></tr>
+      <tr><td><b>Com receita</b></td><td>Pró-labore de mercado mais 45% do lucro distribuído</td><td>Caixa da empresa</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>O pró-labore <strong>não começa durante a construção</strong> — nesse período os R$ 30.000 já estão te pagando. Ele existe para cobrir a fase seguinte: sistema entregue, você mantendo e evoluindo, e ainda nenhum real entrando.</p>
+
+  <div class="call w"><span class="ic">O CUSTO DISSO</span>
+    <p>Esse pró-labore aumenta a dívida da empresa com ele. Se forem doze meses até a primeira venda, são <strong class="num">R$ 21.600</strong> a mais de empréstimo — que a empresa devolve antes de dividir qualquer lucro. Não é dinheiro perdido para ele, mas é mais dinheiro parado.</p>
+    <p>É uma escolha, não um dado. <strong>Sem pró-labore</strong> ele arrisca menos e você volta a trabalhar de graça por tempo indeterminado. <strong>Com pró-labore</strong> você atravessa a fase mais longa do projeto recebendo alguma coisa.</p>
+    <p>Eu insistiria nele. O intervalo entre “entregue” e “vendendo” é o mais comprido e o mais fácil de alguém desistir — é onde sociedade de dois costuma morrer.</p>
+  </div>
+
+  <p style="font-size:13px;color:var(--muted)">Detalhe que o contador vai levantar: se os dois sócios trabalham, cada um pode ter pró-labore proporcional à dedicação. A do Dr. Miguel depois do piloto é pequena — cerca de 2 h por semana — então o dele seria simbólico ou zero. Vale acertar isso por escrito para não virar assunto depois.</p>
+
+  <div class="call w"><span class="ic">SE ELE DISSER NÃO</span>
+    <p>Se ele não puder ou não quiser pagar nada adiantado, a sociedade pura ainda é possível — mas então a divisão deveria pender a seu favor, algo como <strong>60/40</strong>, e o mútuo dele precisa cobrir mais do que só a infraestrutura: parecer, jurídico e certificados também.</p>
+    <p>Trabalhar de graça <em>e</em> aceitar metade não é meio-termo, é o pior dos dois desenhos.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">05</div>
+  <h2>O que muda por você não ser tempo integral</h2>
+  <p>Você trabalha em horário comercial e faria isto em <strong>2 a 3 horas por dia útil mais cerca de 4 horas no fim de semana</strong> — entre 14 e 19 horas por semana. Isso não é uma nota de rodapé: reescreve prazo, preço e, principalmente, o que a sociedade pode virar.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Sua disponibilidade</th><th class="r">Piloto enxuto</th><th class="r">Escopo completo</th></tr></thead>
+    <tbody>
+      <tr><td><b>14 h/semana</b><small>2 h por dia útil + 4 h no fim de semana</small></td><td class="r num">8,8 meses</td><td class="r num">11,4 meses</td></tr>
+      <tr><td><b>16 h/semana</b> <span class="tag b">Média</span><small>2 a 3 h por dia + fim de semana</small></td><td class="r num">7,8 meses</td><td class="r num">10,1 meses</td></tr>
+      <tr><td><b>19 h/semana</b><small>3 h por dia útil + 4 h no fim de semana</small></td><td class="r num">7,3 meses</td><td class="r num">9,0 meses</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>Subi a margem de 30% para 40% na estimativa por causa disso: hora fragmentada rende menos que hora contínua, e toda sessão de duas horas à noite começa recarregando o contexto do problema. O piloto passa de 458 para <strong class="num">493 horas</strong>.</p>
+
+  <div class="call w"><span class="ic">TETO</span>
+    <p>Repare que ir de 16 para 19 horas por semana economiza meio mês, e só. <strong>A partir daí quem trava é a agenda do Dr. Miguel</strong> — as 88 horas clínicas dele, a 3 h por semana, levam 29 semanas de qualquer jeito.</p>
+    <p>Ou seja: <strong>não adianta você se matar de trabalhar.</strong> O que encurta o cronograma de verdade é ele concentrar as horas dele no começo — protocolos e vídeos são quase tudo, e são bloqueantes.</p>
+  </div>
+
+  <h3>O que isso muda em cada proposta</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>Na contratação</h4>
+      <p><strong>Nunca assine data fixa com multa por atraso.</strong> O prazo aqui é consequência de horas disponíveis, não promessa. Contrato por marcos entregues, com estimativa de calendário declarada como estimativa.</p>
+      <p><strong>E hora de noite e fim de semana não vale menos, vale mais.</strong> A faixa de R$ 130 a 180 é de hora comercial de freelancer. Você está vendendo o tempo que sobra da sua vida — se for cobrar, cobre no topo da faixa, não no meio.</p>
+    </div>
+    <div class="card">
+      <h4>Na sociedade</h4>
+      <p><strong>São 8 meses de noites e fins de semana sem receber nada.</strong> "493 horas" soa abstrato; "todo dia depois do trabalho, e metade dos sábados, até o meio do ano que vem" é o que realmente está sendo proposto.</p>
+      <p>Isso não inviabiliza — mas é exatamente por isso que o híbrido existe. Receber algo torna o sacrifício sustentável e reduz a chance de você largar no mês seis.</p>
+    </div>
+  </div>
+
+  <div class="call c"><span class="ic">A PERGUNTA DE FUNDO</span>
+    <p>Tem uma questão que precisa ser dita em voz alta antes de escolher: <strong>a sociedade só faz sentido se existir um caminho plausível para você sair do emprego.</strong></p>
+    <p>Uma empresa cuja engenharia é permanentemente 16 horas por semana não chega a 50 clínicas — e 50 clínicas é justamente o ponto onde a sociedade passa a valer mais que a contratação. Se você nunca puder sair do emprego, a sociedade fica presa num tamanho em que ela é pior negócio que ter sido contratado.</p>
+    <p>Então a pergunta para os dois é: <strong>a partir de quantas clínicas pagantes a empresa banca o seu salário?</strong> Se houver resposta, a sociedade tem lógica. Se não houver, a contratação é o desenho honesto.</p>
+  </div>
+
+  <div class="call"><span class="ic">NO MENSAL</span>
+    <p>Um detalhe prático que vale para o retainer da Proposta B e para o pró-labore da C: o plano Evolução de 24 h por mês são 6 h por semana — cerca de <strong>um terço da sua capacidade</strong>. O Intensivo, de 40 h por mês, come mais da metade. Nenhum dos dois cabe ao mesmo tempo que a construção de outro escopo.</p>
+    <p>Deixe explícito por escrito que o mensal começa <em>depois</em> da entrega do piloto — durante a construção, o que te paga são os marcos.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">06</div>
+  <h2>Quanto cada caminho te dá em três anos</h2>
+  <p>Contratação é previsível. Sociedade depende inteiramente de a Etapa 2 acontecer. Os cenários abaixo assumem preço médio de R$ 1.200 por clínica/mês e distribuição de metade do lucro.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Cenário em 3 anos</th><th class="r">Contratação</th><th class="r">Sociedade 50%</th><th class="r">Híbrido 45%</th></tr></thead>
+    <tbody>
+      <tr><td><b>Nunca vende para fora</b><small>Fica só na clínica do Dr. Miguel</small></td><td class="r num">203.550</td><td class="r num" style="color:var(--crit)">0</td><td class="r num">95.000</td></tr>
+      <tr><td><b>15 clínicas no ano 3</b><small>Cresce devagar, boca a boca</small></td><td class="r num">203.550</td><td class="r num">~60.000</td><td class="r num">~150.000</td></tr>
+      <tr><td><b>50 clínicas no ano 3</b> <span class="tag w">Ponto de virada</span></td><td class="r num">203.550</td><td class="r num">~220.000</td><td class="r num">~290.000</td></tr>
+      <tr><td><b>150 clínicas no ano 3</b><small>Deu muito certo</small></td><td class="r num">203.550</td><td class="r num">~650.000</td><td class="r num">~620.000</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="call"><span class="ic">A LEITURA</span>
+    <p><strong>A sociedade só ganha da contratação se vocês chegarem a algo em torno de 50 clínicas pagantes.</strong> Abaixo disso, você teria ganhado mais sendo contratado — e trabalhado de graça durante dois anos para descobrir isso.</p>
+    <p>O híbrido é o único que não é péssimo em nenhuma linha. Perde um pouco no cenário muito bom, e é o melhor em todos os outros. Quando não se sabe qual cenário vai acontecer — que é exatamente a situação de vocês — essa é a propriedade que importa.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">07</div>
+  <h2>O que precisa estar escrito, em qualquer um dos caminhos</h2>
+  <ol>
+    <li><strong>Propriedade do código e da base de dados.</strong> Quem é dono do quê, e o que acontece com o acervo anonimizado — que pode virar o ativo mais valioso e quase nunca é mencionado em contrato.</li>
+    <li><strong>Vesting ou cláusula de dedicação.</strong> Na sociedade, participação conquistada ao longo do tempo. Na contratação, o que acontece se ele parar de pagar no meio.</li>
+    <li><strong>Saída.</strong> Se um dos dois quiser sair: quem compra a parte de quem, por qual critério de avaliação, em quanto tempo. Escrever isso enquanto estão bem custa uma reunião; escrever depois custa um processo.</li>
+    <li><strong>Responsabilidade técnica e clínica.</strong> Se um alerta falhar e um paciente se prejudicar, quem responde pelo quê. A responsabilidade clínica é dele por lei; a técnica precisa ser definida em contrato.</li>
+    <li><strong>Exclusividade.</strong> Você pode atender outra clínica de oftalmologia? Ele pode contratar outro desenvolvedor? Sem isso escrito, os dois vão presumir a resposta que preferem.</li>
+    <li><strong>O compromisso de horas clínicas dele.</strong> Protocolos, sinais de alarme e vídeos, com prazo — e o que acontece se não vierem. São 88 horas bloqueantes: sem elas o cronograma para, por mais que você trabalhe.</li>
+    <li><strong>Uso da marca RetinAI</strong> e de quem é o registro, se houver.</li>
+  </ol>
+
+  <div class="call c"><span class="ic">LEMBRETE</span>
+    <p>Nada aqui é peça jurídica. São estruturas comerciais para vocês discutirem e levarem a um advogado — de preferência um que já tenha feito acordo de sócios em tecnologia, não o advogado geral da clínica.</p>
+    <p>E vale para os dois lados: <strong>ele deveria ter o próprio advogado.</strong> Acordo em que só uma parte teve orientação é o que mais gera briga depois.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-n">08</div>
+  <h2>Como eu levaria essa conversa</h2>
+  <p>Apresentar as três, na ordem A, B e C, e deixar claro desde o começo que a C é a sua recomendação — não esconder a preferência e esperar que ele adivinhe.</p>
+  <ul>
+    <li><strong>Comece pelo que vocês concordam:</strong> o produto faz sentido, o piloto é barato, e a dúvida é só sobre como dividir risco e retorno.</li>
+    <li><strong>Diga que você não tem reserva.</strong> Não é fraqueza de negociação, é um fato que define o que você pode aceitar. Esconder isso leva a um acordo que você vai ter que romper depois.</li>
+    <li><strong>Traga o número das 493 horas.</strong> Ele provavelmente não faz ideia do tamanho do trabalho, e a estimativa por pacote é o que transforma “fazer um sistema” em algo que dá para precificar.</li>
+    <li><strong>Reconheça a parte dele antes de falar de número.</strong> A ideia é dele, a percepção do problema é dele, e a rede para vender é dele. Dizer isso em voz alta muda o tom da conversa inteira — e é verdade, não cortesia.</li>
+    <li><strong>Não feche na primeira conversa.</strong> Proposta desse tipo se apresenta, se deixa descansar uma semana, e se fecha na segunda reunião — com os dois já tendo falado com advogado.</li>
+  </ul>
+
+  <h3>Sobre a margem de negociação</h3>
+  <p>Levar <strong>45%</strong> na mesa e ter <strong>40%</strong> guardado é normal e legítimo — ninguém abre a primeira proposta no próprio limite. Duas observações práticas, porém:</p>
+  <ul>
+    <li><strong>Não desça por pressão, desça por argumento.</strong> Se a queda para 40% vier depois de ele reclamar, ele vai lembrar disso como “eu consegui arrancar”. Se vier de você dizendo que a ideia e a rede dele valem mais do que a conta de horas sugere, ele lembra como reconhecimento. É a mesma queda de cinco pontos com efeitos opostos daqui a três anos.</li>
+    <li><strong>40% é o piso, e é piso de verdade.</strong> Você carrega em torno de 85% do trabalho contínuo pelos próximos anos. Participação que parece justa no ano um vira ressentimento no ano três — e sócio ressentido é o que mais quebra empresa de dois.</li>
+  </ul>
+</section>
+
+<footer>
+  <p style="max-width:68ch;margin:0">Rascunho interno, agosto de 2026. Valores de hora, preço por clínica e projeções de crescimento são hipóteses para calibrar, não cotações. Estruturas societárias e contratuais precisam de revisão jurídica antes de virarem acordo.</p>
+</footer>
+</div>
